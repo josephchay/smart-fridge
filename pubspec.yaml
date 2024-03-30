@@ -108,6 +108,7 @@ flutter:
   assets:
     - assets/object_detection/
     - assets/images/
+    - assets/images/onboarding/
     - assets/images/logos/
     - assets/images/icons/
     - assets/images/icons/grocery/

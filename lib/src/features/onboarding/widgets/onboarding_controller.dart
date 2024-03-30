@@ -16,11 +16,11 @@ class OnboardingController extends GetxController {
   final pages = [
     OnboardingPageWidget(
       model: OnboardingModel(
-        image: "assets/images/onboarding/kitchen-animated.gif",
-        title: "Eye in the Fridge",
+        image: "assets/images/onboarding/vision_from_within.png",
+        title: "Vision from Within",
         description:
-            "Liberate your fridge from isolation and effortlessly manage your fridge's contents anytime, anywhere!",
-        no: "1/5",
+            "Peek into your fridge and liberate it from isolation while effortlessly managing your fridge's contents anytime, anywhere!",
+        number: "1/5",
         bgColors: [
           HexColor("#95FAFF"),
           // HexColor("#FFC584"),
@@ -30,11 +30,11 @@ class OnboardingController extends GetxController {
     ),
     OnboardingPageWidget(
       model: OnboardingModel(
-        image: "assets/images/onboarding/kitchen-animated.gif",
+        image: "assets/images/onboarding/smart_shopper_assistant_3.png",
         title: "Smart Shopper Assistant",
         description:
             "Seamless customized grocery list synced with your fridge for smarter shopping!",
-        no: "2/5",
+        number: "2/5",
         bgColors: [
           AppTheme.nearlyWhite,
           HexColor("#D2FFB9"),
@@ -44,11 +44,11 @@ class OnboardingController extends GetxController {
     ),
     OnboardingPageWidget(
       model: OnboardingModel(
-        image: "assets/images/onboarding/kitchen-animated.gif",
+        image: "assets/images/onboarding/on_sentinal_alert.png",
         title: "On Sentinel Alert",
         description:
-            "Stay informed with real-time alerts about when and who accesses your fridge!",
-        no: "3/5",
+            "Stay informed with real-time alerts on events around your fridge!",
+        number: "3/5",
         bgColors: [
           HexColor("#FFD6D6"),
           // HexColor("#B4FFFE"),
@@ -58,11 +58,11 @@ class OnboardingController extends GetxController {
     ),
     OnboardingPageWidget(
       model: OnboardingModel(
-        image: "assets/images/onboarding/kitchen-animated.gif",
+        image: "assets/images/onboarding/savvy_culinary_companion_2.png",
         title: "Savvy Culinary Companion",
         description:
             "Transform your ingredients into culinary magic! From fridge to table effortlessly with what you have!",
-        no: "4/5",
+        number: "4/5",
         bgColors: [
           AppTheme.nearlyWhite,
           HexColor("#FFE979"),
@@ -73,11 +73,11 @@ class OnboardingController extends GetxController {
     ),
     OnboardingPageWidget(
       model: OnboardingModel(
-        image: "assets/images/onboarding/kitchen-animated.gif",
-        title: "Welcome Aboard",
+        image: "assets/images/onboarding/fridge_betterment_2.png",
+        title: "Fridge Betterment",
         description:
             'Step into the future of fridge convenience technology. Start Your Smart Fridge Adventure Today!',
-        no: "5/5",
+        number: "5/5",
         bgColors: [
           HexColor("#EEBEFF"),
           // HexColor("#FFE79D"),

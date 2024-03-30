@@ -119,11 +119,18 @@ class _OnboardingPageWidgetState extends State<OnboardingPageWidget>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image(
-              image: AssetImage(widget.model.image),
-              height: size.height * 0.4,
+          Container(
+            width: MediaQuery.of(context).size.width, // Adjust width as needed
+            height: size.height * 0.4, // Adjust height as needed
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(
+                widget.model.image,
+                fit: BoxFit.cover, // Ensures the image covers the clip area
+              ),
             ),
           ),
           Column(
@@ -142,14 +149,14 @@ class _OnboardingPageWidgetState extends State<OnboardingPageWidget>
                 ),
                 child: Text(
                   widget.model.description,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
               ),
             ],
           ),
           Text(
-            widget.model.no == null ? '' : widget.model.no!,
+            widget.model.number == null ? '' : widget.model.number!,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 80.0),

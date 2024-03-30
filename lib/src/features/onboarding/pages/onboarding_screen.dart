@@ -7,8 +7,8 @@ import '../widgets/page_indicator.dart';
 import '../widgets/swipe_next_button.dart';
 import '../widgets/swipe_previous_button.dart';
 
-class AppOnboardingScreen extends StatelessWidget {
-  const AppOnboardingScreen({
+class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({
     super.key,
   });
 
@@ -36,15 +36,14 @@ class AppOnboardingScreen extends StatelessWidget {
             ),
           ),
           Obx(
-            () => AppOnboardPageIndicator(
+            () => OnboardingPageIndicator(
               currentPageIndex: controller.currentPageIndex.value,
               onDotClicked: controller.onDotClicked,
             ),
           ),
           Obx(
-            () => AppOnboardSwipeNextButton(
-              onSignupPressed: () =>
-                  controller.animateToNextPage(context, false),
+            () => OnboardingSwipeNextButton(
+              onPressed: () => controller.animateToNextPage(context, false),
               onLoginPressed: () => controller.animateToNextPage(context, true),
               currentPageIndex: controller.currentPageIndex.value,
             ),

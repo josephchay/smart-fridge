@@ -3,8 +3,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppOnboardPageIndicator extends StatelessWidget {
-  const AppOnboardPageIndicator({
+class OnboardingPageIndicator extends StatelessWidget {
+  const OnboardingPageIndicator({
     super.key,
     required this.currentPageIndex,
     required this.onDotClicked,

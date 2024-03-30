@@ -3,17 +3,64 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppOnboardSwipeNextButton extends StatelessWidget {
-  const AppOnboardSwipeNextButton({
-    super.key,
-    required this.currentPageIndex,
-    required this.onSignupPressed,
-    required this.onLoginPressed,
-  });
-
+class OnboardingSwipeNextButton extends StatefulWidget {
   final int currentPageIndex;
-  final VoidCallback onSignupPressed;
+  final VoidCallback onPressed;
   final VoidCallback onLoginPressed;
+
+  const OnboardingSwipeNextButton({
+    Key? key,
+    required this.currentPageIndex,
+    required this.onPressed,
+    required this.onLoginPressed,
+  }) : super(key: key);
+
+  @override
+  _OnboardingSwipeNextButtonState createState() =>
+      _OnboardingSwipeNextButtonState();
+}
+
+class _OnboardingSwipeNextButtonState extends State<OnboardingSwipeNextButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.currentPageIndex == 4) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant OnboardingSwipeNextButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.currentPageIndex == 4) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,58 +73,61 @@ class AppOnboardSwipeNextButton extends StatelessWidget {
   }
 
   Widget buildSwipeAndSignUpWidget(BuildContext context) {
-    const double padding = 15.0;
-    const double initialRight = 20.0;
-
-    double buttonWidth = currentPageIndex == 4 ? 280.0 : 50.0;
-
-    double adjustedBottom = currentPageIndex == 4 ? 110.0 : 40.0;
-
-    double adjustedRight = currentPageIndex == 4
-        ? (MediaQuery.of(context).size.width - buttonWidth) / 2 - initialRight
-        : initialRight;
-
-    BorderRadius adjustedBorderRadius = currentPageIndex == 4
-        ? const BorderRadius.all(Radius.circular(14.0))
-        : const BorderRadius.all(Radius.circular(18.0));
-
-    IconData adjustedIcon = currentPageIndex == 4
+    IconData adjustedIcon = widget.currentPageIndex == 4
         ? Icons.arrow_forward_rounded
         : Iconsax.arrow_right_3_copy;
 
-    return AnimatedPositioned(
+    double buttonWidth = widget.currentPageIndex == 4 ? 280.0 : 50.0;
+    double adjustedBottom = widget.currentPageIndex == 4 ? 120.0 : 40.0;
+
+    return AnimatedAlign(
       duration: const Duration(milliseconds: 400),
+      alignment: widget.currentPageIndex == 4
+          ? Alignment.bottomCenter
+          : Alignment.bottomRight,
       curve: Curves.easeInOut,
-      bottom: adjustedBottom,
-      right: adjustedRight,
-      child: TextButton(
-        onPressed: onSignupPressed,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-          width: buttonWidth,
-          padding: const EdgeInsets.all(padding),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            borderRadius: adjustedBorderRadius,
-            color: AppTheme.darkGrey,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        width: buttonWidth,
+        height: 50.0,
+        margin: EdgeInsets.only(
+          bottom: adjustedBottom,
+          right: widget.currentPageIndex == 4 ? 0 : 20.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: AppTheme.darkGrey,
+        ),
+        child: GestureDetector(
+          onTap: widget.onPressed,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              if (currentPageIndex == 4)
-                const Text(
-                  'Get Started',
-                  style: TextStyle(
-                    color: AppTheme.nearlyWhite,
-                    fontSize: 15.0,
+              if (widget.currentPageIndex == 4)
+                FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: const Text(
+                    'Get Started',
+                    style: TextStyle(
+                      color: AppTheme.nearlyWhite,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ),
-              const Spacer(),
-              Icon(
-                adjustedIcon,
-                size: 20.0,
-                color: AppTheme.nearlyWhite,
+              AnimatedPositioned(
+                duration: Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+                right: widget.currentPageIndex == 4
+                    ? buttonWidth * 0.08
+                    : (buttonWidth - 20) / 2,
+                child: Icon(
+                  adjustedIcon,
+                  size: 20.0,
+                  color: AppTheme.nearlyWhite,
+                ),
+                top: 0,
+                bottom: 0,
               ),
             ],
           ),
@@ -87,21 +137,19 @@ class AppOnboardSwipeNextButton extends StatelessWidget {
   }
 
   Widget buildLoginTextWidget(BuildContext context) {
-    double adjustedBottom = currentPageIndex == 4 ? 90.0 : 0.0;
-
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
-      bottom: adjustedBottom,
+      bottom: widget.currentPageIndex == 4 ? 90.0 : 0.0,
       left: 0,
       right: 0,
-      child: Center(
-        child: GestureDetector(
-          onTap: currentPageIndex == 4 ? onLoginPressed : null,
-          child: AnimatedOpacity(
-            opacity: currentPageIndex == 4 ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 400),
-            child: const Text.rich(
+      child: GestureDetector(
+        onTap: widget.currentPageIndex == 4 ? widget.onLoginPressed : () {},
+        child: AnimatedOpacity(
+          opacity: widget.currentPageIndex == 4 ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 400),
+          child: Center(
+            child: Text.rich(
               TextSpan(
                 text: 'Already have an account? ',
                 style: TextStyle(

@@ -103,7 +103,7 @@ class _AppVerifyEmailScreenState extends State<AppVerifyEmailScreen>
                     child: Column(
                       children: [
                         Lottie.asset(
-                          "assets/images/auth/registration/email-notification.json",
+                          "assets/images/auth/email-notification.json",
                         ),
                         const SizedBox(height: 32.0),
                         const Text(
