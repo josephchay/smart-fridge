@@ -43,7 +43,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 padding: EdgeInsets.only(top: 20),
                 child: AppDrawerInfoCard(
                   brand: 'SMART FRIDGE',
-                  slogan: "Your new kitchen experience.",
+                  slogan: "Your new refrigerator experience.",
                 ),
               ),
               Padding(

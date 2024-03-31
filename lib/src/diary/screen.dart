@@ -8,63 +8,62 @@ import 'package:smart_fridge/src/ui_view/title_view.dart';
 import '../../top_bar.dart';
 
 /// The Home (first) Page of the app
-class AppDiaryScreen extends StatefulWidget {
+class DiaryScreen extends StatefulWidget {
   final AnimationController? animationController;
-  final Function(double) onScroll;
+  final ScrollController scrollController;
 
-  const AppDiaryScreen({
+  const DiaryScreen({
     Key? key,
     this.animationController,
-    required this.onScroll,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
-  _AppDiaryScreenState createState() => _AppDiaryScreenState();
+  _DiaryScreenState createState() => _DiaryScreenState();
 }
 
-class _AppDiaryScreenState extends State<AppDiaryScreen>
+class _DiaryScreenState extends State<DiaryScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
 
   List<Widget> listViews = <Widget>[];
-  final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
+    super.initState();
+
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: widget.animationController!,
         curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
       ),
     );
-    addAllListData();
 
-    scrollController.addListener(() {
-      if (scrollController.offset >= 24) {
+    widget.scrollController.addListener(() {
+      if (widget.scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
           setState(() {
             topBarOpacity = 1.0;
           });
         }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
-        if (topBarOpacity != scrollController.offset / 24) {
+      } else if (widget.scrollController.offset <= 24 &&
+          widget.scrollController.offset >= 0) {
+        if (topBarOpacity != widget.scrollController.offset / 24) {
           setState(() {
-            topBarOpacity = scrollController.offset / 24;
+            topBarOpacity = widget.scrollController.offset / 24;
           });
         }
-      } else if (scrollController.offset <= 0) {
+      } else if (widget.scrollController.offset <= 0) {
         if (topBarOpacity != 0.0) {
           setState(() {
             topBarOpacity = 0.0;
           });
         }
       }
-
-      widget.onScroll(scrollController.offset);
     });
-    super.initState();
+
+    addAllListData();
   }
 
   void addAllListData() {
@@ -221,7 +220,7 @@ class _AppDiaryScreenState extends State<AppDiaryScreen>
           return const SizedBox();
         } else {
           return ListView.builder(
-            controller: scrollController,
+            controller: widget.scrollController,
             padding: EdgeInsets.only(
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +

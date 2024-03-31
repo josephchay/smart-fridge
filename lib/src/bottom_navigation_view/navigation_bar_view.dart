@@ -11,13 +11,15 @@ import '../../core/util/color.dart';
 class AppNavigationBarView extends StatefulWidget {
   final Function(int index)? changeIndex;
   final Function()? addClick;
+  final Function()? onLongPress;
   final Map<String, AppNavigationBarIcon>? navigationBarIcons;
 
   const AppNavigationBarView({
     Key? key,
-    this.navigationBarIcons,
     this.changeIndex,
     this.addClick,
+    this.onLongPress,
+    this.navigationBarIcons,
   }) : super(key: key);
 
   @override
@@ -40,182 +42,188 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.bottomCenter,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 14,
-            horizontal: 14,
-          ),
-          child: AnimatedBuilder(
-            animation: animationController!,
-            builder: (BuildContext context, Widget? child) {
-              return Transform(
-                transform: Matrix4.translationValues(0.0, 0.0, 0.0),
-                child: PhysicalShape(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  clipBehavior: Clip.antiAlias,
-                  clipper: NavigationBarClipper(
-                      radius: Tween(begin: 0.0, end: 1.0)
-                              .animate(
-                                CurvedAnimation(
-                                    parent: animationController!,
-                                    curve: Curves.fastOutSlowIn),
-                              )
-                              .value *
-                          38.0),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppTheme.nearlyWhite.withOpacity(0.1),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.lighterGrey.withOpacity(0.2),
-                            blurRadius: 6,
-                            spreadRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 62,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 8, top: 4),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: NavigationBarIcons(
-                                        navigationBarIcon:
-                                            widget.navigationBarIcons?['diary'],
-                                        removeAllSelect: () {
-                                          setRemoveAllSelection(widget
-                                              .navigationBarIcons?['diary']);
-                                          widget.changeIndex!(0);
-                                        }),
-                                  ),
-                                  Expanded(
-                                    child: NavigationBarIcons(
-                                        navigationBarIcon: widget
-                                            .navigationBarIcons?['grocery'],
-                                        removeAllSelect: () {
-                                          setRemoveAllSelection(widget
-                                              .navigationBarIcons?['grocery']);
-                                          widget.changeIndex!(1);
-                                        }),
-                                  ),
-                                  SizedBox(
-                                    width: Tween(begin: 0.0, end: 1.0)
-                                            .animate(CurvedAnimation(
-                                                parent: animationController!,
-                                                curve: Curves.fastOutSlowIn))
-                                            .value *
-                                        64.0,
-                                  ),
-                                  Expanded(
-                                    child: NavigationBarIcons(
-                                        navigationBarIcon:
-                                            widget.navigationBarIcons?[
-                                                'notification'],
-                                        removeAllSelect: () {
-                                          setRemoveAllSelection(
-                                              widget.navigationBarIcons?[
-                                                  'notification']);
-                                          widget.changeIndex!(3);
-                                        }),
-                                  ),
-                                  Expanded(
-                                    child: NavigationBarIcons(
-                                        navigationBarIcon:
-                                            widget.navigationBarIcons?['meal'],
-                                        removeAllSelect: () {
-                                          setRemoveAllSelection(widget
-                                              .navigationBarIcons?['meal']);
-                                          widget.changeIndex!(4);
-                                        }),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).padding.bottom,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(
-            bottom: 14,
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom,
+    return GestureDetector(
+      onLongPress: () {
+        widget.onLongPress!();
+      },
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 14,
             ),
-            child: SizedBox(
-              width: 38 * 2.0,
-              height: 38 + 62.0,
-              child: Container(
-                alignment: Alignment.topCenter,
-                color: Colors.transparent,
-                child: SizedBox(
-                  width: 38 * 2.0,
-                  height: 38 * 2.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ScaleTransition(
-                      alignment: Alignment.center,
-                      scale: Tween(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: animationController!,
-                          curve: Curves.fastOutSlowIn,
-                        ),
-                      ),
+            child: AnimatedBuilder(
+              animation: animationController!,
+              builder: (BuildContext context, Widget? child) {
+                return Transform(
+                  transform: Matrix4.translationValues(0.0, 0.0, 0.0),
+                  child: PhysicalShape(
+                    color: Colors.transparent,
+                    elevation: 0,
+                    clipBehavior: Clip.antiAlias,
+                    clipper: NavigationBarClipper(
+                        radius: Tween(begin: 0.0, end: 1.0)
+                                .animate(
+                                  CurvedAnimation(
+                                      parent: animationController!,
+                                      curve: Curves.fastOutSlowIn),
+                                )
+                                .value *
+                            38.0),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                       child: Container(
-                        // alignment: Alignment.center,s
                         decoration: BoxDecoration(
-                          color: AppTheme.nearlyOrange,
-                          gradient: LinearGradient(
-                            colors: [
-                              AppTheme.nearlyOrange,
-                              HexColor('#FF9159'),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          shape: BoxShape.circle,
-                          boxShadow: <BoxShadow>[
+                          color: AppTheme.nearlyWhite.withOpacity(0.1),
+                          boxShadow: [
                             BoxShadow(
-                              color: AppTheme.nearlyOrange.withOpacity(0.4),
-                              offset: const Offset(8.0, 16.0),
-                              blurRadius: 16.0,
+                              color: AppTheme.nearlyWhite.withOpacity(0.8),
+                              blurRadius: 6,
+                              spreadRadius: 10,
                             ),
                           ],
                         ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            splashColor: Colors.white.withOpacity(0.1),
-                            highlightColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            onTap: () {
-                              widget.addClick!();
-                              widget.changeIndex!(2);
-                            },
-                            child: const Icon(
-                              Icons.kitchen,
-                              color: AppTheme.white,
-                              size: 32,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 62,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, right: 8, top: 4),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: NavigationBarIcons(
+                                          navigationBarIcon: widget
+                                              .navigationBarIcons?['diary'],
+                                          removeAllSelect: () {
+                                            setRemoveAllSelection(widget
+                                                .navigationBarIcons?['diary']);
+                                            widget.changeIndex!(0);
+                                          }),
+                                    ),
+                                    Expanded(
+                                      child: NavigationBarIcons(
+                                          navigationBarIcon: widget
+                                              .navigationBarIcons?['grocery'],
+                                          removeAllSelect: () {
+                                            setRemoveAllSelection(
+                                                widget.navigationBarIcons?[
+                                                    'grocery']);
+                                            widget.changeIndex!(1);
+                                          }),
+                                    ),
+                                    SizedBox(
+                                      width: Tween(begin: 0.0, end: 1.0)
+                                              .animate(CurvedAnimation(
+                                                  parent: animationController!,
+                                                  curve: Curves.fastOutSlowIn))
+                                              .value *
+                                          64.0,
+                                    ),
+                                    Expanded(
+                                      child: NavigationBarIcons(
+                                          navigationBarIcon:
+                                              widget.navigationBarIcons?[
+                                                  'notification'],
+                                          removeAllSelect: () {
+                                            setRemoveAllSelection(
+                                                widget.navigationBarIcons?[
+                                                    'notification']);
+                                            widget.changeIndex!(3);
+                                          }),
+                                    ),
+                                    Expanded(
+                                      child: NavigationBarIcons(
+                                          navigationBarIcon: widget
+                                              .navigationBarIcons?['meal'],
+                                          removeAllSelect: () {
+                                            setRemoveAllSelection(widget
+                                                .navigationBarIcons?['meal']);
+                                            widget.changeIndex!(4);
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).padding.bottom,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(
+              bottom: 14,
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              child: SizedBox(
+                width: 38 * 2.0,
+                height: 38 + 62.0,
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  color: Colors.transparent,
+                  child: SizedBox(
+                    width: 38 * 2.0,
+                    height: 38 * 2.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ScaleTransition(
+                        alignment: Alignment.center,
+                        scale: Tween(begin: 0.0, end: 1.0).animate(
+                          CurvedAnimation(
+                            parent: animationController!,
+                            curve: Curves.fastOutSlowIn,
+                          ),
+                        ),
+                        child: Container(
+                          // alignment: Alignment.center,s
+                          decoration: BoxDecoration(
+                            color: AppTheme.nearlyOrange,
+                            gradient: LinearGradient(
+                              colors: [
+                                AppTheme.nearlyOrange,
+                                HexColor('#FF9159'),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            shape: BoxShape.circle,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: AppTheme.nearlyOrange.withOpacity(0.4),
+                                offset: const Offset(8.0, 16.0),
+                                blurRadius: 16.0,
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              splashColor: Colors.white.withOpacity(0.1),
+                              highlightColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              onTap: () {
+                                widget.addClick!();
+                                widget.changeIndex!(2);
+                              },
+                              child: const Icon(
+                                Icons.kitchen,
+                                color: AppTheme.white,
+                                size: 32,
+                              ),
                             ),
                           ),
                         ),
@@ -226,8 +234,8 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

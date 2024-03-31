@@ -1,7 +1,6 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart' as rive;
 import 'package:smart_fridge/camera/ui/screen.dart';
 import 'package:smart_fridge/custom_drawer/drawer.dart';
 import 'package:smart_fridge/grocery_listings/screen.dart';
@@ -41,6 +40,12 @@ class _AppClientEnvironmentControllerState
   Map<String, AppNavigationBarIcon> navigationBarIcons =
       AppNavigationBarIcon.navigationBarIcons;
 
+  late ScrollController _scrollController;
+  double _lastScrollPosition = 0.0;
+
+  late AnimationController navBarAnimationController;
+  late Animation<Offset> navBarSlideAnimation;
+
   Widget tabBody = Container(
     color: AppTheme.background,
   );
@@ -49,11 +54,40 @@ class _AppClientEnvironmentControllerState
   double yOffset = 0;
   double scaleFactor = 1;
   double rotationAngle = 0;
-  late rive.SMIBool isDrawerClose;
   bool isDrawerCloseBool = true;
 
   @override
   void initState() {
+    super.initState();
+
+    navBarAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    navBarSlideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(0, 1), // Slide up
+    ).animate(
+      CurvedAnimation(
+        parent: navBarAnimationController,
+        curve: Cubic(0.87, 0, 0.13, 1),
+      ),
+    );
+
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (isDrawerCloseBool) {
+          // Check if the drawer is closed
+          double currentScrollPosition = _scrollController.position.pixels;
+          if (currentScrollPosition > _lastScrollPosition) {
+            toggleNavBarVisibility(true);
+          } else if (currentScrollPosition < _lastScrollPosition) {
+            toggleNavBarVisibility(false);
+          }
+          _lastScrollPosition = currentScrollPosition;
+        }
+      });
+
     navigationBarIcons.forEach((key, AppNavigationBarIcon tab) {
       tab.isSelected = false;
     });
@@ -95,11 +129,10 @@ class _AppClientEnvironmentControllerState
       vsync: this,
     );
 
-    tabBody = AppDiaryScreen(
+    tabBody = DiaryScreen(
       animationController: pageAnimationController,
-      onScroll: toggleNavBarVisibility,
+      scrollController: _scrollController,
     );
-    super.initState();
 
     // if (widget.onDrawerSlide != null) {
     //   widget.onDrawerSlide!(updatePosition());
@@ -119,6 +152,8 @@ class _AppClientEnvironmentControllerState
 
   @override
   void dispose() {
+    navBarAnimationController.dispose();
+    _scrollController.dispose();
     _drawerAnimationController.dispose();
     pageAnimationController?.dispose();
     super.dispose();
@@ -170,8 +205,8 @@ class _AppClientEnvironmentControllerState
                     alignment: Alignment.center,
                     transform: Matrix4.identity()
                       ..setEntry(3, 2, 0.001)
-                      ..rotateY(
-                          animation.value - 30 * animation.value * pi / 180),
+                      ..rotateY(animation.value -
+                          30 * animation.value * math.pi / 180),
                     child: Transform.translate(
                       offset: Offset(animation.value * 265, 0),
                       child: Transform.scale(
@@ -179,7 +214,21 @@ class _AppClientEnvironmentControllerState
                         child: ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(26.0)),
-                          child: tabBody,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (!isDrawerCloseBool) {
+                                _drawerAnimationController.reverse();
+                                setState(() {
+                                  isDrawerCloseBool = true;
+                                });
+                              }
+                            },
+                            // Wrap tabBody in AbsorbPointer to disable its interaction when drawer is open
+                            child: AbsorbPointer(
+                              absorbing: !isDrawerCloseBool,
+                              child: tabBody,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -190,37 +239,11 @@ class _AppClientEnvironmentControllerState
                         focusedView
                             ? MediaQuery.of(context).size.height - 60
                             : animation.value * 120),
-                    child: navigationBar(),
+                    child: SlideTransition(
+                      position: navBarSlideAnimation,
+                      child: navigationBar(),
+                    ),
                   ),
-                  // AnimatedPositioned(
-                  //   duration: const Duration(milliseconds: 200),
-                  //   curve: Curves.fastOutSlowIn,
-                  //   left: isDrawerCloseBool ? 0 : 220,
-                  //   top: 30,
-                  //   child: DrawerToggleButton(
-                  //     iconOnInit: (artboard) {
-                  //       rive.StateMachineController controller =
-                  //           RiveIconController.getRiveController(
-                  //         artboard,
-                  //         stateMachineName: "State Machine",
-                  //       );
-                  //       isDrawerClose =
-                  //           controller.findSMI("isOpen") as rive.SMIBool;
-                  //       isDrawerClose.value = true;
-                  //     },
-                  //     press: () {
-                  //       isDrawerClose.value = !isDrawerClose.value;
-                  //
-                  //       isDrawerCloseBool
-                  //           ? _drawerAnimationController.forward()
-                  //           : _drawerAnimationController.reverse();
-                  //
-                  //       setState(() {
-                  //         isDrawerCloseBool = isDrawerClose.value;
-                  //       });
-                  //     },
-                  //   ),
-                  // )
                 ],
               );
             }
@@ -230,19 +253,11 @@ class _AppClientEnvironmentControllerState
     );
   }
 
-  void toggleNavBarVisibility(double scrollOffset) {
-    if (scrollOffset >= 0) {
-      if (focusedView) {
-        setState(() {
-          focusedView = false;
-        });
-      }
+  void toggleNavBarVisibility(bool visible) {
+    if (visible) {
+      navBarAnimationController.forward();
     } else {
-      if (!focusedView) {
-        setState(() {
-          focusedView = true;
-        });
-      }
+      navBarAnimationController.reverse();
     }
   }
 
@@ -253,8 +268,16 @@ class _AppClientEnvironmentControllerState
           child: SizedBox(),
         ),
         AppNavigationBarView(
-          navigationBarIcons: navigationBarIcons,
           addClick: () {},
+          onLongPress: () {
+            isDrawerCloseBool
+                ? _drawerAnimationController.forward()
+                : _drawerAnimationController.reverse();
+
+            setState(() {
+              isDrawerCloseBool = !isDrawerCloseBool;
+            });
+          },
           changeIndex: (int index) {
             pageAnimationController?.reverse().then<dynamic>((data) {
               if (!mounted) {
@@ -264,9 +287,9 @@ class _AppClientEnvironmentControllerState
               setState(() {
                 switch (index) {
                   case 0:
-                    tabBody = AppDiaryScreen(
+                    tabBody = DiaryScreen(
                       animationController: pageAnimationController,
-                      onScroll: toggleNavBarVisibility,
+                      scrollController: _scrollController,
                     );
                     break;
                   case 1:
@@ -279,7 +302,10 @@ class _AppClientEnvironmentControllerState
                     tabBody = NotificationScreen();
                     break;
                   case 4:
-                    tabBody = MealPlanningScreen();
+                    tabBody = MealPlanningScreen(
+                      animationController: pageAnimationController,
+                      scrollController: _scrollController,
+                    );
                     break;
                   default:
                     break;
@@ -287,6 +313,7 @@ class _AppClientEnvironmentControllerState
               });
             });
           },
+          navigationBarIcons: navigationBarIcons,
         ),
       ],
     );
