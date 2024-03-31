@@ -4,19 +4,19 @@ import 'package:smart_fridge/src/features/authentication/presentation/register/p
 
 import 'login/pages/screen.dart';
 
-class AppAuthScreen extends StatefulWidget {
+class AuthScreen extends StatefulWidget {
   final bool isLogin;
 
-  const AppAuthScreen({
+  const AuthScreen({
     super.key,
     required this.isLogin,
   });
 
   @override
-  State<AppAuthScreen> createState() => _AppAuthScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AppAuthScreenState extends State<AppAuthScreen>
+class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   double _currentPageIndex = 0.0;
@@ -52,6 +52,8 @@ class _AppAuthScreenState extends State<AppAuthScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -65,11 +67,11 @@ class _AppAuthScreenState extends State<AppAuthScreen>
                 child: PageView(
                   controller: _pageController,
                   children: [
-                    AppLoginScreen(
+                    LoginScreen(
                       pageController: _pageController,
                       animation: _animation,
                     ),
-                    AppRegisterScreen(
+                    RegisterScreen(
                       pageController: _pageController,
                       animation: _animation,
                     ),
@@ -80,7 +82,7 @@ class _AppAuthScreenState extends State<AppAuthScreen>
           ),
           Positioned(
             top: MediaQuery.of(context).padding.top - 36,
-            right: 10.0 + _currentPageIndex * 340.0,
+            right: 10.0 + _currentPageIndex * (screenWidth * .82),
             child: SafeArea(
               child: IconButton(
                 icon: Icon(

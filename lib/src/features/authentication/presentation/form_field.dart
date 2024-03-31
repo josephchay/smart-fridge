@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppAuthFormField extends StatelessWidget {
-  const AppAuthFormField({
+class AuthFormField extends StatelessWidget {
+  const AuthFormField({
     super.key,
     required this.label,
     required this.labelHint,
@@ -27,13 +28,13 @@ class AppAuthFormField extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(
           icon,
-          size: 24,
+          size: 20 * Scaler.textScaleFactor(context),
         ),
         suffixIcon: TextInputType.visiblePassword == inputType
             ? IconButton(
                 icon: Icon(
                   Iconsax.eye_slash_copy,
-                  size: 24,
+                  size: 20 * Scaler.textScaleFactor(context),
                   color: AppTheme.lightGrey.withOpacity(0.8),
                 ),
                 onPressed: () {
@@ -41,16 +42,25 @@ class AppAuthFormField extends StatelessWidget {
                 },
               )
             : null,
+        prefixIconConstraints: BoxConstraints(
+          minWidth: 40,
+        ),
         labelText: label,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppTheme.grey,
+          fontSize: 14 * Scaler.textScaleFactor(context),
         ),
         hintText: labelHint,
         hintStyle: TextStyle(
           color: AppTheme.grey.withOpacity(0.4),
+          fontSize: 14 * Scaler.textScaleFactor(context),
         ),
         filled: true,
         fillColor: AppTheme.nearlyWhite.withOpacity(0.3),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 16 * Scaler.paddingVerticalScaleFactor(context),
+          horizontal: 16 * Scaler.paddingHorizontalScaleFactor(context),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: const BorderSide(
@@ -74,9 +84,9 @@ class AppAuthFormField extends StatelessWidget {
             width: 2,
           ),
         ),
-        floatingLabelStyle: const TextStyle(
+        floatingLabelStyle: TextStyle(
           color: AppTheme.grey,
-          fontSize: 18,
+          fontSize: 14 * Scaler.textScaleFactor(context),
         ),
       ),
       keyboardType: inputType,

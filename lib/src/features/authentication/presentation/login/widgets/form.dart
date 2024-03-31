@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/client_environment_controller.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/verification.dart';
 
 import '../../../../../config/themes/app_theme.dart';
@@ -9,10 +11,10 @@ import '../../form_field.dart';
 import '../../primary_button.dart';
 import '../../secondary_button.dart';
 
-class AppLoginForm extends StatelessWidget {
+class LoginForm extends StatelessWidget {
   final PageController pageController;
 
-  const AppLoginForm({
+  const LoginForm({
     super.key,
     required this.pageController,
   });
@@ -21,17 +23,17 @@ class AppLoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        padding: EdgeInsets.symmetric(vertical: 32.0),
         child: Column(
           children: [
-            const AppAuthFormField(
+            const AuthFormField(
               label: "Email",
               labelHint: "gabrielgraham@gmail.com",
               inputType: TextInputType.emailAddress,
               icon: Iconsax.directbox_notif_copy,
             ),
             const SizedBox(height: 16.0),
-            const AppAuthFormField(
+            const AuthFormField(
               label: "Password",
               labelHint: "********",
               inputType: TextInputType.visiblePassword,
@@ -43,21 +45,17 @@ class AppLoginForm extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Checkbox(
+                    AuthCheckbox(
                       value: true,
-                      onChanged: (bool? newValue) {
-                        // TODO: Implement remember me functionality
-                      },
-                      activeColor: AppTheme.nearlyDarkOrange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      onChanged: (value) {},
                     ),
-                    const Text(
+                    Text(
                       "Remember Me",
                       style: TextStyle(
                         color: AppTheme.grey,
+                        fontSize: 12.0 * Scaler.textScaleFactor(context),
                       ),
+                      textScaleFactor: Scaler.textScaleFactor(context),
                     ),
                   ],
                 ),
@@ -74,21 +72,23 @@ class AppLoginForm extends StatelessWidget {
                     style: TextStyle(
                       color: AppTheme.lightGrey.withOpacity(0.6),
                       backgroundColor: Colors.transparent,
+                      fontSize: 12.0 * Scaler.textScaleFactor(context),
                     ),
+                    textScaleFactor: Scaler.textScaleFactor(context),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
             AppAuthPrimaryButton(
               text: "Login",
               onPressed: () =>
                   Get.to(() => const AppClientEnvironmentController()),
             ),
             const SizedBox(height: 16),
-            AppAuthSecondaryButton(
+            AuthSecondaryButton(
               text: "Create an account",
-              onPressed: goToRegisterPage,
+              onPressed: toggleAuthPage,
               // onPressed: () {
               //   Navigator.push(
               //     context,
@@ -104,7 +104,7 @@ class AppLoginForm extends StatelessWidget {
     );
   }
 
-  void goToRegisterPage() {
+  void toggleAuthPage() {
     if (pageController.hasClients) {
       pageController.animateToPage(
         1,

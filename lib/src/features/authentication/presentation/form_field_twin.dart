@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field.dart';
 
-class AppAuthFormFieldTwin extends StatelessWidget {
-  const AppAuthFormFieldTwin({
+class AuthFormFieldTwin extends StatelessWidget {
+  const AuthFormFieldTwin({
     super.key,
     required this.firstLabel,
     required this.firstLabelHint,
@@ -32,7 +32,7 @@ class AppAuthFormFieldTwin extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: AppAuthFormField(
+          child: AuthFormField(
             label: firstLabel,
             labelHint: firstLabelHint,
             icon: firstIcon,
@@ -41,7 +41,7 @@ class AppAuthFormFieldTwin extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: AppAuthFormField(
+          child: AuthFormField(
             label: secondLabel,
             labelHint: secondLabelHint,
             icon: secondIcon,

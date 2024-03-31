@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../../../config/themes/app_theme.dart';
 
@@ -30,9 +31,10 @@ class AppLoginHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18.0),
-        const Text(
+        Text(
           'Back on Track',
           style: AppTheme.display2,
+          textScaleFactor: Scaler.textScaleFactor(context),
         ),
         const SizedBox(height: 10.0),
         SizedBox(
@@ -41,6 +43,7 @@ class AppLoginHeader extends StatelessWidget {
             "Reconnect with the world behind the door of your refrigerator.",
             style: AppTheme.subtitle,
             textAlign: TextAlign.center,
+            textScaleFactor: Scaler.textScaleFactor(context),
           ),
         ),
       ],

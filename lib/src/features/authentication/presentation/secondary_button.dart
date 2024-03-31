@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppAuthSecondaryButton extends StatelessWidget {
-  const AppAuthSecondaryButton({
+class AuthSecondaryButton extends StatelessWidget {
+  const AuthSecondaryButton({
     super.key,
     required this.text,
     required this.onPressed,
@@ -29,9 +30,10 @@ class AppAuthSecondaryButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 16,
+        style: TextStyle(
+          fontSize: 14.0,
         ),
+        textScaleFactor: Scaler.textScaleFactor(context),
       ),
     );
   }

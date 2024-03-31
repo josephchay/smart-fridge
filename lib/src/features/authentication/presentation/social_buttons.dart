@@ -12,15 +12,15 @@ class AppAuthSocialButtons extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AppAuthSocialIcon(
+        AuthSocialIcon(
           image: "assets/images/logos/google.png",
         ),
         SizedBox(width: 20),
-        AppAuthSocialIcon(
+        AuthSocialIcon(
           image: "assets/images/logos/apple.png",
         ),
         SizedBox(width: 20),
-        AppAuthSocialIcon(
+        AuthSocialIcon(
           image: "assets/images/logos/facebook.png",
         ),
       ],

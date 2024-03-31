@@ -102,7 +102,7 @@ class OnboardingController extends GetxController {
 
   void animateToNextPage(BuildContext context, bool isLogin) {
     if (currentPageIndex.value == 4) {
-      Get.offAll(() => AppAuthScreen(isLogin: isLogin));
+      Get.offAll(() => AuthScreen(isLogin: isLogin));
       // Navigator.pushReplacement(
       //   context,
       //   MaterialPageRoute(

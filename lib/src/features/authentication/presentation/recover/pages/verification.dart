@@ -100,7 +100,7 @@ class _AppRecoverVerificationScreenState
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Lottie.asset(
-                          "assets/images/auth/login/search.json",
+                          "assets/images/auth/search.json",
                         ),
                         const SizedBox(height: 90.0),
                         const Text(
@@ -122,7 +122,7 @@ class _AppRecoverVerificationScreenState
                           ),
                         ),
                         const SizedBox(height: 32),
-                        const AppAuthFormField(
+                        const AuthFormField(
                           label: "Email",
                           labelHint: "gabrielgraham@gmail.com",
                           inputType: TextInputType.emailAddress,

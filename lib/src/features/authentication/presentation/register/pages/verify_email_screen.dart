@@ -146,13 +146,13 @@ class _AppVerifyEmailScreenState extends State<AppVerifyEmailScreen>
                                 subTitle:
                                     'Start tracking your grocery inventory in real-time, get alerts on expiry dates, and even enjoy automated shopping list creation based on your consumption patterns!',
                                 onPressed: () => Get.to(
-                                    () => const AppAuthScreen(isLogin: true)),
+                                    () => const AuthScreen(isLogin: true)),
                               ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 24.0),
-                        AppAuthTertiaryButton(
+                        AuthTertiaryButton(
                           text: 'Resend Email',
                           onPressed: () {},
                         )

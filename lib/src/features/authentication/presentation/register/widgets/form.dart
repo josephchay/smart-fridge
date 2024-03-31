@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
 
 import '../../../../../config/themes/app_theme.dart';
 import '../../form_field.dart';
@@ -23,7 +25,7 @@ class AppRegisterForm extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 32.0),
         child: Column(
           children: <Widget>[
-            const AppAuthFormFieldTwin(
+            const AuthFormFieldTwin(
               firstLabel: "First Name",
               firstLabelHint: "Gabriel",
               firstIcon: Iconsax.user_edit_copy,
@@ -34,76 +36,64 @@ class AppRegisterForm extends StatelessWidget {
               secondInputType: TextInputType.name,
             ),
             const SizedBox(height: 16.0),
-            const AppAuthFormField(
-              label: "Username",
-              labelHint: "gabrielgraham",
-              inputType: TextInputType.name,
-              icon: Iconsax.user_edit_copy,
-            ),
-            const SizedBox(height: 16.0),
-            const AppAuthFormField(
+            const AuthFormField(
               label: "Email",
               labelHint: "grabrielgraham@gmail.com",
               inputType: TextInputType.emailAddress,
               icon: Iconsax.directbox_notif_copy,
             ),
             const SizedBox(height: 16.0),
-            const AppAuthFormField(
+            const AuthFormField(
               label: "Contact Number",
               labelHint: "+60 12 326 1405",
               inputType: TextInputType.number,
               icon: Iconsax.call_copy,
             ),
             const SizedBox(height: 16.0),
-            const AppAuthFormField(
+            const AuthFormField(
               label: "Password",
               labelHint: "********",
               inputType: TextInputType.visiblePassword,
-              icon: Iconsax.eye_slash_copy,
+              icon: Iconsax.password_check_copy,
             ),
             const SizedBox(height: 16.0),
             Row(
               children: [
                 SizedBox(
-                  // width: 24,
-                  // height: 24,
-                  child: Checkbox(
-                    value: true,
-                    onChanged: (value) {
-                      // TODO implement terms and conditions
-                    },
-                    activeColor: AppTheme.nearlyDarkOrange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
+                    child: AuthCheckbox(
+                  value: true,
+                  onChanged: (bool? newValue) {},
+                )),
                 const SizedBox(height: 16.0),
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
                         text: 'I agree to',
                         style: TextStyle(
                           color: AppTheme.grey,
+                          fontSize: 12.0 * Scaler.textScaleFactor(context),
                         ),
                       ),
                       TextSpan(
                         text: ' Privacy Policy',
                         style: TextStyle(
                           color: AppTheme.nearlyDarkOrange,
+                          fontSize: 12.0 * Scaler.textScaleFactor(context),
                         ),
                       ),
                       TextSpan(
                         text: ' and',
                         style: TextStyle(
                           color: AppTheme.grey,
+                          fontSize: 12.0 * Scaler.textScaleFactor(context),
                         ),
                       ),
                       TextSpan(
                         text: ' Terms of use',
                         style: TextStyle(
                           color: AppTheme.nearlyDarkOrange,
+                          fontSize: 12.0 * Scaler.textScaleFactor(context),
                         ),
                       ),
                     ],
@@ -111,7 +101,7 @@ class AppRegisterForm extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
             AppAuthPrimaryButton(
                 text: "Sign Up",
                 onPressed: () => Get.to(
@@ -123,7 +113,7 @@ class AppRegisterForm extends StatelessWidget {
     );
   }
 
-  void goToLoginPage() {
+  void toggleAuthPage() {
     if (pageController.hasClients) {
       pageController.animateToPage(
         0,

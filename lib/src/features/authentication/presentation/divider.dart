@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppAuthDivider extends StatelessWidget {
-  const AppAuthDivider({
+class AuthDivider extends StatelessWidget {
+  const AuthDivider({
     super.key,
     required this.text,
   });
@@ -27,8 +28,9 @@ class AppAuthDivider extends StatelessWidget {
           text,
           style: TextStyle(
             color: AppTheme.lighterGrey.withOpacity(1),
-            fontSize: 13,
+            fontSize: 10,
           ),
+          textScaleFactor: Scaler.textScaleFactor(context),
         ),
         Flexible(
           child: Divider(

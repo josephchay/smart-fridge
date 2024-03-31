@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
@@ -39,8 +40,9 @@ class AppAuthPrimaryButton extends StatelessWidget {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 16.0,
+            fontSize: 14.0,
           ),
+          textScaleFactor: Scaler.textScaleFactor(context),
         ),
       ),
     );

@@ -112,12 +112,12 @@ class _AppResetPasswordScreenState extends State<AppResetPasswordScreen>
                         const SizedBox(height: 24),
                         AppAuthPrimaryButton(
                           text: 'Login to Account',
-                          onPressed: () => Get.offAll(() => const AppAuthScreen(
+                          onPressed: () => Get.offAll(() => const AuthScreen(
                                 isLogin: true,
                               )),
                         ),
                         const SizedBox(height: 24.0),
-                        AppAuthTertiaryButton(
+                        AuthTertiaryButton(
                           text: 'Resend Email',
                           onPressed: () {},
                         )

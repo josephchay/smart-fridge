@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppAuthSocialIcon extends StatelessWidget {
-  const AppAuthSocialIcon({
+class AuthSocialIcon extends StatelessWidget {
+  const AuthSocialIcon({
     super.key,
     required this.image,
   });
