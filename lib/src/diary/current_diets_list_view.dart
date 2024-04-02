@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/models/current_meal_diet_list_data.dart';
 
@@ -109,7 +110,7 @@ class MealDietView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double tabWidth = screenWidth - (16 * 2);
+    double tabWidth = (screenWidth - (16 * 2)) * .48;
 
     return AnimatedBuilder(
       animation: animationController!,
@@ -125,7 +126,6 @@ class MealDietView extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(
-                      top: 32,
                       left: 8,
                       right: 8,
                       bottom: 16,
@@ -154,24 +154,24 @@ class MealDietView extends StatelessWidget {
                       child: Stack(
                         children: [
                           Positioned(
-                            top: 16, // Space from the top of the card
-                            left: 0,
+                            top: 64, // Space from the top of the card
+                            left: 16,
                             right: 0,
                             child: Text(
                               mealsListData!.titleTxt,
-                              textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontFamily: AppTheme.fontName,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 15,
                                 letterSpacing: 0.6,
                                 color: AppTheme.white,
                               ),
+                              textScaleFactor: Scaler.textScaleFactor(context),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                              top: 54,
+                              top: 86,
                               left: 16,
                               right: 16,
                               bottom: 8,
@@ -183,7 +183,9 @@ class MealDietView extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 8, bottom: 8),
+                                      top: 8,
+                                      bottom: 8,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -195,10 +197,12 @@ class MealDietView extends StatelessWidget {
                                           style: const TextStyle(
                                             fontFamily: AppTheme.fontName,
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 13,
+                                            fontSize: 12,
                                             letterSpacing: 0.4,
                                             color: AppTheme.white,
                                           ),
+                                          textScaleFactor:
+                                              Scaler.textScaleFactor(context),
                                         ),
                                       ],
                                     ),
@@ -219,9 +223,11 @@ class MealDietView extends StatelessWidget {
                                           letterSpacing: 0.2,
                                           color: AppTheme.white,
                                         ),
+                                        textScaleFactor:
+                                            Scaler.textScaleFactor(context),
                                       ),
                                     mealsListData?.kcal != 0
-                                        ? const Padding(
+                                        ? Padding(
                                             padding: EdgeInsets.only(
                                               left: 4,
                                               bottom: 3,
@@ -235,6 +241,9 @@ class MealDietView extends StatelessWidget {
                                                 letterSpacing: 0.2,
                                                 color: AppTheme.white,
                                               ),
+                                              textScaleFactor:
+                                                  Scaler.textScaleFactor(
+                                                      context),
                                             ))
                                         : Padding(
                                             padding: const EdgeInsets.only(
@@ -242,7 +251,7 @@ class MealDietView extends StatelessWidget {
                                               bottom: 3,
                                             ),
                                             child: Text(
-                                              'ON WAIT',
+                                              'PENDING',
                                               style: TextStyle(
                                                 fontFamily: AppTheme.fontName,
                                                 fontWeight: FontWeight.w500,
@@ -251,6 +260,9 @@ class MealDietView extends StatelessWidget {
                                                 color: AppTheme.nearlyWhite
                                                     .withOpacity(0.6),
                                               ),
+                                              textScaleFactor:
+                                                  Scaler.textScaleFactor(
+                                                      context),
                                             ),
                                           ),
                                   ],
@@ -263,8 +275,8 @@ class MealDietView extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 0,
-                    left: 0,
+                    top: -36,
+                    left: -6,
                     child: Transform.rotate(
                       angle: 45 * pi / 180,
                       child: Container(
@@ -278,11 +290,11 @@ class MealDietView extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 40,
-                    left: 30,
+                    top: 10,
+                    left: 26,
                     child: SizedBox(
-                      width: 30,
-                      height: 30,
+                      width: 26,
+                      height: 26,
                       child: SvgPicture.asset(
                         mealsListData!.imagePath,
                         color: AppTheme.white,

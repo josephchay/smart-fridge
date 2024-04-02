@@ -157,7 +157,7 @@ class _AppMarketScreenState extends State<AppMarketScreen>
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            AppClientTopBar(
+            AppTopBar(
               title: 'Market',
               topBarOpacity: topBarOpacity,
               animationController: widget.animationController,

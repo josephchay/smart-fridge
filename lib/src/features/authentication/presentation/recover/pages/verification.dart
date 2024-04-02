@@ -73,7 +73,7 @@ class _AppRecoverVerificationScreenState
             },
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top - 32,
+            top: MediaQuery.of(context).padding.top * 0.1,
             left: 10.0,
             child: SafeArea(
               child: IconButton(

@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/utils/date_picker.dart';
 
-import 'grocery_listings/calendar_popup_view.dart';
+enum AppTopBarAction {
+  none,
+  datepicker,
+  favourites,
+}
 
-class AppClientTopBar extends StatefulWidget {
-  const AppClientTopBar({
+class AppTopBar extends StatefulWidget {
+  final String title;
+  final AppTopBarAction action;
+  final double topBarOpacity;
+  final AnimationController? animationController;
+  final Animation<double>? animation;
+
+  const AppTopBar({
     super.key,
+    this.action = AppTopBarAction.none,
     required this.topBarOpacity,
-    this.withDateModification = false,
     required this.title,
     this.animationController,
     this.animation,
   });
 
-  final String title;
-  final double topBarOpacity;
-  final bool withDateModification;
-  final AnimationController? animationController;
-  final Animation<double>? animation;
-
   @override
-  State<AppClientTopBar> createState() => _AppClientTopBarState();
+  State<AppTopBar> createState() => _AppTopBarState();
 }
 
-class _AppClientTopBarState extends State<AppClientTopBar>
-    with TickerProviderStateMixin {
+class _AppTopBarState extends State<AppTopBar> with TickerProviderStateMixin {
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
 
@@ -45,8 +50,9 @@ class _AppClientTopBarState extends State<AppClientTopBar>
                     color:
                         AppTheme.background.withOpacity(widget.topBarOpacity),
                     borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(18.0),
-                        bottomRight: Radius.circular(18.0)),
+                      bottomLeft: Radius.circular(18.0),
+                      bottomRight: Radius.circular(18.0),
+                    ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: AppTheme.lightGrey
@@ -84,94 +90,12 @@ class _AppClientTopBarState extends State<AppClientTopBar>
                                     letterSpacing: 1.2,
                                     color: AppTheme.darkerText,
                                   ),
+                                  textScaleFactor:
+                                      Scaler.textScaleFactor(context),
                                 ),
                               ),
                             ),
-                            if (widget.withDateModification) ...[
-                              SizedBox(
-                                height: 38,
-                                width: 38,
-                                child: InkWell(
-                                  highlightColor: Colors.transparent,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0),
-                                  ),
-                                  onTap: () {},
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.keyboard_arrow_left,
-                                      color: AppTheme.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  focusColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  splashColor: Colors.grey.withOpacity(0.2),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(4.0),
-                                  ),
-                                  onTap: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    // setState(() {
-                                    //   isDatePopupOpen = true;
-                                    // });
-                                    showDemoDialog(context: context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 8,
-                                      right: 8,
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Icon(
-                                            Icons.calendar_today,
-                                            color: AppTheme.grey,
-                                            size: 18,
-                                          ),
-                                        ),
-                                        Text(
-                                          '15 May',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontFamily: AppTheme.fontName,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 18,
-                                            letterSpacing: -0.2,
-                                            color: AppTheme.darkerText,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 38,
-                                width: 38,
-                                child: InkWell(
-                                  highlightColor: Colors.transparent,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(32.0)),
-                                  onTap: () {},
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.keyboard_arrow_right,
-                                      color: AppTheme.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            _getActionWidget(),
                           ],
                         ),
                       )
@@ -186,23 +110,27 @@ class _AppClientTopBarState extends State<AppClientTopBar>
     );
   }
 
-  void showDemoDialog({BuildContext? context}) {
-    showDialog<dynamic>(
-      context: context!,
-      builder: (BuildContext context) => CalendarPopupView(
-        barrierDismissible: true,
-        minimumDate: DateTime.now(),
-        //  maximumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 10),
-        initialEndDate: endDate,
-        initialStartDate: startDate,
-        onApplyClick: (DateTime startData, DateTime endData) {
-          setState(() {
-            startDate = startData;
-            endDate = endData;
-          });
-        },
-        onCancelClick: () {},
-      ),
-    );
+  Widget _getActionWidget() {
+    switch (widget.action) {
+      case AppTopBarAction.datepicker:
+        return DatePicker(
+          startDate: startDate,
+          endDate: endDate,
+          onDateChange: (DateTime start, DateTime end) {
+            setState(() {
+              startDate = start;
+              endDate = end;
+            });
+          },
+        );
+      case AppTopBarAction.favourites:
+        return Icon(
+          Icons.favorite_border_outlined,
+          color: AppTheme.nearlyBlack,
+        );
+      case AppTopBarAction.none:
+      default:
+        return SizedBox(); // No action
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:smart_fridge/src/diary/current_diets_list_view.dart';
 import 'package:smart_fridge/src/ui_view/accumulated_nutrition_view.dart';
 import 'package:smart_fridge/src/ui_view/body_measurement.dart';
 import 'package:smart_fridge/src/ui_view/title_view.dart';
+import 'package:smart_fridge/src/utils/date_picker.dart';
 
 import '../../top_bar.dart';
 
@@ -41,6 +42,8 @@ class _DiaryScreenState extends State<DiaryScreen>
     );
 
     widget.scrollController.addListener(() {
+      if (!mounted) return;
+
       if (widget.scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
           setState(() {
@@ -67,12 +70,11 @@ class _DiaryScreenState extends State<DiaryScreen>
   }
 
   void addAllListData() {
-    const int count = 9;
+    const int count = 6; // number of items in the list
 
     listViews.add(
       TitleView(
         titleTxt: 'Accumulated Nutrition',
-        subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
@@ -82,6 +84,7 @@ class _DiaryScreenState extends State<DiaryScreen>
         animationController: widget.animationController!,
       ),
     );
+
     listViews.add(
       AppAccumulatedNutritionView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -93,10 +96,10 @@ class _DiaryScreenState extends State<DiaryScreen>
         animationController: widget.animationController!,
       ),
     );
+
     listViews.add(
       TitleView(
         titleTxt: 'Current Diet',
-        subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
@@ -122,7 +125,6 @@ class _DiaryScreenState extends State<DiaryScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Body measurement',
-        subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
@@ -144,6 +146,7 @@ class _DiaryScreenState extends State<DiaryScreen>
         animationController: widget.animationController!,
       ),
     );
+
     // listViews.add(
     //   TitleView(
     //     titleTxt: 'Water',
@@ -169,6 +172,7 @@ class _DiaryScreenState extends State<DiaryScreen>
     //     mainScreenAnimationController: widget.animationController!,
     //   ),
     // );
+    //
     // listViews.add(
     //   GlassView(
     //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -189,30 +193,33 @@ class _DiaryScreenState extends State<DiaryScreen>
 
   @override
   Widget build(BuildContext context) {
+    DateTime startDate = DateTime.now();
+    DateTime endDate = DateTime.now().add(const Duration(days: 5));
+
     return Container(
       color: AppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
           children: <Widget>[
-            getMainListViewUI(),
-            AppClientTopBar(
+            getListViewUI(),
+            AppTopBar(
               title: 'Diary',
+              action: AppTopBarAction.datepicker,
               topBarOpacity: topBarOpacity,
               animationController: widget.animationController,
               animation: topBarAnimation,
-              withDateModification: true,
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom,
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget getMainListViewUI() {
+  Widget getListViewUI() {
     return FutureBuilder<bool>(
       future: getData(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -225,7 +232,7 @@ class _DiaryScreenState extends State<DiaryScreen>
               top: AppBar().preferredSize.height +
                   MediaQuery.of(context).padding.top +
                   24,
-              bottom: 62 + MediaQuery.of(context).padding.bottom,
+              bottom: 20 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
             scrollDirection: Axis.vertical,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
@@ -96,22 +97,26 @@ class _OnboardingSwipeNextButtonState extends State<OnboardingSwipeNextButton>
           right: widget.currentPageIndex == 4 ? 0 : 20.0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(18.0),
           color: AppTheme.darkGrey,
         ),
         child: GestureDetector(
           onTap: widget.onPressed,
           child: Stack(
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             children: [
               if (widget.currentPageIndex == 4)
-                FadeTransition(
-                  opacity: _opacityAnimation,
-                  child: const Text(
-                    'Get Started',
-                    style: TextStyle(
-                      color: AppTheme.nearlyWhite,
-                      fontSize: 16.0,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: Text(
+                      "Get Started",
+                      style: TextStyle(
+                        color: AppTheme.nearlyWhite,
+                        fontSize: 16.0,
+                      ),
+                      textScaleFactor: Scaler.textScaleFactor(context),
                     ),
                   ),
                 ),

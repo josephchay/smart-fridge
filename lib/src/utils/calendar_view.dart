@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../src/config/themes/app_theme.dart';
+import '../config/themes/app_theme.dart';
 
-class CustomCalendarView extends StatefulWidget {
-  const CustomCalendarView(
-      {Key? key,
-      this.initialStartDate,
-      this.initialEndDate,
-      this.startEndDateChange,
-      this.minimumDate,
-      this.maximumDate})
-      : super(key: key);
+class CalendarView extends StatefulWidget {
+  const CalendarView({
+    Key? key,
+    this.initialStartDate,
+    this.initialEndDate,
+    this.startEndDateChange,
+    this.minimumDate,
+    this.maximumDate,
+  }) : super(key: key);
 
   final DateTime? minimumDate;
   final DateTime? maximumDate;
@@ -21,10 +21,10 @@ class CustomCalendarView extends StatefulWidget {
   final Function(DateTime, DateTime)? startEndDateChange;
 
   @override
-  _CustomCalendarViewState createState() => _CustomCalendarViewState();
+  _CalendarViewState createState() => _CalendarViewState();
 }
 
-class _CustomCalendarViewState extends State<CustomCalendarView> {
+class _CalendarViewState extends State<CalendarView> {
   List<DateTime> dateList = <DateTime>[];
   DateTime currentMonthDate = DateTime.now();
   DateTime? startDate;

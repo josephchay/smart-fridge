@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/screen.dart';
-
-import '../../../../../config/themes/app_theme.dart';
-import '../../primary_button.dart';
-import '../../tertiary_button.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/tertiary_button.dart';
 
 class AppResetPasswordScreen extends StatefulWidget {
   const AppResetPasswordScreen({Key? key}) : super(key: key);
@@ -40,6 +39,12 @@ class _AppResetPasswordScreenState extends State<AppResetPasswordScreen>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -67,7 +72,7 @@ class _AppResetPasswordScreenState extends State<AppResetPasswordScreen>
             },
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top - 32,
+            top: MediaQuery.of(context).padding.top * 0.1,
             left: 10.0,
             child: SafeArea(
               child: IconButton(

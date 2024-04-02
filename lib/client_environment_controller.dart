@@ -79,11 +79,7 @@ class _AppClientEnvironmentControllerState
         if (isDrawerCloseBool) {
           // Check if the drawer is closed
           double currentScrollPosition = _scrollController.position.pixels;
-          if (currentScrollPosition > _lastScrollPosition) {
-            toggleNavBarVisibility(true);
-          } else if (currentScrollPosition < _lastScrollPosition) {
-            toggleNavBarVisibility(false);
-          }
+          toggleNavBarVisibility(currentScrollPosition > _lastScrollPosition);
           _lastScrollPosition = currentScrollPosition;
         }
       });
@@ -302,7 +298,7 @@ class _AppClientEnvironmentControllerState
                     tabBody = NotificationScreen();
                     break;
                   case 4:
-                    tabBody = MealPlanningScreen(
+                    tabBody = AppMealPlannerScreen(
                       animationController: pageAnimationController,
                       scrollController: _scrollController,
                     );

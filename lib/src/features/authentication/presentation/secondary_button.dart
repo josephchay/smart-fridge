@@ -31,7 +31,7 @@ class AuthSecondaryButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 14.0,
+          fontSize: 16.0,
         ),
         textScaleFactor: Scaler.textScaleFactor(context),
       ),

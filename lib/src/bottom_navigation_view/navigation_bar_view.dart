@@ -79,7 +79,7 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
                           color: AppTheme.nearlyWhite.withOpacity(0.1),
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.nearlyWhite.withOpacity(0.8),
+                              color: AppTheme.grey.withOpacity(0.1),
                               blurRadius: 6,
                               spreadRadius: 10,
                             ),
@@ -91,7 +91,10 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
                               height: 62,
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 8, right: 8, top: 4),
+                                  left: 8,
+                                  right: 8,
+                                  top: 4,
+                                ),
                                 child: Row(
                                   children: [
                                     Expanded(

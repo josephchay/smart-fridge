@@ -31,7 +31,7 @@ class AuthTertiaryButton extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 12.0,
+          fontSize: 14.0,
         ),
         textScaleFactor: Scaler.textScaleFactor(context),
       ),

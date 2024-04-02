@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
-import 'custom_calendar.dart';
+import 'calendar_view.dart';
 
-class CalendarPopupView extends StatefulWidget {
-  const CalendarPopupView(
-      {Key? key,
-      this.initialStartDate,
-      this.initialEndDate,
-      this.onApplyClick,
-      this.onCancelClick,
-      this.barrierDismissible = true,
-      this.minimumDate,
-      this.maximumDate})
-      : super(key: key);
+class CalendarModalView extends StatefulWidget {
+  const CalendarModalView({
+    Key? key,
+    this.initialStartDate,
+    this.initialEndDate,
+    this.onApplyClick,
+    this.onCancelClick,
+    this.barrierDismissible = true,
+    this.minimumDate,
+    this.maximumDate,
+  }) : super(key: key);
 
   final DateTime? minimumDate;
   final DateTime? maximumDate;
@@ -25,10 +25,10 @@ class CalendarPopupView extends StatefulWidget {
 
   final Function()? onCancelClick;
   @override
-  _CalendarPopupViewState createState() => _CalendarPopupViewState();
+  _CalendarModalViewState createState() => _CalendarModalViewState();
 }
 
-class _CalendarPopupViewState extends State<CalendarPopupView>
+class _CalendarModalViewState extends State<CalendarModalView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   DateTime? startDate;
@@ -172,7 +172,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                             const Divider(
                               height: 1,
                             ),
-                            CustomCalendarView(
+                            CalendarView(
                               minimumDate: widget.minimumDate,
                               maximumDate: widget.maximumDate,
                               initialEndDate: widget.initialEndDate,

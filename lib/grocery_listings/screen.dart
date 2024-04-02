@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:smart_fridge/grocery_listings/hotel_list_view.dart';
+import 'package:smart_fridge/grocery_listings/grocery_list_view.dart';
 import 'package:smart_fridge/grocery_listings/model/grocery_list_data.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../src/config/themes/app_theme.dart';
 import 'filters_screen.dart';
@@ -338,11 +339,15 @@ class _GroceryScreenState extends State<GroceryScreen>
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 4, bottom: 4),
+                    left: 16,
+                    right: 16,
+                    top: 4,
+                    bottom: 4,
+                  ),
                   child: TextField(
                     onChanged: (String txt) {},
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: 18 * Scaler.textScaleFactor(context),
                     ),
                     cursorColor: AppTheme.buildLightTheme().primaryColor,
                     decoration: InputDecoration(

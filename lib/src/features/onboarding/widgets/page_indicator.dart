@@ -24,7 +24,7 @@ class OnboardingPageIndicator extends StatelessWidget {
         activeIndex: currentPageIndex,
         onDotClicked: onDotClicked,
         effect: ExpandingDotsEffect(
-          dotColor: AppTheme.lighterGrey.withOpacity(0.6),
+          dotColor: AppTheme.lighterGrey.withOpacity(0.3),
           activeDotColor: AppTheme.darkGrey,
           dotHeight: 6.0,
         ),

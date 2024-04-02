@@ -81,7 +81,7 @@ class _AuthScreenState extends State<AuthScreen>
             ],
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top - 36,
+            top: MediaQuery.of(context).padding.top * 0.1,
             right: 10.0 + _currentPageIndex * (screenWidth * .82),
             child: SafeArea(
               child: IconButton(

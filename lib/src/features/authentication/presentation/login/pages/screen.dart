@@ -1,13 +1,12 @@
-import 'dart:math';
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/core/util/color.dart';
-
-import '../../divider.dart';
-import '../../social_buttons.dart';
-import '../widgets/form.dart';
-import '../widgets/header.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/divider.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/login/widgets/form.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/login/widgets/header.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/social_buttons.dart';
 
 class LoginScreen extends StatelessWidget {
   final PageController pageController;
@@ -30,7 +29,7 @@ class LoginScreen extends StatelessWidget {
           right: -100,
           child: Transform(
             alignment: Alignment.center,
-            transform: Matrix4.rotationY(pi),
+            transform: Matrix4.rotationY(math.pi),
             child: Image.asset(
                 'assets/images/miscellaneous/yellow-orange-gradient-blob.png'),
           ),
@@ -55,7 +54,7 @@ class LoginScreen extends StatelessWidget {
           bottom: -40,
           child: Transform(
             alignment: Alignment.center,
-            transform: Matrix4.rotationY(pi),
+            transform: Matrix4.rotationY(math.pi),
             child: Image.asset(
                 'assets/images/miscellaneous/pink-purple-gradient-blob.png'),
           ),
@@ -74,26 +73,28 @@ class LoginScreen extends StatelessWidget {
             );
           },
         ),
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 56.0,
-              bottom: 24.0,
-              left: 24.0,
-              right: 24.0,
-            ),
-            child: Column(
-              children: [
-                const AppLoginHeader(),
-                LoginForm(
-                  pageController: pageController,
-                ),
-                const AuthDivider(
-                  text: "OR SIGN IN WITH",
-                ),
-                const SizedBox(height: 16),
-                const AppAuthSocialButtons(),
-              ],
+        SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 40.0,
+                bottom: 24.0,
+                left: 24.0,
+                right: 24.0,
+              ),
+              child: Column(
+                children: [
+                  const AppLoginHeader(),
+                  LoginForm(
+                    pageController: pageController,
+                  ),
+                  const AuthDivider(
+                    text: "OR SIGN IN WITH",
+                  ),
+                  const SizedBox(height: 16),
+                  const AppAuthSocialButtons(),
+                ],
+              ),
             ),
           ),
         ),

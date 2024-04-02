@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
 class TitleView extends StatelessWidget {
   final String titleTxt;
   final String subTxt;
+  final bool hasTopPadding;
+  final bool hasBottomPadding;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const TitleView(
-      {Key? key,
-      this.titleTxt = "",
-      this.subTxt = "",
-      this.animationController,
-      this.animation})
-      : super(key: key);
+  const TitleView({
+    super.key,
+    this.titleTxt = "",
+    this.subTxt = "",
+    this.hasTopPadding = true,
+    this.hasBottomPadding = true,
+    this.animationController,
+    this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,12 @@ class TitleView extends StatelessWidget {
                 0.0, 30 * (1.0 - animation!.value), 0.0),
             child: Container(
               child: Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: hasTopPadding ? 16 : 0,
+                  bottom: hasBottomPadding ? 16 : 0,
+                ),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -37,10 +47,11 @@ class TitleView extends StatelessWidget {
                         style: const TextStyle(
                           fontFamily: AppTheme.fontName,
                           fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                          fontSize: 15,
                           letterSpacing: 0.5,
                           color: AppTheme.lightText,
                         ),
+                        textScaleFactor: Scaler.textScaleFactor(context),
                       ),
                     ),
                     InkWell(
@@ -58,17 +69,18 @@ class TitleView extends StatelessWidget {
                               style: const TextStyle(
                                 fontFamily: AppTheme.fontName,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 16,
+                                fontSize: 14,
                                 letterSpacing: 0.5,
                                 color: AppTheme.nearlyDarkOrange,
                               ),
+                              textScaleFactor: Scaler.textScaleFactor(context),
                             ),
                             // SizedBox(
                             //   height: 38,
                             //   width: 26,
                             //   child: Icon(
                             //     Icons.arrow_forward,
-                            //     color: AppTheme.darkText,
+                            //     color: AppTheme.nearlyDarkOrange,
                             //     size: 18,
                             //   ),
                             // ),

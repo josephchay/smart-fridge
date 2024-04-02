@@ -10,10 +10,10 @@ class AppAccumulatedNutritionView extends StatelessWidget {
   final Animation<double>? animation;
 
   const AppAccumulatedNutritionView({
-    Key? key,
+    super.key,
     this.animationController,
     this.animation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,6 @@ class AppAccumulatedNutritionView extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 24,
                 right: 24,
-                top: 16,
-                bottom: 18,
               ),
               child: Container(
                 decoration: BoxDecoration(

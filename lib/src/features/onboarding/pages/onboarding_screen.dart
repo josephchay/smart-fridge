@@ -30,9 +30,15 @@ class OnboardingScreen extends StatelessWidget {
             // slideIconWidget: Icon(Iconsax.arrow_right_3),
           ),
           Obx(
-            () => AppOnboardSwipePreviousButton(
-              onPressed: () => controller.animateToPreviousPage(context),
-              currentPageIndex: controller.currentPageIndex.value,
+            () => AnimatedOpacity(
+              // Only visible starting from the second page (index 1)
+              opacity: controller.currentPageIndex.value > 0 ? 1.0 : 0.0,
+              duration:
+                  const Duration(milliseconds: 300), // Transition duration
+              child: AppOnboardSwipePreviousButton(
+                onPressed: () => controller.animateToPreviousPage(context),
+                currentPageIndex: controller.currentPageIndex.value,
+              ),
             ),
           ),
           Obx(

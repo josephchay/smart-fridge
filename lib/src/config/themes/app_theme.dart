@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../core/util/color.dart';
+import 'package:smart_fridge/core/util/color.dart';
 
 class AppTheme {
   AppTheme._();
@@ -11,6 +10,7 @@ class AppTheme {
   static const Color nearlyOrange = Color(0xFFFDCD4B);
   static const Color nearlyDarkOrange = Color(0xFFFFBB4F);
   static const Color nearlyTiger = Color(0xFFFE724D);
+  static const Color nearlyRed = Color(0xFFF31A33);
 
   static const Color nearlyDarkBlue = Color(0xFF2633C5);
   static const Color nearlyBlue = Color(0xFF00B6F0);

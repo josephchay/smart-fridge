@@ -14,20 +14,22 @@ class Stats {
   int preProcessingTime;
   int count;
 
-  Stats(
-      {required this.totalPredictTime,
-      this.totalElapsedTime,
-      required this.inferenceTime,
-      required this.preProcessingTime,
-      this.count = 1});
+  Stats({
+    required this.totalPredictTime,
+    this.totalElapsedTime,
+    required this.inferenceTime,
+    required this.preProcessingTime,
+    this.count = 1,
+  });
 
   Stats operator +(Stats other) {
     return Stats(
-        totalPredictTime: totalPredictTime + other.totalPredictTime,
-        totalElapsedTime: (totalElapsedTime ?? 0) + (other.totalElapsedTime ?? 0),
-        inferenceTime: inferenceTime + other.inferenceTime,
-        preProcessingTime: preProcessingTime + other.preProcessingTime,
-        count: count + other.count);
+      totalPredictTime: totalPredictTime + other.totalPredictTime,
+      totalElapsedTime: (totalElapsedTime ?? 0) + (other.totalElapsedTime ?? 0),
+      inferenceTime: inferenceTime + other.inferenceTime,
+      preProcessingTime: preProcessingTime + other.preProcessingTime,
+      count: count + other.count,
+    );
   }
 
   Stats get average {
@@ -36,11 +38,12 @@ class Stats {
     }
 
     return Stats(
-        totalPredictTime: totalPredictTime ~/ count,
-        totalElapsedTime: totalElapsedTime! ~/ count,
-        inferenceTime: inferenceTime ~/ count,
-        preProcessingTime: preProcessingTime ~/ count,
-        count: count);
+      totalPredictTime: totalPredictTime ~/ count,
+      totalElapsedTime: totalElapsedTime! ~/ count,
+      inferenceTime: inferenceTime ~/ count,
+      preProcessingTime: preProcessingTime ~/ count,
+      count: count,
+    );
   }
 
   @override

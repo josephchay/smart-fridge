@@ -119,6 +119,7 @@ flutter:
     - assets/images/miscellaneous/
     - assets/videos/
     - assets/images/temp/
+    - assets/images/meals/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
