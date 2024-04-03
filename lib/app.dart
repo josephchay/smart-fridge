@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/features/onboarding/pages/onboarding_screen.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -31,7 +30,14 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: OnboardingScreen(),
+      home: Scaffold(
+        backgroundColor: AppTheme.background,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }

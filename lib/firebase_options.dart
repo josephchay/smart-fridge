@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '377268597115',
     projectId: 'smart-fridge-c71eb',
     storageBucket: 'smart-fridge-c71eb.appspot.com',
+    androidClientId: '377268597115-mii1n0c0qqfu1826ubae4rv7rnkq7cs5.apps.googleusercontent.com',
+    iosClientId: '377268597115-rp5bnr8lls2rh6fju6ef9srknuob1ogj.apps.googleusercontent.com',
     iosBundleId: 'com.example.objectDetection',
   );
 }

@@ -2,11 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
-
-import '../../../../../config/themes/app_theme.dart';
-import '../../divider.dart';
-import '../../social_buttons.dart';
-import '../widgets/form.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/divider.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/register/widgets/form.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/social_buttons.dart';
 
 class RegisterScreen extends StatelessWidget {
   final PageController pageController;

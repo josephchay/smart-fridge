@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/form_field.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
-
-import '../../../../../config/themes/app_theme.dart';
-import '../../form_field.dart';
-import '../../form_field_twin.dart';
-import '../../primary_button.dart';
-import '../pages/verify_email_screen.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/form_field_twin.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/register/pages/verify_email_screen.dart';
 
 class AppRegisterForm extends StatelessWidget {
   final PageController pageController;
