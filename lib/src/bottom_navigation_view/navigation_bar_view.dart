@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/models/navigation_bar_icon.dart';
@@ -15,12 +16,12 @@ class AppNavigationBarView extends StatefulWidget {
   final Map<String, AppNavigationBarIcon>? navigationBarIcons;
 
   const AppNavigationBarView({
-    Key? key,
+    super.key,
     this.changeIndex,
     this.addClick,
     this.onLongPress,
     this.navigationBarIcons,
-  }) : super(key: key);
+  });
 
   @override
   _AppNavigationBarViewState createState() => _AppNavigationBarViewState();
@@ -42,7 +43,7 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onLongPress: () {
         widget.onLongPress!();
       },

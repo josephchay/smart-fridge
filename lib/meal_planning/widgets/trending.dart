@@ -245,7 +245,7 @@ class MealCard extends StatelessWidget {
                                 // check if the current meal is in the favorites list
                                 color: meal.isFavourite
                                     ? AppTheme.nearlyRed
-                                    : AppTheme.grey,
+                                    : AppTheme.grey.withOpacity(.8),
                               ),
                             ),
                           ),

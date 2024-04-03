@@ -263,53 +263,55 @@ class _AppClientEnvironmentControllerState
         const Expanded(
           child: SizedBox(),
         ),
-        AppNavigationBarView(
-          addClick: () {},
-          onLongPress: () {
-            isDrawerCloseBool
-                ? _drawerAnimationController.forward()
-                : _drawerAnimationController.reverse();
-
-            setState(() {
-              isDrawerCloseBool = !isDrawerCloseBool;
-            });
-          },
-          changeIndex: (int index) {
-            pageAnimationController?.reverse().then<dynamic>((data) {
-              if (!mounted) {
-                return;
-              }
+        SafeArea(
+          child: AppNavigationBarView(
+            addClick: () {},
+            onLongPress: () {
+              isDrawerCloseBool
+                  ? _drawerAnimationController.forward()
+                  : _drawerAnimationController.reverse();
 
               setState(() {
-                switch (index) {
-                  case 0:
-                    tabBody = DiaryScreen(
-                      animationController: pageAnimationController,
-                      scrollController: _scrollController,
-                    );
-                    break;
-                  case 1:
-                    tabBody = GroceryScreen();
-                    break;
-                  case 2:
-                    tabBody = CameraScreen();
-                    break;
-                  case 3:
-                    tabBody = NotificationScreen();
-                    break;
-                  case 4:
-                    tabBody = AppMealPlannerScreen(
-                      animationController: pageAnimationController,
-                      scrollController: _scrollController,
-                    );
-                    break;
-                  default:
-                    break;
-                }
+                isDrawerCloseBool = !isDrawerCloseBool;
               });
-            });
-          },
-          navigationBarIcons: navigationBarIcons,
+            },
+            changeIndex: (int index) {
+              pageAnimationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+
+                setState(() {
+                  switch (index) {
+                    case 0:
+                      tabBody = DiaryScreen(
+                        animationController: pageAnimationController,
+                        scrollController: _scrollController,
+                      );
+                      break;
+                    case 1:
+                      tabBody = GroceryScreen();
+                      break;
+                    case 2:
+                      tabBody = CameraScreen();
+                      break;
+                    case 3:
+                      tabBody = NotificationScreen();
+                      break;
+                    case 4:
+                      tabBody = AppMealPlannerScreen(
+                        animationController: pageAnimationController,
+                        scrollController: _scrollController,
+                      );
+                      break;
+                    default:
+                      break;
+                  }
+                });
+              });
+            },
+            navigationBarIcons: navigationBarIcons,
+          ),
         ),
       ],
     );

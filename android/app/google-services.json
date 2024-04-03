@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "377268597115",
+    "project_id": "smart-fridge-c71eb",
+    "storage_bucket": "smart-fridge-c71eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377268597115:android:401f27347bcca2bdcf0dde",
+        "android_client_info": {
+          "package_name": "com.example.smart_fridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAGTSGuZ4m2lzVXgqEaU3pqnDqseqNoKA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

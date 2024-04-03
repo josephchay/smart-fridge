@@ -1,8 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
-import 'package:smart_fridge/meal_planning/widgets/food_counter.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
 class MealScreen extends StatefulWidget {
@@ -24,43 +25,43 @@ class _MealScreenState extends State<MealScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 6,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.nearlyOrange,
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text("Start Cooking"),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: IconButton(
-                onPressed: () {},
-                style: IconButton.styleFrom(
-                  shape: CircleBorder(
-                    side: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2,
-                    ),
-                  ),
-                ),
-                icon: Icon(
-                  widget.meal.isFavourite ? Iconsax.heart : Iconsax.heart,
-                  color: widget.meal.isFavourite ? Colors.red : Colors.black,
-                  size: 20,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   padding: const EdgeInsets.all(10),
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         flex: 6,
+      //         child: ElevatedButton(
+      //           onPressed: () {},
+      //           style: ElevatedButton.styleFrom(
+      //             backgroundColor: AppTheme.nearlyOrange,
+      //             foregroundColor: Colors.white,
+      //           ),
+      //           child: const Text("Make Meal"),
+      //         ),
+      //       ),
+      //       const SizedBox(width: 10),
+      //       Expanded(
+      //         child: IconButton(
+      //           onPressed: () {},
+      //           style: IconButton.styleFrom(
+      //             shape: CircleBorder(
+      //               side: BorderSide(
+      //                 color: Colors.grey.shade300,
+      //                 width: 2,
+      //               ),
+      //             ),
+      //           ),
+      //           icon: Icon(
+      //             widget.meal.isFavourite ? Iconsax.heart : Iconsax.heart,
+      //             color: widget.meal.isFavourite ? Colors.red : Colors.black,
+      //             size: 20,
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +74,7 @@ class _MealScreenState extends State<MealScreen> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(widget.meal.image),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -84,28 +85,18 @@ class _MealScreenState extends State<MealScreen> {
                   right: 10,
                   child: Row(
                     children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          fixedSize: const Size(50, 50),
-                        ),
-                        icon: const Icon(CupertinoIcons.chevron_back),
+                      MainActionButton(
+                        icon: CupertinoIcons.chevron_back,
+                        color: AppTheme.darkText,
                       ),
                       const Spacer(),
-                      IconButton(
-                        onPressed: () {},
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          fixedSize: const Size(50, 50),
-                        ),
-                        icon: const Icon(Iconsax.notification),
+                      MainActionButton(
+                        icon: widget.meal.isFavourite
+                            ? Icons.favorite_outlined
+                            : Icons.favorite_border_outlined,
+                        color: widget.meal.isFavourite
+                            ? AppTheme.nearlyRed
+                            : AppTheme.grey,
                       ),
                     ],
                   ),
@@ -155,22 +146,11 @@ class _MealScreenState extends State<MealScreen> {
                   Row(
                     children: [
                       const Icon(
-                        Iconsax.flash_1,
+                        Icons.access_time_filled,
                         size: 20,
                         color: Colors.grey,
                       ),
-                      Text(
-                        widget.meal.stepsCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const Icon(
-                        Iconsax.clock,
-                        size: 20,
-                        color: Colors.grey,
-                      ),
+                      const SizedBox(width: 4),
                       Text(
                         widget.meal.duration,
                         style: const TextStyle(
@@ -178,15 +158,19 @@ class _MealScreenState extends State<MealScreen> {
                           color: Colors.grey,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(
-                        Iconsax.star,
-                        color: Colors.yellow.shade700,
-                        size: 25,
+                      const SizedBox(width: 20),
+                      const Icon(
+                        Icons.text_snippet,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        widget.meal.stepsCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -203,30 +187,8 @@ class _MealScreenState extends State<MealScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            "How many servings?",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          )
                         ],
                       ),
-                      const Spacer(),
-                      FoodCounter(
-                        currentNumber: currentNumber,
-                        onAdd: () => setState(() {
-                          currentNumber++;
-                        }),
-                        onRemove: () {
-                          if (currentNumber != 1) {
-                            setState(() {
-                              currentNumber--;
-                            });
-                          }
-                        },
-                      )
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -247,12 +209,13 @@ class _MealScreenState extends State<MealScreen> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
+                          Text(
+                            widget.meal.title,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
+                            textScaleFactor: Scaler.textScaleFactor(context),
                           ),
                           const Spacer(),
                           Text(
@@ -341,6 +304,42 @@ class _MealScreenState extends State<MealScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainActionButton extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  const MainActionButton({
+    super.key,
+    required this.icon,
+    this.color = AppTheme.darkText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(
+          15), // Match this to your IconButton's borderRadius
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppTheme.white.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              icon,
+              color: color,
+            ),
+            // Remove the styleFrom if using a Container for background styling
+          ),
         ),
       ),
     );

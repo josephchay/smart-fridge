@@ -25,7 +25,7 @@ class _AppOnboardSwipePreviousButtonState
 
   @override
   Widget build(BuildContext context) {
-    double adjustedBottom = widget.currentPageIndex == 4 ? 30.0 : 45.0;
+    double adjustedBottom = widget.currentPageIndex == 4 ? 30.0 : 40.0;
 
     // Determine the correct alignment based on currentPageIndex
     Alignment targetAlignment =
@@ -34,7 +34,10 @@ class _AppOnboardSwipePreviousButtonState
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       alignment: targetAlignment,
-      padding: EdgeInsets.only(bottom: adjustedBottom),
+      padding: EdgeInsets.only(
+        left: 10,
+        bottom: adjustedBottom,
+      ),
       child: TextButton(
         onPressed: widget.onPressed,
         style: TextButton.styleFrom(

@@ -1,12 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/features/onboarding/pages/onboarding_screen.dart';
 
+import 'app.dart';
+import 'firebase_options.dart';
 import 'main_injection_container.dart';
 
 Future<void> main() async {
@@ -22,32 +19,9 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
-  ]).then((_) => runApp(const SmartFridgeApp()));
-}
+  ]).then((_) => runApp(const App()));
 
-class SmartFridgeApp extends StatelessWidget {
-  const SmartFridgeApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Makes status bar transparent
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness:
-          !kIsWeb && Platform.isAndroid ? Brightness.dark : Brightness.light,
-      systemNavigationBarColor: Colors.black.withOpacity(0.002),
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness:
-          Brightness.dark, // Ensure icons are visible
-    ));
-
-    return GetMaterialApp(
-      title: 'Smart Fridge',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: OnboardingScreen(),
-    );
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
