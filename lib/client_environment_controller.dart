@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/camera/ui/screen.dart';
+import 'package:smart_fridge/camera/screen.dart';
 import 'package:smart_fridge/custom_drawer/drawer.dart';
 import 'package:smart_fridge/grocery_listings/screen.dart';
 import 'package:smart_fridge/meal_planning/screen.dart';
@@ -293,7 +293,7 @@ class _AppClientEnvironmentControllerState
                       tabBody = GroceryScreen();
                       break;
                     case 2:
-                      tabBody = CameraScreen();
+                      tabBody = FridgeScreen();
                       break;
                     case 3:
                       tabBody = NotificationScreen();
