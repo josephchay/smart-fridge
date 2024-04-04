@@ -2,51 +2,82 @@ import 'package:camera/camera.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'dart:async';
+
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
 late List<CameraDescription> cameras;
 
 // YOLO V5 REAL-TIME OBJECT DETECTION
 class FridgeScreen extends StatefulWidget {
-  const FridgeScreen({super.key});
+  const FridgeScreen({
+    super.key,
+  });
 
   @override
   State<FridgeScreen> createState() => _FridgeScreenState();
 }
 
-class _FridgeScreenState extends State<FridgeScreen> {
+class _FridgeScreenState extends State<FridgeScreen>
+    with WidgetsBindingObserver {
   late CameraController controller;
-  late List<Map<String, dynamic>> yoloResults;
+  List<Map<String, dynamic>> yoloResults = [];
   CameraImage? cameraImage;
   bool isLoaded = false;
   bool isDetecting = false;
 
   late FlutterVision vision; // YOLO
   FlutterTts flutterTts = FlutterTts(); // TTS
+  bool isTTSActive = false;
 
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     vision = FlutterVision(); // YOLO
-    initTTS(); // TTS
-
-    init();
+    // initTTS();
+    initCamera();
   }
 
+  // Initialize camera and start detection
+  void initCamera() async {
+    cameras = await availableCameras();
+    controller =
+        CameraController(cameras[0], ResolutionPreset.max, enableAudio: false);
+    await controller.initialize();
+    await loadYoloModel();
+    startDetection();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      stopDetection(); // Stop detection when the app is paused
+    } else if (state == AppLifecycleState.resumed) {
+      startDetection(); // Resume detection when the app is resumed
+    }
+  }
+
+  /// Text to Speech
   Future<void> initTTS() async {
-    // TTS
-    await flutterTts.setLanguage("en-US"); // Set the language you want
+    await flutterTts.setLanguage("en-US"); // Set the language
     await flutterTts.setSpeechRate(1.0); // Adjust speech rate (1.0 is normal)
     await flutterTts.setVolume(1.0); // Adjust volume (0.0 to 1.0)
     await flutterTts.setPitch(1.0); // Adjust pitch (1.0 is normal)
+
+    setState(() {
+      isTTSActive = true;
+    });
   }
 
   Future<void> speak(String text) async {
-    await flutterTts.speak(text); // TTS
+    if (isTTSActive) {
+      await flutterTts.speak(text); // TTS
+    }
   }
 
-  init() async {
+  void init() async {
     cameras = await availableCameras();
     controller =
         CameraController(cameras[0], ResolutionPreset.max, enableAudio: false);
@@ -63,6 +94,9 @@ class _FridgeScreenState extends State<FridgeScreen> {
 
   @override
   void dispose() async {
+    WidgetsBinding.instance.removeObserver(this); // Remove observer
+    stopDetection(); // Stop detection
+
     flutterTts.stop(); // TTS Stop
     vision.closeYoloModel(); // YOLO Stop
 
@@ -73,15 +107,21 @@ class _FridgeScreenState extends State<FridgeScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
     if (!isLoaded) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
-          child: Text("Model not loaded. Waiting for it.",
-              style: TextStyle(color: Colors.white)),
+          child: Text(
+            "Getting camera ready",
+            style: TextStyle(
+                color: AppTheme.white,
+                fontSize: 16 * Scaler.textScaleFactor(context)),
+          ),
         ),
       );
     }
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -92,56 +132,27 @@ class _FridgeScreenState extends State<FridgeScreen> {
           ),
         ),
         ...displayBoxesAroundRecognizedObjects(size),
-        Positioned(
-          bottom: 75,
-          width: MediaQuery.of(context).size.width,
-          child: Container(
-            height: 80,
-            width: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                  width: 5, color: Colors.white, style: BorderStyle.solid),
-            ),
-            child: isDetecting
-                ? IconButton(
-                    onPressed: () async {
-                      stopDetection();
-                    },
-                    icon: const Icon(
-                      Icons.stop,
-                      color: Colors.red,
-                    ),
-                    iconSize: 50,
-                  )
-                : IconButton(
-                    onPressed: () async {
-                      await startDetection();
-                    },
-                    icon: const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                    ),
-                    iconSize: 50,
-                  ),
-          ),
-        ),
       ],
     );
   }
 
+  // Load YOLO model
   Future<void> loadYoloModel() async {
     await vision.loadYoloModel(
-        labels: 'assets/object_detection/yolo/labels.txt',
-        modelPath: 'assets/object_detection/yolo/yolov5n.tflite',
-        modelVersion: "yolov5",
-        numThreads: 8,
-        useGpu: true);
+      labels: 'assets/object_detection/yolo/labels.txt',
+      modelPath: 'assets/object_detection/yolo/yolov5n.tflite',
+      modelVersion: "yolov5",
+      numThreads: 8,
+      useGpu: true,
+    );
     setState(() {
       isLoaded = true;
     });
+    // Optionally call startDetection() here if you want to wait for the model to load
+    // startDetection();
   }
 
+  // Process each frame for YOLO
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
     final result = await vision.yoloOnFrame(
         bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
@@ -150,33 +161,38 @@ class _FridgeScreenState extends State<FridgeScreen> {
         iouThreshold: 0.4,
         confThreshold: 0.4,
         classThreshold: 0.5);
-    if (result.isNotEmpty) {
+    if (result.isNotEmpty && mounted) {
       setState(() {
         yoloResults = result;
+      });
+      for (var res in result) {
+        speak(res['tag']); // For each detection, speak out the result
+      }
+    }
+  }
+
+  // Ensure that the startDetection is awaited and starts the image stream
+  Future<void> startDetection() async {
+    if (!controller.value.isStreamingImages) {
+      setState(() {
+        isDetecting = true;
+      });
+      controller.startImageStream((image) {
+        if (isDetecting) {
+          cameraImage = image;
+          yoloOnFrame(image);
+        }
       });
     }
   }
 
-  Future<void> startDetection() async {
-    setState(() {
-      isDetecting = true;
-    });
-    if (controller.value.isStreamingImages) {
-      return;
-    }
-    await controller.startImageStream((image) async {
-      if (isDetecting) {
-        cameraImage = image;
-        yoloOnFrame(image);
-      }
-    });
-  }
-
+  // Stop the detection process
   Future<void> stopDetection() async {
-    setState(() {
+    if (isDetecting) {
+      await controller.stopImageStream();
       isDetecting = false;
       yoloResults.clear();
-    });
+    }
   }
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
@@ -189,6 +205,10 @@ class _FridgeScreenState extends State<FridgeScreen> {
     return yoloResults.map((result) {
       speak("${result['tag']}");
 
+      String detection =
+          "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(0)}%";
+      String detectionWithoutConfidence = "${result['tag']}";
+
       return Positioned(
         left: result["box"][0] * factorX,
         top: result["box"][1] * factorY,
@@ -197,14 +217,17 @@ class _FridgeScreenState extends State<FridgeScreen> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            border: Border.all(color: Colors.pink, width: 2.0),
+            border: Border.all(
+              color: colorPick,
+              width: 2.0,
+            ),
           ),
           child: Text(
-            "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(0)}%",
+            detection,
             style: TextStyle(
               background: Paint()..color = colorPick,
               color: Colors.white,
-              fontSize: 18.0,
+              fontSize: 16.0 * Scaler.textScaleFactor(context),
             ),
           ),
         ),

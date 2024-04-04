@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/camera/screen.dart';
 import 'package:smart_fridge/custom_drawer/drawer.dart';
+import 'package:smart_fridge/fridge/screen.dart';
 import 'package:smart_fridge/grocery_listings/screen.dart';
 import 'package:smart_fridge/meal_planning/screen.dart';
 import 'package:smart_fridge/src/bottom_navigation_view/navigation_bar_view.dart';

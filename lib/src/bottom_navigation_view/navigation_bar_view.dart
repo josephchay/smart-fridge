@@ -2,12 +2,10 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:smart_fridge/core/util/color.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/models/navigation_bar_icon.dart';
-
-import '../../core/util/color.dart';
 
 class AppNavigationBarView extends StatefulWidget {
   final Function(int index)? changeIndex;
@@ -221,6 +219,8 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
                               focusColor: Colors.transparent,
                               onTap: () {
                                 widget.addClick!();
+                                setRemoveAllSelection(
+                                    widget.navigationBarIcons?['fridge']);
                                 widget.changeIndex!(2);
                               },
                               child: const Icon(
@@ -259,9 +259,11 @@ class _AppNavigationBarViewState extends State<AppNavigationBarView>
 }
 
 class NavigationBarIcons extends StatefulWidget {
-  const NavigationBarIcons(
-      {Key? key, this.navigationBarIcon, this.removeAllSelect})
-      : super(key: key);
+  const NavigationBarIcons({
+    super.key,
+    this.navigationBarIcon,
+    this.removeAllSelect,
+  });
 
   final AppNavigationBarIcon? navigationBarIcon;
   final Function()? removeAllSelect;
