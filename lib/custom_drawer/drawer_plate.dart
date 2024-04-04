@@ -14,7 +14,7 @@ class AppDrawerPlate extends StatelessWidget {
   });
 
   final bool isLightMode;
-  final AppDrawerIcon tab;
+  final AppDrawerTab tab;
   final VoidCallback press;
   // final ValueChanged<rive.Artboard> iconOnInit;
   final bool isActive;

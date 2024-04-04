@@ -44,23 +44,6 @@ class _CameraScreenState extends State<CameraScreen> {
           // Bounding boxes
           boundingBoxes(results),
 
-          // Heading
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              padding: EdgeInsets.only(top: 20),
-              child: Text(
-                'Object Detection Flutter',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepOrangeAccent.withOpacity(0.4),
-                ),
-              ),
-            ),
-          ),
-
           // Bottom Sheet
           Align(
             alignment: Alignment.bottomCenter,

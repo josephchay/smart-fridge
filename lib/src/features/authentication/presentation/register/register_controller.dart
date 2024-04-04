@@ -75,13 +75,15 @@ class AppRegisterController extends GetxController {
       );
 
       Get.to(
-        () => const AppVerifyEmailScreen(),
+        () => AppVerifyEmailScreen(
+          email: email.text.trim(),
+        ),
       );
     } on FirebaseAuthException catch (e) {
       AppFullScreenLoader.stopLoading();
 
       AppSnackbar.error(
-        message: AppFirebase.getMessageFromErrorCode(e.code),
+        message: AppFirebase.messageFromAuthErrorCode(e.code),
       );
     } catch (e) {
       AppFullScreenLoader.stopLoading();

@@ -14,7 +14,7 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  AppDrawerIcon selectedTab = drawerTopTabIcons.first;
+  AppDrawerTab selectedTab = drawerTopTabs.first;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       ),
                 ),
               ),
-              ...drawerTopTabIcons.map((tab) => AppDrawerPlate(
+              ...drawerTopTabs.map((tab) => AppDrawerPlate(
                     isLightMode: isLightMode,
                     tab: tab,
                     // iconOnInit: (artboard) {
@@ -76,6 +76,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       setState(() {
                         selectedTab = tab;
                       });
+                      tab.action();
                     },
                     isActive: selectedTab == tab,
                   )),
@@ -92,7 +93,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       ),
                 ),
               ),
-              ...drawerBottomTabIcons.map(
+              ...drawerBottomTabs.map(
                 (tab) => AppDrawerPlate(
                   isLightMode: isLightMode,
                   tab: tab,
@@ -113,6 +114,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     setState(() {
                       selectedTab = tab;
                     });
+                    tab.action();
                   },
                   isActive: selectedTab == tab,
                 ),

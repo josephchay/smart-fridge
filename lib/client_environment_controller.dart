@@ -16,9 +16,9 @@ class AppClientEnvironmentController extends StatefulWidget {
   final Function(double x, double y, double scale, double angle)? onDrawerSlide;
 
   const AppClientEnvironmentController({
-    Key? key,
+    super.key,
     this.onDrawerSlide,
-  }) : super(key: key);
+  });
 
   @override
   _AppClientEnvironmentControllerState createState() =>

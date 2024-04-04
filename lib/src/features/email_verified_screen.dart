@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/src/features/result_screen.dart';
 
-class AppSuccessToastScreen extends StatefulWidget {
-  const AppSuccessToastScreen({
+class AppEmailVerifiedScreen extends StatefulWidget {
+  const AppEmailVerifiedScreen({
     super.key,
     required this.image,
     required this.title,
@@ -18,10 +18,10 @@ class AppSuccessToastScreen extends StatefulWidget {
   final VoidCallback onPressed;
 
   @override
-  State<AppSuccessToastScreen> createState() => _AppSuccessToastScreenState();
+  State<AppEmailVerifiedScreen> createState() => _AppEmailVerifiedScreenState();
 }
 
-class _AppSuccessToastScreenState extends State<AppSuccessToastScreen>
+class _AppEmailVerifiedScreenState extends State<AppEmailVerifiedScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animationBottom;

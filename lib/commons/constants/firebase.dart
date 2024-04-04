@@ -1,7 +1,7 @@
 class AppFirebase {
   AppFirebase._();
 
-  static String getMessageFromErrorCode(String errorCode) {
+  static String messageFromAuthErrorCode(String errorCode) {
     switch (errorCode) {
       case "ERROR_EMAIL_ALREADY_IN_USE":
       case "account-exists-with-different-credential":

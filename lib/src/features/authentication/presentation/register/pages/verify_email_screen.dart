@@ -4,16 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_fridge/core/util/color.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/register/verify_email_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/screen.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/tertiary_button.dart';
-import 'package:smart_fridge/src/features/success_screen.dart';
-
-import '../../../../../../core/util/color.dart';
+import 'package:smart_fridge/src/features/email_verified_screen.dart';
 
 class AppVerifyEmailScreen extends StatefulWidget {
-  const AppVerifyEmailScreen({Key? key}) : super(key: key);
+  final String? email;
+
+  const AppVerifyEmailScreen({
+    super.key,
+    this.email,
+  });
 
   @override
   State<AppVerifyEmailScreen> createState() => _AppVerifyEmailScreenState();
@@ -50,6 +55,7 @@ class _AppVerifyEmailScreenState extends State<AppVerifyEmailScreen>
   @override
   Widget build(BuildContext context) {
     final dark = ColorHelper.isDarkMode(context);
+    final controller = Get.put(AppVerifyEmailController());
 
     return Scaffold(
       body: Stack(
@@ -116,8 +122,8 @@ class _AppVerifyEmailScreenState extends State<AppVerifyEmailScreen>
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16.0),
-                        const Text(
-                          'support@joseph.com',
+                        Text(
+                          widget.email ?? '',
                           style: TextStyle(
                             color: AppTheme.lightGrey,
                             fontSize: 12.0,
@@ -139,22 +145,14 @@ class _AppVerifyEmailScreenState extends State<AppVerifyEmailScreen>
                           width: double.infinity,
                           child: AppAuthPrimaryButton(
                             text: 'Continue',
-                            onPressed: () => Get.to(
-                              () => AppSuccessToastScreen(
-                                image: 'assets/images/miscellaneous/tick.json',
-                                title: 'Account Created Successfully!',
-                                subTitle:
-                                    'Start tracking your grocery inventory in real-time, get alerts on expiry dates, and even enjoy automated shopping list creation based on your consumption patterns!',
-                                onPressed: () => Get.to(
-                                    () => const AuthScreen(isLogin: true)),
-                              ),
-                            ),
+                            onPressed: () =>
+                                controller.checkEmailVerificationStatus(),
                           ),
                         ),
                         const SizedBox(height: 24.0),
                         AuthTertiaryButton(
                           text: 'Resend Email',
-                          onPressed: () {},
+                          onPressed: () => controller.process(),
                         )
                       ],
                     ),
