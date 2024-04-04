@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:smart_fridge/bindings/core_bindings.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
 class App extends StatelessWidget {
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      initialBinding: CoreBindings(),
       home: Scaffold(
         backgroundColor: AppTheme.background,
         body: Center(

@@ -4,21 +4,25 @@ import 'package:smart_fridge/src/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AppAuthFormField extends StatelessWidget {
+class AppAuthPasswordFormField extends StatelessWidget {
   final String label;
   final String labelHint;
   final TextInputType inputType;
   final IconData icon;
+  final IconButton? suffixIcon;
+  final bool obscureText;
   final TextEditingController controller;
   final String? Function(String?) validator;
   final bool expands;
 
-  const AppAuthFormField({
+  const AppAuthPasswordFormField({
     super.key,
     required this.label,
     required this.labelHint,
     required this.inputType,
     required this.icon,
+    this.suffixIcon,
+    this.obscureText = false,
     required this.controller,
     required this.validator,
     this.expands = false,
@@ -30,11 +34,13 @@ class AppAuthFormField extends StatelessWidget {
       controller: controller,
       validator: validator,
       expands: expands,
+      obscureText: obscureText,
       decoration: InputDecoration(
         prefixIcon: Icon(
           icon,
           size: 20 * Scaler.textScaleFactor(context),
         ),
+        suffixIcon: suffixIcon ?? null,
         prefixIconConstraints: BoxConstraints(
           minWidth: 40,
         ),

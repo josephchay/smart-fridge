@@ -4,7 +4,9 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/client_environment_controller.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/login/login_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/verification.dart';
+import 'package:smart_fridge/utils/validators/validation.dart';
 
 import '../../../../../config/themes/app_theme.dart';
 import '../../form_field.dart';
@@ -21,23 +23,29 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AppLoginController());
+
     return Form(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 32.0),
         child: Column(
           children: [
-            const AuthFormField(
+            AppAuthFormField(
               label: "Email",
               labelHint: "gabrielgraham@gmail.com",
               inputType: TextInputType.emailAddress,
               icon: Iconsax.directbox_notif_copy,
+              controller: controller.email,
+              validator: (value) => AppValidators.validateEmail(value),
             ),
             const SizedBox(height: 16.0),
-            const AuthFormField(
+            AppAuthFormField(
               label: "Password",
               labelHint: "********",
               inputType: TextInputType.visiblePassword,
               icon: Iconsax.password_check_copy,
+              controller: controller.password,
+              validator: (value) => AppValidators.validatePassword(value),
             ),
             const SizedBox(height: 8.0),
             Row(

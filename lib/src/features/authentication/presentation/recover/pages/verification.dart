@@ -7,6 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/reset_password.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/recover/recover_verification_controller.dart';
+import 'package:smart_fridge/utils/validators/validation.dart';
 
 import '../../../../../../core/util/color.dart';
 import '../../../../../config/themes/app_theme.dart';
@@ -45,6 +47,7 @@ class _AppRecoverVerificationScreenState
   @override
   Widget build(BuildContext context) {
     final dark = ColorHelper.isDarkMode(context);
+    final controller = Get.put(AppRecoverVerificationController());
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -122,11 +125,14 @@ class _AppRecoverVerificationScreenState
                           ),
                         ),
                         const SizedBox(height: 32),
-                        const AuthFormField(
+                        AppAuthFormField(
                           label: "Email",
                           labelHint: "gabrielgraham@gmail.com",
                           inputType: TextInputType.emailAddress,
                           icon: Iconsax.directbox_notif_copy,
+                          controller: controller.email,
+                          validator: (value) =>
+                              AppValidators.validateEmail(value),
                         ),
                         const SizedBox(height: 24),
                         AppAuthPrimaryButton(

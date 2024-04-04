@@ -10,7 +10,8 @@ class AppTheme {
   static const Color nearlyOrange = Color(0xFFFDCD4B);
   static const Color nearlyDarkOrange = Color(0xFFFFBB4F);
   static const Color nearlyTiger = Color(0xFFFE724D);
-  static const Color nearlyRed = Color(0xFFF31A33);
+  static const Color nearlyRed = Color(0xFFFF485D);
+  static const Color nearlyGreen = Color(0xFF79E829);
 
   static const Color nearlyDarkBlue = Color(0xFF2633C5);
   static const Color nearlyBlue = Color(0xFF00B6F0);
