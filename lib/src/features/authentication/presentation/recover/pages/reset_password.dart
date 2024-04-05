@@ -4,13 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/controllers/forget_password/reset_password_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/screen.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/tertiary_button.dart';
 
 class AppResetPasswordScreen extends StatefulWidget {
-  const AppResetPasswordScreen({Key? key}) : super(key: key);
+  final String email;
+
+  const AppResetPasswordScreen({
+    super.key,
+    required this.email,
+  });
 
   @override
   State<AppResetPasswordScreen> createState() => _AppResetPasswordScreenState();
@@ -114,6 +121,18 @@ class _AppResetPasswordScreenState extends State<AppResetPasswordScreen>
                             textAlign: TextAlign.center,
                           ),
                         ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 300.0,
+                          child: Text(
+                            widget.email,
+                            style: TextStyle(
+                              color: AppTheme.grey.withOpacity(.4),
+                              fontSize: 13.0 * Scaler.textScaleFactor(context),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         const SizedBox(height: 24),
                         AppAuthPrimaryButton(
                           text: 'Login to Account',
@@ -124,7 +143,8 @@ class _AppResetPasswordScreenState extends State<AppResetPasswordScreen>
                         const SizedBox(height: 24.0),
                         AuthTertiaryButton(
                           text: 'Resend Email',
-                          onPressed: () {},
+                          onPressed: () => AppResetPasswordController.instance
+                              .resendEmail(widget.email),
                         )
                       ],
                     ),

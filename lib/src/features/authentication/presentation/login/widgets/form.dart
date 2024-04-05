@@ -6,7 +6,7 @@ import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/login/login_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/password_form_field.dart';
-import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/verification.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/reset_password_verification_screen.dart';
 import 'package:smart_fridge/utils/validators/validation.dart';
 
 import '../../../../../config/themes/app_theme.dart';
@@ -88,8 +88,8 @@ class LoginForm extends StatelessWidget {
                   ],
                 ),
                 TextButton(
-                  onPressed: () =>
-                      Get.to(() => const AppRecoverVerificationScreen()),
+                  onPressed: () => Get.to(
+                      () => const AppResetPasswordEmailVerificationScreen()),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.transparent,
                     disabledForegroundColor:

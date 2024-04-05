@@ -26,7 +26,7 @@ class AppFirebase {
       case "invalid-email":
         return "Email address is invalid.";
       default:
-        return "Login failed. Please try again.";
+        return "An error occurred! Please try again later.";
     }
   }
 }

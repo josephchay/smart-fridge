@@ -54,7 +54,7 @@ class AppSnackbar {
                     "DISMISS",
                     style: TextStyle(
                       color: AppTheme.nearlyBlack.withOpacity(.4),
-                      fontSize: 14 * Scaler.textScaleFactor(Get.context!),
+                      fontSize: 13 * Scaler.textScaleFactor(Get.context!),
                     ),
                   ),
                 ),

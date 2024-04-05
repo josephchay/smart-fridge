@@ -27,9 +27,9 @@ class AppLoginController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     email.text = localStorage.read('REMEMBER_ME_EMAIL') ?? '';
     password.text = localStorage.read('REMEMBER_ME_PASSWORD') ?? '';
-    super.onInit();
   }
 
   Future<void> process() async {
@@ -59,16 +59,17 @@ class AppLoginController extends GetxController {
         password: password.text.trim(),
       );
 
-      final uid = credential.user!.uid;
-      final docSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      final userData = docSnapshot.data();
-      final fullName = '${userData!['firstName']} ${userData['lastName']}';
+      final userDocs = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email.text.trim())
+          .get();
+      final userData = userDocs.docs.first.data();
 
       AppFullScreenLoader.stopLoading();
 
       AppSnackbar.success(
-        message: 'Welcome back, $fullName!',
+        message:
+            'Welcome back, ${userData['firstName']} ${userData['lastName']}!',
       );
 
       AuthenticationRepository.instance.screenRedirect();

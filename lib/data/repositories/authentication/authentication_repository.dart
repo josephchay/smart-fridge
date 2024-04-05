@@ -23,6 +23,7 @@ class AuthenticationRepository extends GetxController {
     screenRedirect();
   }
 
+  /// [screenRedirect] redirects the user to the appropriate screen based on the user's authentication status.
   void screenRedirect() async {
     final user = _auth.currentUser;
 
@@ -45,6 +46,7 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
+  /// [loginWithEmailAndPassword] logs in a user with email and password.
   Future<UserCredential> loginWithEmailAndPassword({
     required String email,
     required String password,
@@ -80,6 +82,7 @@ class AuthenticationRepository extends GetxController {
     throw Exception('An error occurred! Please try again later.');
   }
 
+  /// [registerWithEmailAndPassword] registers a new user with email and password.
   Future<UserCredential> registerWithEmailAndPassword({
     required String email,
     required String password,
@@ -115,6 +118,7 @@ class AuthenticationRepository extends GetxController {
     throw Exception('An error occurred! Please try again later.');
   }
 
+  /// [sendEmailVerification] sends an email verification to the user's email address.
   Future<void> sendEmailVerification() async {
     try {
       final user = _auth.currentUser;
@@ -151,6 +155,45 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
+  /// [sendPasswordResetEmail] sends a password reset email to the user's email address.
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(
+        email: email,
+      );
+
+      AppSnackbar.success(
+        message: 'Password reset email sent successfully!',
+      );
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.error(
+        message: e.message ??
+            'An error occurred when sending an email verification! Please try again later.',
+      );
+    } on FirebaseException catch (e) {
+      AppSnackbar.error(
+        message: e.message ??
+            'An error occurred when sending an email verification! Please try again later.',
+      );
+    } on FormatException catch (_) {
+      AppSnackbar.error(
+        message:
+            'There was an error while processing your request. Please try again later.',
+      );
+    } on PlatformException catch (e) {
+      AppSnackbar.error(
+        message: e.message ??
+            'An error occurred when sending an email verification! Please try again later.',
+      );
+    } catch (e) {
+      AppSnackbar.error(
+        message:
+            'An error occurred when sending an email verification! Please try again later.',
+      );
+    }
+  }
+
+  /// [logout] logs out the current user.
   Future<void> logout() async {
     try {
       await GoogleSignIn().signOut();
@@ -184,6 +227,7 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
+  /// [loginWithGoogle] logs in a user with Google.
   Future<UserCredential?> loginWithGoogle() async {
     try {
       // Trigger the auth flow
@@ -224,5 +268,9 @@ class AuthenticationRepository extends GetxController {
       );
       return null;
     }
+  }
+
+  void clearLocalStorage() {
+    localStorage.erase();
   }
 }

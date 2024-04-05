@@ -52,6 +52,12 @@ class _AppEmailVerifiedScreenState extends State<AppEmailVerifiedScreen>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(

@@ -11,7 +11,7 @@ class UserRepository extends GetxController {
 
   Future<void> save(UserModel user) async {
     try {
-      await _db.collection("Users").doc(user.id).set(user.toJson());
+      await _db.collection("users").doc(user.id).set(user.toJson());
     } on FirebaseException catch (e) {
       AppSnackbar.error(
         message: e.message ?? 'An error occurred! Please try again later.',

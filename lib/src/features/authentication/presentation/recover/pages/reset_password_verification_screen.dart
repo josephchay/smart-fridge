@@ -4,25 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smart_fridge/core/util/color.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/controllers/forget_password/reset_password_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';
-import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/reset_password.dart';
-import 'package:smart_fridge/src/features/authentication/presentation/recover/recover_verification_controller.dart';
 import 'package:smart_fridge/utils/validators/validation.dart';
 
-import '../../../../../../core/util/color.dart';
-import '../../../../../config/themes/app_theme.dart';
-
-class AppRecoverVerificationScreen extends StatefulWidget {
-  const AppRecoverVerificationScreen({Key? key}) : super(key: key);
+class AppResetPasswordEmailVerificationScreen extends StatefulWidget {
+  const AppResetPasswordEmailVerificationScreen({Key? key}) : super(key: key);
 
   @override
-  State<AppRecoverVerificationScreen> createState() =>
-      _AppRecoverVerificationScreenState();
+  State<AppResetPasswordEmailVerificationScreen> createState() =>
+      _AppResetPasswordEmailVerificationScreenState();
 }
 
-class _AppRecoverVerificationScreenState
-    extends State<AppRecoverVerificationScreen>
+class _AppResetPasswordEmailVerificationScreenState
+    extends State<AppResetPasswordEmailVerificationScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -45,9 +43,15 @@ class _AppRecoverVerificationScreenState
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dark = ColorHelper.isDarkMode(context);
-    final controller = Get.put(AppRecoverVerificationController());
+    final controller = Get.put(AppResetPasswordController());
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -99,48 +103,49 @@ class _AppRecoverVerificationScreenState
                       left: 24.0,
                       right: 24.0,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Lottie.asset(
-                          "assets/images/auth/search.json",
-                        ),
-                        const SizedBox(height: 90.0),
-                        const Text(
-                          'Verify Your Identity',
-                          style: TextStyle(
-                            color: AppTheme.darkerText,
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.w700,
+                    child: Form(
+                      key: controller.formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            "assets/images/auth/search.json",
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        const SizedBox(
-                          width: 300.0,
-                          child: Text(
-                            'On the Road to Recovery! Securely Verify Your Identity and Start Fresh with a New Password.',
-                            style: AppTheme.subtitle,
+                          const SizedBox(height: 90.0),
+                          const Text(
+                            'Confirm Your Identity',
+                            style: TextStyle(
+                              color: AppTheme.darkerText,
+                              fontSize: 26.0,
+                              fontWeight: FontWeight.w700,
+                            ),
                             textAlign: TextAlign.center,
                           ),
-                        ),
-                        const SizedBox(height: 32),
-                        AppAuthFormField(
-                          label: "Email",
-                          labelHint: "gabrielgraham@gmail.com",
-                          inputType: TextInputType.emailAddress,
-                          icon: Iconsax.directbox_notif_copy,
-                          controller: controller.email,
-                          validator: (value) =>
-                              AppValidators.validateEmail(value),
-                        ),
-                        const SizedBox(height: 24),
-                        AppAuthPrimaryButton(
-                          text: 'Recover Password',
-                          onPressed: () =>
-                              Get.offAll(() => const AppResetPasswordScreen()),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          const SizedBox(
+                            width: 300.0,
+                            child: Text(
+                              'On the road to recovery! Securely verify your identify and start fresh with a new password.',
+                              style: AppTheme.subtitle,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                          AppAuthFormField(
+                            label: "Email",
+                            labelHint: "gabrielgraham@gmail.com",
+                            inputType: TextInputType.emailAddress,
+                            icon: Iconsax.directbox_notif_copy,
+                            controller: controller.email,
+                            validator: AppValidators.validateEmail,
+                          ),
+                          const SizedBox(height: 24),
+                          AppAuthPrimaryButton(
+                            text: 'Continue',
+                            onPressed: controller.sendEmail,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
