@@ -68,7 +68,10 @@ class AppSnackbar {
     ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
   }
 
-  static void info({String message = '', int duration = 3}) {
+  static void info({
+    String message = '',
+    int duration = 3,
+  }) {
     _showSnackbar(
       message: message,
       themeColor: AppTheme.grey,
@@ -77,7 +80,10 @@ class AppSnackbar {
     );
   }
 
-  static void success({String message = '', int duration = 3}) {
+  static void success({
+    String message = '',
+    int duration = 3,
+  }) {
     _showSnackbar(
       message: message,
       themeColor: AppTheme.nearlyGreen,
@@ -86,7 +92,10 @@ class AppSnackbar {
     );
   }
 
-  static void warning({String message = '', int duration = 3}) {
+  static void warning({
+    String message = '',
+    int duration = 3,
+  }) {
     _showSnackbar(
       message: message,
       themeColor: AppTheme.nearlyOrange,
@@ -95,7 +104,10 @@ class AppSnackbar {
     );
   }
 
-  static void error({String message = '', int duration = 3}) {
+  static void error({
+    String message = '',
+    int duration = 3,
+  }) {
     _showSnackbar(
       message: message,
       themeColor: AppTheme.nearlyRed,

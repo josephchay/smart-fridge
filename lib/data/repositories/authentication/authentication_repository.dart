@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smart_fridge/client_environment_controller.dart';
 import 'package:smart_fridge/commons/constants/firebase.dart';
 import 'package:smart_fridge/commons/widgets/snackbar.dart';
@@ -152,7 +153,9 @@ class AuthenticationRepository extends GetxController {
 
   Future<void> logout() async {
     try {
+      await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
+
       Get.offAll(() => const AuthScreen(isLogin: true));
     } on FirebaseAuthException catch (e) {
       AppSnackbar.error(
@@ -181,7 +184,45 @@ class AuthenticationRepository extends GetxController {
     }
   }
 
-  void clearLocalStorage() {
-    localStorage.erase();
+  Future<UserCredential?> loginWithGoogle() async {
+    try {
+      // Trigger the auth flow
+      final GoogleSignInAccount? userAccount = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await userAccount?.authentication;
+
+      // Create a new credential
+      final credentials = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Return userCredential after sign in
+      return await _auth.signInWithCredential(credentials);
+    } on FirebaseAuthException catch (e) {
+      AppSnackbar.error(
+        message: AppFirebase.messageFromAuthErrorCode(e.code),
+      );
+    } on FirebaseException catch (e) {
+      AppSnackbar.error(
+        message: e.message ?? 'An error occurred! Please try again later.',
+      );
+    } on FormatException catch (_) {
+      AppSnackbar.error(
+        message:
+            'There was an error while processing your request. Please try again later.',
+      );
+    } on PlatformException catch (e) {
+      AppSnackbar.error(
+        message: e.message ?? 'An error occurred! Please try again later.',
+      );
+    } catch (e) {
+      AppSnackbar.error(
+        message: 'An error occurred! Please try again later.',
+      );
+      return null;
+    }
   }
 }

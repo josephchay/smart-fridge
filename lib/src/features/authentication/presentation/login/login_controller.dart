@@ -8,6 +8,7 @@ import 'package:smart_fridge/commons/constants/firebase.dart';
 import 'package:smart_fridge/commons/widgets/snackbar.dart';
 import 'package:smart_fridge/commons/widgets/network_manager.dart';
 import 'package:smart_fridge/data/repositories/authentication/authentication_repository.dart';
+import 'package:smart_fridge/src/features/personalization/controllers/user_controller.dart';
 import 'package:smart_fridge/utils/modals/full_screen_loader.dart';
 
 class AppLoginController extends GetxController {
@@ -21,6 +22,8 @@ class AppLoginController extends GetxController {
   final localStorage = GetStorage();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final userController = Get.put(UserController());
 
   @override
   void onInit() {
@@ -75,6 +78,34 @@ class AppLoginController extends GetxController {
       AppSnackbar.error(
         message: AppFirebase.messageFromAuthErrorCode(e.code),
       );
+    } catch (e) {
+      AppFullScreenLoader.stopLoading();
+
+      AppSnackbar.error(
+        message: 'Login failed. Please try again later.',
+      );
+    }
+  }
+
+  Future<void> processWithGoogle() async {
+    try {
+      AppFullScreenLoader.openLoadingDialog("Logging in...", AppAsset.loader);
+
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        AppFullScreenLoader.stopLoading();
+        return;
+      }
+
+      final userCredentials =
+          await AuthenticationRepository.instance.loginWithGoogle();
+
+      // Save user record
+      await userController.save(userCredentials);
+
+      AppFullScreenLoader.stopLoading();
+
+      AuthenticationRepository.instance.screenRedirect();
     } catch (e) {
       AppFullScreenLoader.stopLoading();
 

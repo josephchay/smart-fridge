@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../config/themes/app_theme.dart';
 
-class AuthSocialIcon extends StatelessWidget {
-  const AuthSocialIcon({
+class AuthSocialButton extends StatelessWidget {
+  const AuthSocialButton({
     super.key,
     required this.image,
+    this.onPressed,
   });
 
   final String image;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,7 @@ class AuthSocialIcon extends StatelessWidget {
         ),
       ),
       child: IconButton(
-        onPressed: () {
-          // TODO Implement sign in with google functionality
-        },
+        onPressed: () => onPressed?.call(),
         icon: Image(
           width: 40,
           height: 40,

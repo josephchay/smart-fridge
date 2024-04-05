@@ -85,18 +85,20 @@ class _MealScreenState extends State<MealScreen> {
                   right: 10,
                   child: Row(
                     children: [
-                      MainActionButton(
+                      TopActionButton(
                         icon: CupertinoIcons.chevron_back,
                         color: AppTheme.darkText,
+                        onPressed: () => Navigator.pop(context),
                       ),
                       const Spacer(),
-                      MainActionButton(
+                      TopActionButton(
                         icon: widget.meal.isFavourite
                             ? Icons.favorite_outlined
                             : Icons.favorite_border_outlined,
                         color: widget.meal.isFavourite
                             ? AppTheme.nearlyRed
                             : AppTheme.grey,
+                        onPressed: () {},
                       ),
                     ],
                   ),
@@ -109,7 +111,7 @@ class _MealScreenState extends State<MealScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.white,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(20),
                         topLeft: Radius.circular(20),
@@ -119,16 +121,16 @@ class _MealScreenState extends State<MealScreen> {
                 ),
               ],
             ),
-            Center(
-              child: Container(
-                width: 50,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Container(
+            //     width: 50,
+            //     height: 5,
+            //     decoration: BoxDecoration(
+            //       color: Colors.grey.shade300,
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -310,14 +312,16 @@ class _MealScreenState extends State<MealScreen> {
   }
 }
 
-class MainActionButton extends StatelessWidget {
+class TopActionButton extends StatelessWidget {
   final IconData icon;
   final Color color;
+  final Function()? onPressed;
 
-  const MainActionButton({
+  const TopActionButton({
     super.key,
     required this.icon,
     this.color = AppTheme.darkText,
+    this.onPressed,
   });
 
   @override
@@ -333,7 +337,7 @@ class MainActionButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => onPressed!(),
             icon: Icon(
               icon,
               color: color,
