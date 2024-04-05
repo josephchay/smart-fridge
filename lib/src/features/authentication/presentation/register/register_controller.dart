@@ -69,11 +69,6 @@ class AppRegisterController extends GetxController {
 
       AppFullScreenLoader.stopLoading();
 
-      AppSnackbar.success(
-        message:
-            'Registration successful. Please verify your email to continue.',
-      );
-
       Get.to(
         () => AppVerifyEmailScreen(
           email: email.text.trim(),
@@ -89,7 +84,7 @@ class AppRegisterController extends GetxController {
       AppFullScreenLoader.stopLoading();
 
       AppSnackbar.error(
-        message: 'An error occurred while registering. Please try again later.',
+        message: 'Registration failed. Please try again later.',
       );
     }
   }

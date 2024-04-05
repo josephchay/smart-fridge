@@ -68,11 +68,20 @@ class AppSnackbar {
     ScaffoldMessenger.of(Get.context!).showSnackBar(snackBar);
   }
 
+  static void info({String message = '', int duration = 3}) {
+    _showSnackbar(
+      message: message,
+      themeColor: AppTheme.grey,
+      icon: Icons.info,
+      duration: duration,
+    );
+  }
+
   static void success({String message = '', int duration = 3}) {
     _showSnackbar(
       message: message,
       themeColor: AppTheme.nearlyGreen,
-      icon: Icons.check_rounded,
+      icon: Icons.check_circle,
       duration: duration,
     );
   }

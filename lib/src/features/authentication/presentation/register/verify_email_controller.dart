@@ -16,23 +16,6 @@ class AppVerifyEmailController extends GetxController {
   void process() async {
     try {
       await AuthenticationRepository.instance.sendEmailVerification();
-
-      FirebaseAuth.instance.currentUser!.reload();
-      final user = FirebaseAuth.instance.currentUser;
-      if (user!.emailVerified) {
-        Get.off(() => AppEmailVerifiedScreen(
-              image: 'assets/images/miscellaneous/tick.json',
-              title: 'Account Created Successfully!',
-              subTitle:
-                  'Start tracking your grocery inventory in real-time, get alerts on item durations, and even enjoy automated shopping list creation based on your consumption patterns!',
-              onPressed: () =>
-                  AuthenticationRepository.instance.screenRedirect(),
-            ));
-      }
-
-      AppSnackbar.success(
-        message: 'Verification email sent successfully!',
-      );
     } catch (e) {
       AppSnackbar.error(
         message: e.toString(),
@@ -42,14 +25,27 @@ class AppVerifyEmailController extends GetxController {
 
   void checkEmailVerificationStatus() async {
     final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null && currentUser.emailVerified) {
-      Get.off(() => AppEmailVerifiedScreen(
-            image: 'assets/images/miscellaneous/tick.json',
-            title: 'Account Created Successfully!',
-            subTitle:
-                'Start tracking your grocery inventory in real-time, get alerts on item durations, and even enjoy automated shopping list creation based on your consumption patterns!',
-            onPressed: () => AuthenticationRepository.instance.screenRedirect(),
-          ));
+
+    if (currentUser != null) {
+      await currentUser.reload();
+      final refreshedUser = FirebaseAuth.instance.currentUser;
+
+      if (refreshedUser != null && refreshedUser.emailVerified) {
+        Get.off(() => AppEmailVerifiedScreen(
+              image: 'assets/images/miscellaneous/tick.json',
+              title: 'Account Created Successfully!',
+              subTitle:
+                  'Start tracking your grocery inventory in real-time, get alerts on item durations, and even enjoy automated shopping list creation based on your consumption patterns!',
+              onPressed: () =>
+                  AuthenticationRepository.instance.screenRedirect(),
+            ));
+      } else {
+        AppSnackbar.warning(
+          message: 'Please verify your email address to continue.',
+        );
+      }
+    } else {
+      AppSnackbar.warning(message: 'Please register to continue.');
     }
   }
 }

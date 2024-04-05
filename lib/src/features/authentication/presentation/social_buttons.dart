@@ -17,10 +17,6 @@ class AppAuthSocialButtons extends StatelessWidget {
         ),
         SizedBox(width: 20),
         AuthSocialIcon(
-          image: "assets/images/logos/apple.png",
-        ),
-        SizedBox(width: 20),
-        AuthSocialIcon(
           image: "assets/images/logos/facebook.png",
         ),
       ],

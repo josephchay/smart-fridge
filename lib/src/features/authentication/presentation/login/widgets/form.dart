@@ -5,6 +5,7 @@ import 'package:smart_fridge/client_environment_controller.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/login/login_controller.dart';
+import 'package:smart_fridge/src/features/authentication/presentation/password_form_field.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/recover/pages/verification.dart';
 import 'package:smart_fridge/utils/validators/validation.dart';
 
@@ -26,6 +27,7 @@ class LoginForm extends StatelessWidget {
     final controller = Get.put(AppLoginController());
 
     return Form(
+      key: controller.formKey,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 32.0),
         child: Column(
@@ -39,13 +41,28 @@ class LoginForm extends StatelessWidget {
               validator: (value) => AppValidators.validateEmail(value),
             ),
             const SizedBox(height: 16.0),
-            AppAuthFormField(
-              label: "Password",
-              labelHint: "********",
-              inputType: TextInputType.visiblePassword,
-              icon: Iconsax.password_check_copy,
-              controller: controller.password,
-              validator: (value) => AppValidators.validatePassword(value),
+            Obx(
+              () => AppAuthPasswordFormField(
+                label: "Password",
+                labelHint: "********",
+                inputType: TextInputType.visiblePassword,
+                icon: Iconsax.password_check_copy,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.hidePassword.value
+                        ? Iconsax.eye_copy
+                        : Iconsax.eye_slash_copy,
+                    size: 20 * Scaler.textScaleFactor(context),
+                    color: AppTheme.lightGrey.withOpacity(0.8),
+                  ),
+                  onPressed: () {
+                    controller.hidePassword.toggle();
+                  },
+                ),
+                obscureText: controller.hidePassword.value,
+                controller: controller.password,
+                validator: (value) => AppValidators.validatePassword(value),
+              ),
             ),
             const SizedBox(height: 8.0),
             Row(
@@ -53,9 +70,12 @@ class LoginForm extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    AuthCheckbox(
-                      value: true,
-                      onChanged: (value) {},
+                    Obx(
+                      () => AuthCheckbox(
+                        value: controller.rememberMeConfirmed.value,
+                        onChanged: (value) =>
+                            controller.rememberMeConfirmed.toggle(),
+                      ),
                     ),
                     Text(
                       "Remember Me",
@@ -90,8 +110,7 @@ class LoginForm extends StatelessWidget {
             const SizedBox(height: 40),
             AppAuthPrimaryButton(
               text: "Login",
-              onPressed: () =>
-                  Get.to(() => const AppClientEnvironmentController()),
+              onPressed: () => controller.process(),
             ),
             const SizedBox(height: 16),
             AuthSecondaryButton(
