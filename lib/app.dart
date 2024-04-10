@@ -50,6 +50,7 @@ class App extends StatelessWidget {
   }
 
   static Future<void> initializeLoaders() async {
+    // file may temporarily be removed
     await loadMeals('assets/datasets/meals2.csv');
   }
 }
