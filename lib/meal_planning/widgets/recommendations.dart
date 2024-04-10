@@ -1,11 +1,16 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
+import 'package:smart_fridge/meal_planning/screens/meal_screen.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/utils/formatters/datetime.dart';
 
 class AppMealPlannerRecommendations extends StatefulWidget {
   final Animation<double>? animation;
   final AnimationController? animationController;
+  final Function()? callBack;
 
   const AppMealPlannerRecommendations({
     super.key,
@@ -14,7 +19,6 @@ class AppMealPlannerRecommendations extends StatefulWidget {
     this.animationController,
   });
 
-  final Function()? callBack;
   @override
   _AppMealPlannerRecommendationsState createState() =>
       _AppMealPlannerRecommendationsState();
@@ -22,6 +26,8 @@ class AppMealPlannerRecommendations extends StatefulWidget {
 
 class _AppMealPlannerRecommendationsState
     extends State<AppMealPlannerRecommendations> with TickerProviderStateMixin {
+  List<Meal> displayedMeals = [];
+
   AnimationController? horizontalAnimationController;
 
   @override
@@ -31,6 +37,16 @@ class _AppMealPlannerRecommendationsState
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
+
+    _prepareList();
+  }
+
+  void _prepareList() {
+    if (recommendedMealList.length > 20) {
+      displayedMeals = recommendedMealList.sublist(0, 20);
+    } else {
+      displayedMeals = recommendedMealList;
+    }
   }
 
   Future<bool> getData() async {
@@ -70,12 +86,12 @@ class _AppMealPlannerRecommendationsState
                       return const SizedBox();
                     } else {
                       return ListView.builder(
-                        itemCount: recommendedMealList.length,
+                        itemCount: displayedMeals.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
-                          final int count = recommendedMealList.length > 10
+                          final int count = displayedMeals.length > 10
                               ? 10
-                              : recommendedMealList.length;
+                              : displayedMeals.length;
                           final Animation<double> horizontalAnimation =
                               Tween<double>(begin: 0.0, end: 1.0).animate(
                                   CurvedAnimation(
@@ -86,13 +102,12 @@ class _AppMealPlannerRecommendationsState
 
                           return Padding(
                             padding: _getMealCardPadding(
-                                index, recommendedMealList.length),
-                            child: MealView(
-                              meal: recommendedMealList[index],
+                                index, displayedMeals.length),
+                            child: MealCard(
+                              meal: displayedMeals[index],
                               animation: horizontalAnimation,
                               animationController:
                                   horizontalAnimationController,
-                              callback: widget.callBack,
                             ),
                           );
                         },
@@ -130,16 +145,14 @@ class _AppMealPlannerRecommendationsState
   }
 }
 
-class MealView extends StatelessWidget {
-  final VoidCallback? callback;
-  final Meal? meal;
+class MealCard extends StatelessWidget {
+  final Meal meal;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const MealView({
+  const MealCard({
     super.key,
-    this.callback,
-    this.meal,
+    required this.meal,
     this.animationController,
     this.animation,
   });
@@ -161,7 +174,14 @@ class MealView extends StatelessWidget {
                 100 * (1.0 - animation!.value), 0.0, 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: callback,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MealScreen(
+                    data: meal,
+                  ),
+                ),
+              ),
               child: Container(
                 width: containerWidth,
                 child: Stack(
@@ -191,7 +211,7 @@ class MealView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                meal!.title,
+                                meal!.name,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -216,11 +236,13 @@ class MealView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     CardSubInfo(
-                                      text: meal!.duration,
+                                      text: AppDatetime
+                                          .fromMinutesToFormattedHourMinute(
+                                              meal!.preparationMinutes),
                                       icon: Icons.access_time_filled,
                                     ),
                                     CardSubInfo(
-                                      text: meal!.stepsCount.toString(),
+                                      text: meal!.nSteps.toString(),
                                       icon: Icons.text_snippet,
                                     ),
                                   ],

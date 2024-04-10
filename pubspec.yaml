@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   cupertino_icons: ^1.0.2
+  csv: ^5.0.1
 
   camera: ^0.10.5
   flutter_vision: ^1.1.4
@@ -116,6 +117,7 @@ flutter:
   assets:
     - assets/object_detection/
     - assets/object_detection/yolo/
+    - assets/datasets/
     - assets/images/
     - assets/images/onboarding/
     - assets/images/logos/

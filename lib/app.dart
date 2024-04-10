@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:smart_fridge/bindings/core_bindings.dart';
+import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 
 class App extends StatelessWidget {
@@ -34,12 +35,21 @@ class App extends StatelessWidget {
       initialBinding: CoreBindings(),
       home: Scaffold(
         backgroundColor: AppTheme.background,
-        body: Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
+        body: FutureBuilder(
+          future: initializeLoaders(),
+          builder: (context, snapshot) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
+          },
         ),
       ),
     );
+  }
+
+  static Future<void> initializeLoaders() async {
+    await loadMeals('assets/datasets/meals2.csv');
   }
 }

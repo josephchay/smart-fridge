@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/utils/formatters/datetime.dart';
+import 'package:smart_fridge/utils/formatters/strings.dart';
 
 class MealScreen extends StatefulWidget {
-  final Meal meal;
+  final Meal data;
 
   const MealScreen({
     super.key,
-    required this.meal,
+    required this.data,
   });
 
   @override
@@ -53,8 +55,8 @@ class _MealScreenState extends State<MealScreen> {
       //             ),
       //           ),
       //           icon: Icon(
-      //             widget.meal.isFavourite ? Iconsax.heart : Iconsax.heart,
-      //             color: widget.meal.isFavourite ? Colors.red : Colors.black,
+      //             widget.meal.isFavorite ? Iconsax.heart : Iconsax.heart,
+      //             color: widget.meal.isFavorite ? Colors.red : Colors.black,
       //             size: 20,
       //           ),
       //         ),
@@ -73,7 +75,7 @@ class _MealScreenState extends State<MealScreen> {
                     height: MediaQuery.of(context).size.width - 20,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.meal.image),
+                        image: AssetImage(widget.data.image),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -92,10 +94,10 @@ class _MealScreenState extends State<MealScreen> {
                       ),
                       const Spacer(),
                       TopActionButton(
-                        icon: widget.meal.isFavourite
+                        icon: widget.data.isFavorite
                             ? Icons.favorite_outlined
                             : Icons.favorite_border_outlined,
-                        color: widget.meal.isFavourite
+                        color: widget.data.isFavorite
                             ? AppTheme.nearlyRed
                             : AppTheme.grey,
                         onPressed: () {},
@@ -138,7 +140,7 @@ class _MealScreenState extends State<MealScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.meal.title,
+                    widget.data.name,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -147,45 +149,60 @@ class _MealScreenState extends State<MealScreen> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.access_time_filled,
-                        size: 20,
+                        size: 20 * Scaler.textScaleFactor(context),
                         color: Colors.grey,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        widget.meal.duration,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        AppDatetime.fromMinutesToFormattedHourMinute(
+                          widget.data.preparationMinutes,
+                        ),
+                        style: TextStyle(
+                          fontSize: 14 * Scaler.textScaleFactor(context),
                           color: Colors.grey,
                         ),
                       ),
                       const SizedBox(width: 20),
-                      const Icon(
+                      Icon(
                         Icons.text_snippet,
-                        size: 20,
+                        size: 20 * Scaler.textScaleFactor(context),
                         color: Colors.grey,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        widget.meal.stepsCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 14,
+                        widget.data.nSteps.toString(),
+                        style: TextStyle(
+                          fontSize: 14 * Scaler.textScaleFactor(context),
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Icon(
+                        Icons.grain,
+                        size: 20 * Scaler.textScaleFactor(context),
+                        color: Colors.grey,
+                      ),
+                      Text(
+                        "${widget.data.ingredients.length}",
+                        style: TextStyle(
+                          fontSize: 14 * Scaler.textScaleFactor(context),
                           color: Colors.grey,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   Row(
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Ingredients",
+                            "Steps",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 20 * Scaler.textScaleFactor(context),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -197,108 +214,141 @@ class _MealScreenState extends State<MealScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.meal.image),
-                                fit: BoxFit.fill,
+                      for (int i = 0; i < widget.data.steps.length; i++) ...[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                '${i + 1}.', // Step number, starting from 1
+                                style: TextStyle(
+                                  fontSize:
+                                      16 * Scaler.textScaleFactor(context),
+                                  color: i % 2 == 0
+                                      ? AppTheme.deactivatedText
+                                      : AppTheme.deactivatedText
+                                          .withOpacity(0.6),
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            widget.meal.title,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textScaleFactor: Scaler.textScaleFactor(context),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "400g",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
-                            ),
-                          )
-                        ],
-                      ),
-                      Divider(
-                        height: 20,
-                        color: Colors.grey.shade300,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.meal.image),
-                                fit: BoxFit.fill,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                AppStrings.capitalizeFirstOfSentence(
+                                        widget.data.steps[i]) +
+                                    ".", // Step description
+                                style: TextStyle(
+                                  fontSize:
+                                      16 * Scaler.textScaleFactor(context),
+                                  color: i % 2 == 0
+                                      ? AppTheme.deactivatedText
+                                      : AppTheme.deactivatedText
+                                          .withOpacity(0.6),
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        if (i !=
+                            widget.data.steps.length -
+                                1) // Check if it's not the last element
+                          Divider(
+                            height: 30,
+                            color: Colors.grey.shade300,
                           ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        // Makes the "Ingredients" text flexible
+                        flex: 2,
+                        child: Text(
+                          "Ingredients",
+                          style: TextStyle(
+                            fontSize: 20 * Scaler.textScaleFactor(context),
+                            fontWeight: FontWeight.bold,
                           ),
-                          const Spacer(),
-                          Text(
-                            "400g",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Flexible(
+                        // Makes the ingredients count text flexible
+                        flex: 1,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppTheme.lighterGrey.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            "${widget.data.ingredients.length} / ${widget.data.nIngredients}",
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
+                              fontSize: 14 * Scaler.textScaleFactor(context),
+                              color: Colors.white,
                             ),
-                          )
-                        ],
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
-                      Divider(
-                        height: 20,
-                        color: Colors.grey.shade300,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: AssetImage(widget.meal.image),
-                                fit: BoxFit.fill,
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (int i = 0;
+                          i < widget.data.ingredients.length;
+                          i++) ...[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                '${i + 1}.', // Step number, starting from 1
+                                style: TextStyle(
+                                  fontSize:
+                                      16 * Scaler.textScaleFactor(context),
+                                  color: AppTheme.deactivatedText,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            "Ramen Noodles",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                AppStrings.capitalizeFirstOfSentence(
+                                        widget.data.ingredients[i]) +
+                                    ".", // Step description
+                                style: TextStyle(
+                                  fontSize:
+                                      16 * Scaler.textScaleFactor(context),
+                                  color: AppTheme.deactivatedText,
+                                ),
+                              ),
                             ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "400g",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey.shade400,
+                            Icon(
+                              Icons.check_circle,
+                              color: AppTheme.nearlyGreen,
+                              size: 24 * Scaler.textScaleFactor(context),
                             ),
-                          )
-                        ],
-                      ),
+                          ],
+                        ),
+                        if (i !=
+                            widget.data.ingredients.length -
+                                1) // Check if it's not the last element
+                          Divider(
+                            height: 30,
+                            color: Colors.grey.shade300,
+                          ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 20),

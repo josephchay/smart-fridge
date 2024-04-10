@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/utils/calendar_modal_view.dart';
-import 'package:smart_fridge/src/utils/datetime.dart';
+import 'package:smart_fridge/utils/formatters/datetime.dart';
 
 class DatePicker extends StatelessWidget {
   final DateTime startDate;
@@ -18,7 +18,7 @@ class DatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String formattedDate = AppDateTime.formatDate(DateTime.now());
+    final String formattedDate = AppDatetime.formatDate(DateTime.now());
 
     return Row(
       children: <Widget>[

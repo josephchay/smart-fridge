@@ -1,27 +1,31 @@
 import 'dart:ui';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/meal_planning/screens/meal_screen.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/utils/formatters/datetime.dart';
 
-class AppMealPlannerTrending extends StatefulWidget {
+class AppMealPlannerLatest extends StatefulWidget {
   final Animation<double>? animation;
   final AnimationController? animationController;
 
-  const AppMealPlannerTrending({
+  const AppMealPlannerLatest({
     super.key,
     this.animation,
     this.animationController,
   });
 
   @override
-  State<AppMealPlannerTrending> createState() => _AppMealPlannerTrendingState();
+  State<AppMealPlannerLatest> createState() => _AppMealPlannerLatestState();
 }
 
-class _AppMealPlannerTrendingState extends State<AppMealPlannerTrending>
+class _AppMealPlannerLatestState extends State<AppMealPlannerLatest>
     with TickerProviderStateMixin {
+  List<Meal> displayedMeals = [];
+
   AnimationController? horizontalAnimationController;
 
   @override
@@ -31,10 +35,20 @@ class _AppMealPlannerTrendingState extends State<AppMealPlannerTrending>
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
+
+    _prepareList();
+  }
+
+  void _prepareList() {
+    if (latestMealList.length > 20) {
+      displayedMeals = latestMealList.sublist(0, 20);
+    } else {
+      displayedMeals = latestMealList;
+    }
   }
 
   Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 450));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 250));
     return true;
   }
 
@@ -60,7 +74,7 @@ class _AppMealPlannerTrendingState extends State<AppMealPlannerTrending>
                 right: 24,
               ),
               child: Container(
-                height: 200,
+                height: 240,
                 width: double.infinity,
                 child: FutureBuilder<bool>(
                   future: getData(),
@@ -70,12 +84,12 @@ class _AppMealPlannerTrendingState extends State<AppMealPlannerTrending>
                       return const SizedBox();
                     } else {
                       return ListView.builder(
-                        itemCount: recommendedMealList.length,
+                        itemCount: displayedMeals.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
-                          final int count = recommendedMealList.length > 10
+                          final int count = displayedMeals.length > 10
                               ? 10
-                              : recommendedMealList.length;
+                              : displayedMeals.length;
                           final Animation<double> horizontalAnimation =
                               Tween<double>(begin: 0.0, end: 1.0).animate(
                                   CurvedAnimation(
@@ -86,9 +100,9 @@ class _AppMealPlannerTrendingState extends State<AppMealPlannerTrending>
 
                           return Padding(
                             padding: _getMealCardPadding(
-                                index, trendingMealList.length),
+                                index, displayedMeals.length),
                             child: MealCard(
-                              meal: trendingMealList[index],
+                              meal: displayedMeals[index],
                               animation: horizontalAnimation,
                               animationController:
                                   horizontalAnimationController,
@@ -156,7 +170,7 @@ class MealCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => MealScreen(
-                    meal: meal,
+                    data: meal,
                   ),
                 ),
               ),
@@ -193,7 +207,7 @@ class MealCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          meal.title,
+                          meal.name,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -205,11 +219,14 @@ class MealCard extends StatelessWidget {
                         Row(
                           children: [
                             CardSubInfo(
-                              text: meal.duration,
+                              text:
+                                  AppDatetime.fromMinutesToFormattedHourMinute(
+                                meal.preparationMinutes,
+                              ),
                               icon: Icons.access_time_filled,
                             ),
                             CardSubInfo(
-                              text: meal.stepsCount.toString(),
+                              text: meal.nSteps.toString(),
                               icon: Icons.text_snippet,
                             ),
                           ],
@@ -239,11 +256,11 @@ class MealCard extends StatelessWidget {
                               iconSize: 20 * Scaler.textScaleFactor(context),
                               onPressed: () {},
                               icon: Icon(
-                                meal.isFavourite
+                                meal.isFavorite
                                     ? Icons.favorite_outlined
                                     : Icons.favorite_border_outlined,
                                 // check if the current meal is in the favorites list
-                                color: meal.isFavourite
+                                color: meal.isFavorite
                                     ? AppTheme.nearlyRed
                                     : AppTheme.grey.withOpacity(.8),
                               ),

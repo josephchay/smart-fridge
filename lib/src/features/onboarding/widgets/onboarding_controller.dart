@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:liquid_swipe/PageHelpers/LiquidController.dart';
+import 'package:smart_fridge/core/util/color.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/authentication/data/models/onboarding/onboarding_model.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/screen.dart';
 import 'package:smart_fridge/src/features/onboarding/widgets/onboarding_page_widget.dart';
-
-import '../../../../core/util/color.dart';
-import '../../authentication/data/models/onboarding/onboarding_model.dart';
 
 class OnboardingController extends GetxController {
   final pageController = LiquidController();

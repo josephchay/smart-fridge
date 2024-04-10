@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/widgets/categories.dart';
 import 'package:smart_fridge/meal_planning/widgets/recommendations.dart';
 import 'package:smart_fridge/meal_planning/widgets/search_bar.dart';
-import 'package:smart_fridge/meal_planning/widgets/trending.dart';
+import 'package:smart_fridge/meal_planning/widgets/latest.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/ui_view/title_view.dart';
 import 'package:smart_fridge/top_bar.dart';
@@ -138,7 +138,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Trending',
+        titleTxt: 'Latest',
         subTxt: 'View All',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
@@ -151,7 +151,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
     );
 
     listViews.add(
-      AppMealPlannerTrending(
+      AppMealPlannerLatest(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,

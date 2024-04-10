@@ -2,10 +2,9 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:liquid_swipe/liquid_swipe.dart";
 import 'package:smart_fridge/src/features/onboarding/widgets/onboarding_controller.dart';
-
-import '../widgets/page_indicator.dart';
-import '../widgets/swipe_next_button.dart';
-import '../widgets/swipe_previous_button.dart';
+import "package:smart_fridge/src/features/onboarding/widgets/page_indicator.dart";
+import "package:smart_fridge/src/features/onboarding/widgets/swipe_next_button.dart";
+import "package:smart_fridge/src/features/onboarding/widgets/swipe_previous_button.dart";
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({
