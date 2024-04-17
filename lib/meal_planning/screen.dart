@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/meal_planning/widgets/categories.dart';
+import 'package:smart_fridge/meal_planning/widgets/all-list.dart';
 import 'package:smart_fridge/meal_planning/widgets/recommendations.dart';
 import 'package:smart_fridge/meal_planning/widgets/search_bar.dart';
 import 'package:smart_fridge/meal_planning/widgets/latest.dart';
@@ -113,6 +115,15 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
       TitleView(
         titleTxt: 'Recommendations',
         subTxt: 'View All',
+        subTxtAction: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppMealPlannerAllList(
+                    type: 'Recommendations',
+                    data: recommendedMealList,
+                    animationController: widget.animationController!,
+                  )),
+        ),
         hasBottomPadding: false,
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
@@ -140,6 +151,15 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
       TitleView(
         titleTxt: 'Latest',
         subTxt: 'View All',
+        subTxtAction: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AppMealPlannerAllList(
+                    type: 'Latest',
+                    data: latestMealList,
+                    animationController: widget.animationController!,
+                  )),
+        ),
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,

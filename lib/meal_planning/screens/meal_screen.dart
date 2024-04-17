@@ -22,48 +22,45 @@ class MealScreen extends StatefulWidget {
 
 class _MealScreenState extends State<MealScreen> {
   int currentNumber = 1;
+  bool isMakingMeal = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // bottomNavigationBar: Container(
-      //   padding: const EdgeInsets.all(10),
-      //   child: Row(
-      //     children: [
-      //       Expanded(
-      //         flex: 6,
-      //         child: ElevatedButton(
-      //           onPressed: () {},
-      //           style: ElevatedButton.styleFrom(
-      //             backgroundColor: AppTheme.nearlyOrange,
-      //             foregroundColor: Colors.white,
-      //           ),
-      //           child: const Text("Make Meal"),
-      //         ),
-      //       ),
-      //       const SizedBox(width: 10),
-      //       Expanded(
-      //         child: IconButton(
-      //           onPressed: () {},
-      //           style: IconButton.styleFrom(
-      //             shape: CircleBorder(
-      //               side: BorderSide(
-      //                 color: Colors.grey.shade300,
-      //                 width: 2,
-      //               ),
-      //             ),
-      //           ),
-      //           icon: Icon(
-      //             widget.meal.isFavorite ? Iconsax.heart : Iconsax.heart,
-      //             color: widget.meal.isFavorite ? Colors.red : Colors.black,
-      //             size: 20,
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isMakingMeal = !isMakingMeal;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.nearlyOrange,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: Text(
+                    isMakingMeal ? "Stop Making" : "Make Meal",
+                    style: TextStyle(
+                      fontSize: 16 * Scaler.textScaleFactor(context),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +72,7 @@ class _MealScreenState extends State<MealScreen> {
                     height: MediaQuery.of(context).size.width - 20,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.data.image),
+                        image: AssetImage(widget.data.image ?? ""),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -140,7 +137,7 @@ class _MealScreenState extends State<MealScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.data.name,
+                    widget.data.name ?? "Currently Not Available",
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -157,7 +154,7 @@ class _MealScreenState extends State<MealScreen> {
                       const SizedBox(width: 4),
                       Text(
                         AppDatetime.fromMinutesToFormattedHourMinute(
-                          widget.data.preparationMinutes,
+                          widget.data.preparationMinutes ?? 0,
                         ),
                         style: TextStyle(
                           fontSize: 14 * Scaler.textScaleFactor(context),
@@ -185,7 +182,25 @@ class _MealScreenState extends State<MealScreen> {
                         color: Colors.grey,
                       ),
                       Text(
-                        "${widget.data.ingredients.length}",
+                        "${widget.data.ingredients!.length}",
+                        style: TextStyle(
+                          fontSize: 14 * Scaler.textScaleFactor(context),
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_month,
+                        size: 20 * Scaler.textScaleFactor(context),
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        widget.data.submitted,
                         style: TextStyle(
                           fontSize: 14 * Scaler.textScaleFactor(context),
                           color: Colors.grey,
@@ -204,6 +219,7 @@ class _MealScreenState extends State<MealScreen> {
                             style: TextStyle(
                               fontSize: 20 * Scaler.textScaleFactor(context),
                               fontWeight: FontWeight.bold,
+                              color: AppTheme.nearlyOrange,
                             ),
                           ),
                         ],
@@ -214,7 +230,7 @@ class _MealScreenState extends State<MealScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (int i = 0; i < widget.data.steps.length; i++) ...[
+                      for (int i = 0; i < widget.data.steps!.length; i++) ...[
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -236,7 +252,7 @@ class _MealScreenState extends State<MealScreen> {
                             Expanded(
                               child: Text(
                                 AppStrings.capitalizeFirstOfSentence(
-                                        widget.data.steps[i]) +
+                                        widget.data.steps![i]) +
                                     ".", // Step description
                                 style: TextStyle(
                                   fontSize:
@@ -251,7 +267,7 @@ class _MealScreenState extends State<MealScreen> {
                           ],
                         ),
                         if (i !=
-                            widget.data.steps.length -
+                            widget.data.steps!.length -
                                 1) // Check if it's not the last element
                           Divider(
                             height: 30,
@@ -272,6 +288,7 @@ class _MealScreenState extends State<MealScreen> {
                           style: TextStyle(
                             fontSize: 20 * Scaler.textScaleFactor(context),
                             fontWeight: FontWeight.bold,
+                            color: AppTheme.nearlyOrange,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -285,11 +302,11 @@ class _MealScreenState extends State<MealScreen> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppTheme.lighterGrey.withOpacity(0.8),
+                            color: AppTheme.nearlyOrange,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            "${widget.data.ingredients.length} / ${widget.data.nIngredients}",
+                            "${widget.data.ingredients!.length} / ${widget.data.nIngredients}",
                             style: TextStyle(
                               fontSize: 14 * Scaler.textScaleFactor(context),
                               color: Colors.white,
@@ -305,7 +322,7 @@ class _MealScreenState extends State<MealScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (int i = 0;
-                          i < widget.data.ingredients.length;
+                          i < widget.data.ingredients!.length;
                           i++) ...[
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,27 +339,31 @@ class _MealScreenState extends State<MealScreen> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                AppStrings.capitalizeFirstOfSentence(
-                                        widget.data.ingredients[i]) +
-                                    ".", // Step description
-                                style: TextStyle(
-                                  fontSize:
-                                      16 * Scaler.textScaleFactor(context),
-                                  color: AppTheme.deactivatedText,
+                            if (widget.data.ingredients![i].isNotEmpty)
+                              Expanded(
+                                child: Text(
+                                  AppStrings.capitalizeFirstOfSentence(
+                                          widget.data.ingredients![i]) +
+                                      ".", // Step description
+                                  style: TextStyle(
+                                    fontSize:
+                                        16 * Scaler.textScaleFactor(context),
+                                    color: AppTheme.deactivatedText,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: AppTheme.nearlyGreen,
-                              size: 24 * Scaler.textScaleFactor(context),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Icon(
+                                Icons.check_circle,
+                                color: AppTheme.nearlyGreen,
+                                size: 24 * Scaler.textScaleFactor(context),
+                              ),
                             ),
                           ],
                         ),
                         if (i !=
-                            widget.data.ingredients.length -
+                            widget.data.ingredients!.length -
                                 1) // Check if it's not the last element
                           Divider(
                             height: 30,

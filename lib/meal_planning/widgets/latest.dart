@@ -147,12 +147,16 @@ class MealCard extends StatelessWidget {
   final Meal meal;
   final Animation<double>? animation;
   final AnimationController? animationController;
+  final bool displaySubInfo;
+  final bool textEllipsis;
 
   const MealCard({
     super.key,
     required this.meal,
     this.animation,
     this.animationController,
+    this.displaySubInfo = true,
+    this.textEllipsis = false,
   });
 
   @override
@@ -190,7 +194,7 @@ class MealCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
-                              image: AssetImage(meal.image),
+                              image: AssetImage(meal.image ?? ''),
                               fit: BoxFit.cover,
                             ),
                             boxShadow: [
@@ -207,30 +211,32 @@ class MealCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          meal.name,
-                          style: const TextStyle(
-                            fontSize: 15,
+                          meal.name ?? '',
+                          style: TextStyle(
+                            fontSize: textEllipsis ? 14 : 16,
                             fontWeight: FontWeight.bold,
                           ),
-                          textScaleFactor: Scaler.textScaleFactor(
-                              context), // Adjust text size based on screen size
+                          textScaleFactor: Scaler.textScaleFactor(context),
+                          maxLines: textEllipsis ? 1 : null,
+                          overflow: textEllipsis ? TextOverflow.ellipsis : null,
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            CardSubInfo(
-                              text:
-                                  AppDatetime.fromMinutesToFormattedHourMinute(
-                                meal.preparationMinutes,
+                        if (displaySubInfo) const SizedBox(height: 10),
+                        if (displaySubInfo)
+                          Row(
+                            children: [
+                              CardSubInfo(
+                                text: AppDatetime
+                                    .fromMinutesToFormattedHourMinute(
+                                  meal.preparationMinutes ?? 0,
+                                ),
+                                icon: Icons.access_time_filled,
                               ),
-                              icon: Icons.access_time_filled,
-                            ),
-                            CardSubInfo(
-                              text: meal.nSteps.toString(),
-                              icon: Icons.text_snippet,
-                            ),
-                          ],
-                        ),
+                              CardSubInfo(
+                                text: meal.nSteps.toString(),
+                                icon: Icons.text_snippet,
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                     Positioned(

@@ -1,0 +1,26 @@
+background
+vegetables | leafy_greens
+vegetables | stem_vegetables
+vegetables | non-starchy_roots
+vegetables | other
+fruits
+protein | meat
+protein | poultry
+protein | seafood
+protein | eggs
+protein | beans/nuts
+starches/grains | baked_goods
+starches/grains | rice/grains/cereals
+starches/grains | noodles/pasta
+starches/grains | starchy_vegetables
+starches/grains | other
+soups/stews
+herbs/spices
+dairy
+snacks
+sweets/desserts
+beverages
+fats/oils/sauces
+food_containers
+dining_tools
+other_food

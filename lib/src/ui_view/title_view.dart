@@ -5,6 +5,7 @@ import 'package:smart_fridge/src/config/themes/app_theme.dart';
 class TitleView extends StatelessWidget {
   final String titleTxt;
   final String subTxt;
+  final VoidCallback? subTxtAction;
   final bool hasTopPadding;
   final bool hasBottomPadding;
   final AnimationController? animationController;
@@ -14,6 +15,7 @@ class TitleView extends StatelessWidget {
     super.key,
     this.titleTxt = "",
     this.subTxt = "",
+    this.subTxtAction,
     this.hasTopPadding = true,
     this.hasBottomPadding = true,
     this.animationController,
@@ -44,21 +46,20 @@ class TitleView extends StatelessWidget {
                       child: Text(
                         titleTxt,
                         textAlign: TextAlign.left,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: AppTheme.fontName,
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
+                          fontSize: 15 * Scaler.textScaleFactor(context),
                           letterSpacing: 0.5,
                           color: AppTheme.lightText,
                         ),
-                        textScaleFactor: Scaler.textScaleFactor(context),
                       ),
                     ),
                     InkWell(
                       highlightColor: Colors.transparent,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10.0)),
-                      onTap: () {},
+                      onTap: subTxtAction ?? () {},
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -66,14 +67,13 @@ class TitleView extends StatelessWidget {
                             Text(
                               subTxt,
                               textAlign: TextAlign.left,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: AppTheme.fontName,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 14,
+                                fontSize: 14 * Scaler.textScaleFactor(context),
                                 letterSpacing: 0.5,
                                 color: AppTheme.nearlyDarkOrange,
                               ),
-                              textScaleFactor: Scaler.textScaleFactor(context),
                             ),
                             // SizedBox(
                             //   height: 38,

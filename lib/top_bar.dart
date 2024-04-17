@@ -7,6 +7,7 @@ enum AppTopBarAction {
   none,
   datepicker,
   favourites,
+  close,
 }
 
 class AppTopBar extends StatefulWidget {
@@ -124,9 +125,28 @@ class _AppTopBarState extends State<AppTopBar> with TickerProviderStateMixin {
           },
         );
       case AppTopBarAction.favourites:
-        return Icon(
-          Icons.favorite_border_outlined,
-          color: AppTheme.nearlyBlack,
+        return InkWell(
+          highlightColor: Colors.transparent,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(32.0),
+          ),
+          onTap: () {},
+          child: Icon(
+            Icons.favorite_border_outlined,
+            color: AppTheme.nearlyBlack,
+          ),
+        );
+      case AppTopBarAction.close:
+        return InkWell(
+          highlightColor: Colors.transparent,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(32.0),
+          ),
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            Icons.close,
+            color: AppTheme.nearlyBlack,
+          ),
         );
       case AppTopBarAction.none:
       default:

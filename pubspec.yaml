@@ -41,10 +41,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   csv: ^5.0.1
 
-  camera: ^0.10.5
-  flutter_vision: ^1.1.4
-  permission_handler: ^11.0.1
-  flutter_tts: ^3.8.2
+  camera: ^0.10.5+9
+  tflite_flutter: ^0.10.4
+  image: ^3.3.0
+  path_provider: ^2.1.2
+
+  # For yolov5 object detection - under commit 790e3d9d23c435d3c9acdab59832ee5b659cb0bc lib/fridge/screen
+#  camera: ^0.10.5
+#  flutter_vision: ^1.1.4
+#  permission_handler: ^11.0.1
+#  flutter_tts: ^3.8.2
 
   font_awesome_flutter: ^10.1.0
   flutter_rating_bar: ^4.0.1
@@ -116,8 +122,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/object_detection/
+    - assets/object_detection/second/
     - assets/object_detection/yolo/
     - assets/datasets/
+    - assets/datasets/images/
     - assets/images/
     - assets/images/onboarding/
     - assets/images/logos/

@@ -13,6 +13,10 @@ class AppDatetime {
     int minutes = totalMinutes % 60;
 
     // Format and return the string
-    return hours == 0 ? "${minutes}m" : "${hours}h ${minutes}m";
+    return hours == 0
+        ? "${minutes}m"
+        : minutes == 0
+            ? "${hours}"
+            : "${hours}h ${minutes}m";
   }
 }
