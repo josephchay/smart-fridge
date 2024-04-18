@@ -4,9 +4,7 @@ import 'package:smart_fridge/src/diary/current_diets_list_view.dart';
 import 'package:smart_fridge/src/ui_view/accumulated_nutrition_view.dart';
 import 'package:smart_fridge/src/ui_view/body_measurement.dart';
 import 'package:smart_fridge/src/ui_view/title_view.dart';
-import 'package:smart_fridge/src/utils/date_picker.dart';
-
-import '../../top_bar.dart';
+import 'package:smart_fridge/top_bar.dart';
 
 /// The Home (first) Page of the app
 class DiaryScreen extends StatefulWidget {
@@ -14,10 +12,10 @@ class DiaryScreen extends StatefulWidget {
   final ScrollController scrollController;
 
   const DiaryScreen({
-    Key? key,
+    super.key,
     this.animationController,
     required this.scrollController,
-  }) : super(key: key);
+  });
 
   @override
   _DiaryScreenState createState() => _DiaryScreenState();
