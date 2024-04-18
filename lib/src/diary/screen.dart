@@ -68,7 +68,7 @@ class _DiaryScreenState extends State<DiaryScreen>
   }
 
   void addAllListData() {
-    const int count = 6; // number of items in the list
+    const int count = 4; // number of items in the list
 
     listViews.add(
       TitleView(
@@ -120,30 +120,30 @@ class _DiaryScreenState extends State<DiaryScreen>
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Body measurement',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
+    // listViews.add(
+    //   TitleView(
+    //     titleTxt: 'Body measurement',
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
 
-    listViews.add(
-      BodyMeasurementView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
+    // listViews.add(
+    //   BodyMeasurementView(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
 
     // listViews.add(
     //   TitleView(

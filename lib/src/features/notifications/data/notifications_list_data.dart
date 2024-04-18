@@ -1,24 +1,44 @@
 class NotificationListData {
+  String title;
+  String description;
+  String time;
+
   NotificationListData({
-    this.imagePath = '',
-    this.titleTxt = '',
+    this.title = '',
+    this.description = '',
+    this.time = '',
   });
-
-  String imagePath;
-  String titleTxt;
-
-  static List<NotificationListData> notificationList = <NotificationListData>[
-    NotificationListData(
-      imagePath: 'assets/images/temp/onion.jpg',
-      titleTxt: 'Your onions are about to run out of freshness!',
-    ),
-    NotificationListData(
-      imagePath: 'assets/images/temp/pork.jpg',
-      titleTxt: 'Your pork is starting to rot!',
-    ),
-    NotificationListData(
-      imagePath: 'assets/images/temp/cabbage.webp',
-      titleTxt: 'Your cabbage is starting to get yellow!',
-    ),
-  ];
 }
+
+final List<NotificationListData> recentNotificationList =
+    <NotificationListData>[
+  NotificationListData(
+    title: 'Human Interaction',
+    description: 'Your fridge has been opened',
+    time: 'now',
+  ),
+  NotificationListData(
+    title: 'Item Duration',
+    description: 'Your cabbage has been placed here for 24 days.',
+    time: '2 hours ago',
+  ),
+  NotificationListData(
+    title: 'Human Interaction',
+    description: 'Your fridge has been opened',
+    time: '3 hours ago',
+  ),
+];
+
+final List<NotificationListData> yesterdayNotificationList =
+    <NotificationListData>[
+  NotificationListData(
+    title: 'Human Interaction',
+    description: 'Your fridge has been opened',
+    time: '5:17pm',
+  ),
+  NotificationListData(
+    title: 'Item Duration',
+    description: 'Your Eggs have been placed here for 30 days.',
+    time: '9am',
+  ),
+];

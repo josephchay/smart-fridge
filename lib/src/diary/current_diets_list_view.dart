@@ -30,9 +30,9 @@ class _CurrentDietsListViewState extends State<CurrentDietsListView>
 
   @override
   void initState() {
+    super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-    super.initState();
   }
 
   Future<bool> getData() async {

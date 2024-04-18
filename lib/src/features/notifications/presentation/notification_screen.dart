@@ -1,282 +1,195 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/features/notifications/data/notifications_list_data.dart';
+import 'package:smart_fridge/src/features/notifications/presentation/notification_item.dart';
 import 'package:smart_fridge/src/features/notifications/presentation/notification_list_view.dart';
-
-import '../../../config/themes/app_theme.dart';
+import 'package:smart_fridge/src/ui_view/title_view.dart';
+import 'package:smart_fridge/top_bar.dart';
 
 class NotificationScreen extends StatefulWidget {
+  final AnimationController? animationController;
+  final ScrollController scrollController;
+
+  const NotificationScreen({
+    super.key,
+    this.animationController,
+    required this.scrollController,
+  });
+
   @override
-  _NotificationScreenState createState() => _NotificationScreenState();
+  NotificationScreenState createState() => NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen>
+class NotificationScreenState extends State<NotificationScreen>
     with TickerProviderStateMixin {
-  AnimationController? animationController;
-  List<NotificationListData> NotificationList =
-      NotificationListData.notificationList;
-  final ScrollController _scrollController = ScrollController();
+  Animation<double>? topBarAnimation;
+
+  List<Widget> listViews = <Widget>[];
+  double topBarOpacity = 0.0;
 
   @override
   void initState() {
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
     super.initState();
+
+    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: widget.animationController!,
+        curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
+      ),
+    );
+
+    widget.scrollController.addListener(() {
+      if (!mounted) return;
+
+      if (widget.scrollController.offset >= 24) {
+        if (topBarOpacity != 1.0) {
+          setState(() {
+            topBarOpacity = 1.0;
+          });
+        }
+      } else if (widget.scrollController.offset <= 24 &&
+          widget.scrollController.offset >= 0) {
+        if (topBarOpacity != widget.scrollController.offset / 24) {
+          setState(() {
+            topBarOpacity = widget.scrollController.offset / 24;
+          });
+        }
+      } else if (widget.scrollController.offset <= 0) {
+        if (topBarOpacity != 0.0) {
+          setState(() {
+            topBarOpacity = 0.0;
+          });
+        }
+      }
+    });
+
+    addAllListData();
+  }
+
+  void addAllListData() {
+    const int count = 4; // number of items in the list
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Today',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
+          ),
+        ),
+        animationController: widget.animationController!,
+      ),
+    );
+
+    for (int i = 0; i < recentNotificationList.length; i++) {
+      final int count = recentNotificationList.length;
+      final Animation<double> animation =
+          Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: widget.animationController!,
+          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
+        ),
+      );
+      listViews.add(
+        NotificationItem(
+          callback: () {},
+          data: recentNotificationList[i],
+          animation: animation,
+          animationController: widget.animationController!,
+        ),
+      );
+    }
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Yesterday',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
+          ),
+        ),
+        animationController: widget.animationController!,
+      ),
+    );
+
+    for (int i = 0; i < yesterdayNotificationList.length; i++) {
+      final int count = yesterdayNotificationList.length;
+      final Animation<double> animation =
+          Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+          parent: widget.animationController!,
+          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
+        ),
+      );
+      listViews.add(
+        NotificationItem(
+          callback: () {},
+          data: yesterdayNotificationList[i],
+          animation: animation,
+          animationController: widget.animationController!,
+        ),
+      );
+    }
   }
 
   Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
+    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
   }
 
   @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: AppTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    getAppBarUI(),
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverPersistentHeader(
-                              pinned: true,
-                              floating: true,
-                              delegate: ContestTabHeader(
-                                getFilterBarUI(),
-                              ),
-                            ),
-                          ];
-                        },
-                        body: Container(
-                          color: AppTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: NotificationList.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count = NotificationList.length > 10
-                                  ? 10
-                                  : NotificationList.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController!,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController?.forward();
-                              return NotificationListView(
-                                callback: () {},
-                                groceryData: NotificationList[index],
-                                animation: animation,
-                                animationController: animationController!,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    DateTime startDate = DateTime.now();
+    DateTime endDate = DateTime.now().add(const Duration(days: 5));
 
-  Widget getListUI() {
     return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, -2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height - 156 - 50,
-            child: FutureBuilder<bool>(
-              future: getData(),
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                } else {
-                  return ListView.builder(
-                    itemCount: NotificationList.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      final int count = NotificationList.length > 10
-                          ? 10
-                          : NotificationList.length;
-                      final Animation<double> animation =
-                          Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                  parent: animationController!,
-                                  curve: Interval((1 / count) * index, 1.0,
-                                      curve: Curves.fastOutSlowIn)));
-                      animationController?.forward();
-
-                      return NotificationListView(
-                        callback: () {},
-                        groceryData: NotificationList[index],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget getNotificationViewList() {
-    final List<Widget> NotificationListViews = <Widget>[];
-    for (int i = 0; i < NotificationList.length; i++) {
-      final int count = NotificationList.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      NotificationListViews.add(
-        NotificationListView(
-          callback: () {},
-          groceryData: NotificationList[i],
-          animation: animation,
-          animationController: animationController!,
-        ),
-      );
-    }
-    animationController?.forward();
-    return Column(
-      children: NotificationListViews,
-    );
-  }
-
-  Widget getFilterBarUI() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 24,
-            decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().backgroundColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    offset: const Offset(0, -2),
-                    blurRadius: 8.0),
-              ],
-            ),
-          ),
-        ),
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Divider(
-            height: 1,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      color: AppTheme.background,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
           children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Notifications',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22 + 6 - 6,
-                    letterSpacing: 1.2,
-                    color: AppTheme.darkerText,
-                  ),
-                ),
-              ),
+            getListViewUI(),
+            AppTopBar(
+              title: 'Notifications',
+              topBarOpacity: topBarOpacity,
+              animationController: widget.animationController,
+              animation: topBarAnimation,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).padding.bottom,
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-    this.searchUI,
-  );
-  final Widget searchUI;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return searchUI;
-  }
-
-  @override
-  double get maxExtent => 52.0;
-
-  @override
-  double get minExtent => 52.0;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+  Widget getListViewUI() {
+    return FutureBuilder<bool>(
+      future: getData(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        } else {
+          return ListView.builder(
+            controller: widget.scrollController,
+            padding: EdgeInsets.only(
+              top: AppBar().preferredSize.height +
+                  MediaQuery.of(context).padding.top +
+                  24,
+              bottom: 20 + MediaQuery.of(context).padding.bottom,
+            ),
+            itemCount: listViews.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (BuildContext context, int index) {
+              widget.animationController?.forward();
+              return listViews[index];
+            },
+          );
+        }
+      },
+    );
   }
 }
