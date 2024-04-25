@@ -11,11 +11,13 @@ import 'package:smart_fridge/utils/formatters/datetime.dart';
 class AppMealPlannerRecommendations extends StatefulWidget {
   final Animation<double>? animation;
   final AnimationController? animationController;
+  final List<Meal> meals;
 
   const AppMealPlannerRecommendations({
     super.key,
     this.animation,
     this.animationController,
+    required this.meals,
   });
 
   @override
@@ -40,11 +42,18 @@ class _AppMealPlannerRecommendationsState
     _prepareList();
   }
 
+  @override
+  void didUpdateWidget(covariant AppMealPlannerRecommendations oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.meals != widget.meals) {
+      _prepareList(); // Update the list if the incoming meals change
+    }
+  }
+
   void _prepareList() {
-    if (recommendedMealList.length > 20) {
-      displayedMeals = recommendedMealList.sublist(0, 20);
-    } else {
-      displayedMeals = recommendedMealList;
+    displayedMeals = widget.meals;
+    if (displayedMeals.length > 20) {
+      displayedMeals = displayedMeals.sublist(0, 20);
     }
   }
 

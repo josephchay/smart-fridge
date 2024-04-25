@@ -6,11 +6,13 @@ import 'package:smart_fridge/src/config/themes/app_theme.dart';
 class AppPageSearchBar extends StatelessWidget {
   final Animation<double>? animation;
   final AnimationController? animationController;
+  final Function(String) onSearchChanged;
 
   const AppPageSearchBar({
     super.key,
     this.animation,
     this.animationController,
+    required this.onSearchChanged,
   });
 
   @override
@@ -55,6 +57,7 @@ class AppPageSearchBar extends StatelessWidget {
                     SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        onChanged: onSearchChanged,
                         style: TextStyle(
                           fontSize: 16 * Scaler.textScaleFactor(context),
                         ),

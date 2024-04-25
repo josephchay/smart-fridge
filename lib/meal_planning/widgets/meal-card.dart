@@ -81,6 +81,8 @@ class MealCard extends StatelessWidget {
                                 ),
                                 textScaleFactor:
                                     Scaler.textScaleFactor(context),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               const Expanded(
                                 child: SizedBox(),

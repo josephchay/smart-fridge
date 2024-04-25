@@ -30,9 +30,15 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
   List<Widget> listViews = <Widget>[];
   double topBarOpacity = 0.0;
 
+  List<Meal> allMeals = [];
+  List<Meal> filteredLatestMeals = [];
+  List<Meal> filteredRecommendedMeals = [];
+
   @override
   void initState() {
     super.initState();
+    filteredLatestMeals = List.from(latestMealList);
+    filteredRecommendedMeals = List.from(recommendedMealList);
 
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -69,6 +75,25 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
     addAllListData();
   }
 
+  void onSearchChanged(String query) {
+    setState(() {
+      filteredLatestMeals = query.isEmpty
+          ? List.from(latestMealList)
+          : latestMealList
+              .where((meal) =>
+                  meal.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+      filteredRecommendedMeals = query.isEmpty
+          ? List.from(recommendedMealList)
+          : recommendedMealList
+              .where((meal) =>
+                  meal.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
+      listViews.clear();
+      addAllListData(); // Refresh the UI with the new lists
+    });
+  }
+
   void addAllListData() {
     const int count = 7; // number of items in the list
 
@@ -81,6 +106,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
           ),
         ),
         animationController: widget.animationController,
+        onSearchChanged: onSearchChanged,
       ),
     );
 
@@ -144,6 +170,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
           ),
         ),
         animationController: widget.animationController,
+        meals: filteredRecommendedMeals,
       ),
     );
 
@@ -179,6 +206,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
           ),
         ),
         animationController: widget.animationController,
+        meals: filteredLatestMeals,
       ),
     );
   }

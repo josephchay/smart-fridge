@@ -167,6 +167,7 @@ class _AppMealPlannerAllListState extends State<AppMealPlannerAllList>
                         animation: animation,
                         animationController: animationController,
                         textEllipsis: true,
+                        textMaxLines: 1,
                       ),
                     ],
                   ),

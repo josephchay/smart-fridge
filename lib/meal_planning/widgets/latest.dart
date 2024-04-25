@@ -11,11 +11,13 @@ import 'package:smart_fridge/utils/formatters/datetime.dart';
 class AppMealPlannerLatest extends StatefulWidget {
   final Animation<double>? animation;
   final AnimationController? animationController;
+  final List<Meal> meals;
 
   const AppMealPlannerLatest({
     super.key,
     this.animation,
     this.animationController,
+    required this.meals,
   });
 
   @override
@@ -39,11 +41,18 @@ class _AppMealPlannerLatestState extends State<AppMealPlannerLatest>
     _prepareList();
   }
 
+  @override
+  void didUpdateWidget(covariant AppMealPlannerLatest oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.meals != widget.meals) {
+      _prepareList(); // Update the list if the incoming meals change
+    }
+  }
+
   void _prepareList() {
-    if (latestMealList.length > 20) {
-      displayedMeals = latestMealList.sublist(0, 20);
-    } else {
-      displayedMeals = latestMealList;
+    displayedMeals = widget.meals;
+    if (displayedMeals.length > 20) {
+      displayedMeals = displayedMeals.sublist(0, 20);
     }
   }
 
@@ -106,6 +115,8 @@ class _AppMealPlannerLatestState extends State<AppMealPlannerLatest>
                               animation: horizontalAnimation,
                               animationController:
                                   horizontalAnimationController,
+                              textEllipsis: true,
+                              textMaxLines: 3,
                             ),
                           );
                         },
@@ -149,6 +160,7 @@ class MealCard extends StatelessWidget {
   final AnimationController? animationController;
   final bool displaySubInfo;
   final bool textEllipsis;
+  final int textMaxLines;
 
   const MealCard({
     super.key,
@@ -157,6 +169,7 @@ class MealCard extends StatelessWidget {
     this.animationController,
     this.displaySubInfo = true,
     this.textEllipsis = false,
+    this.textMaxLines = -1,
   });
 
   @override
@@ -217,7 +230,7 @@ class MealCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           textScaleFactor: Scaler.textScaleFactor(context),
-                          maxLines: textEllipsis ? 1 : null,
+                          maxLines: textEllipsis ? textMaxLines : null,
                           overflow: textEllipsis ? TextOverflow.ellipsis : null,
                         ),
                         if (displaySubInfo) const SizedBox(height: 10),
