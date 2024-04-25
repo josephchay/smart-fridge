@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_fridge/grocery_listings/grocery_list_view.dart';
-import 'package:smart_fridge/grocery_listings/model/grocery_list_data.dart';
+import 'package:smart_fridge/grocery_listings/model/grocery_data.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
-
-import '../src/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'filters_screen.dart';
 
 class GroceryScreen extends StatefulWidget {
@@ -15,14 +14,31 @@ class GroceryScreen extends StatefulWidget {
 class _GroceryScreenState extends State<GroceryScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<GroceryListData> GroceryList = GroceryListData.groceryList;
   final ScrollController _scrollController = ScrollController();
+
+  List<GroceryData> filteredGroceryData = [];
+
+// print all the unique categories and brands
+  void printUniqueCategoriesAndBrands() {
+    print("Unique Categories:====================================");
+    uniqueCategories.forEach((category) {
+      print(category);
+    });
+
+    print("\nUnique Brands::====================================");
+    uniqueBrands.forEach((brand) {
+      print(brand);
+    });
+  }
 
   @override
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     super.initState();
+
+    filteredGroceryData = List.from(groceryList);
+    // printUniqueCategoriesAndBrands();
   }
 
   Future<bool> getData() async {
@@ -30,10 +46,35 @@ class _GroceryScreenState extends State<GroceryScreen>
     return true;
   }
 
+  void updateFilteredData(List<GroceryData> newFilteredData) {
+    setState(() {
+      filteredGroceryData = newFilteredData;
+    });
+  }
+
   @override
   void dispose() {
     animationController?.dispose();
     super.dispose();
+  }
+
+  void onSearchChanged(String query) {
+    // Ensure dupedFilteredGroceryData is a separate copy of the original full list
+    // This should be done outside of this method to keep the original full list intact.
+    List<GroceryData> dupedFilteredGroceryData = List.from(groceryList);
+
+    setState(() {
+      if (query.isEmpty) {
+        // Reset filteredGroceryData to the original full list when the query is empty
+        filteredGroceryData = List.from(dupedFilteredGroceryData);
+      } else {
+        // Apply the filtering based on the search query
+        filteredGroceryData = dupedFilteredGroceryData
+            .where(
+                (meal) => meal.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -76,21 +117,21 @@ class _GroceryScreenState extends State<GroceryScreen>
                               pinned: true,
                               floating: true,
                               delegate: ContestTabHeader(
-                                getFilterBarUI(),
-                              ),
+                                  searchUI: getFilterBarUI(),
+                                  itemCount: filteredGroceryData.length),
                             ),
                           ];
                         },
                         body: Container(
                           color: AppTheme.buildLightTheme().backgroundColor,
                           child: ListView.builder(
-                            itemCount: GroceryList.length,
+                            itemCount: filteredGroceryData.length,
                             padding: const EdgeInsets.only(top: 8),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (BuildContext context, int index) {
-                              final int count = GroceryList.length > 10
+                              final int count = filteredGroceryData.length > 10
                                   ? 10
-                                  : GroceryList.length;
+                                  : filteredGroceryData.length;
                               final Animation<double> animation =
                                   Tween<double>(begin: 0.0, end: 1.0).animate(
                                       CurvedAnimation(
@@ -101,7 +142,7 @@ class _GroceryScreenState extends State<GroceryScreen>
                               animationController?.forward();
                               return GroceryListView(
                                 callback: () {},
-                                groceryData: GroceryList[index],
+                                groceryData: filteredGroceryData[index],
                                 animation: animation,
                                 animationController: animationController!,
                               );
@@ -142,11 +183,12 @@ class _GroceryScreenState extends State<GroceryScreen>
                   return const SizedBox();
                 } else {
                   return ListView.builder(
-                    itemCount: GroceryList.length,
+                    itemCount: filteredGroceryData.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
-                      final int count =
-                          GroceryList.length > 10 ? 10 : GroceryList.length;
+                      final int count = filteredGroceryData.length > 10
+                          ? 10
+                          : filteredGroceryData.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
@@ -157,7 +199,7 @@ class _GroceryScreenState extends State<GroceryScreen>
 
                       return GroceryListView(
                         callback: () {},
-                        groceryData: GroceryList[index],
+                        groceryData: filteredGroceryData[index],
                         animation: animation,
                         animationController: animationController!,
                       );
@@ -174,8 +216,8 @@ class _GroceryScreenState extends State<GroceryScreen>
 
   Widget getHotelViewList() {
     final List<Widget> GroceryListViews = <Widget>[];
-    for (int i = 0; i < GroceryList.length; i++) {
-      final int count = GroceryList.length;
+    for (int i = 0; i < filteredGroceryData.length; i++) {
+      final int count = filteredGroceryData.length;
       final Animation<double> animation =
           Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
@@ -186,7 +228,7 @@ class _GroceryScreenState extends State<GroceryScreen>
       GroceryListViews.add(
         GroceryListView(
           callback: () {},
-          groceryData: GroceryList[i],
+          groceryData: filteredGroceryData[i],
           animation: animation,
           animationController: animationController!,
         ),
@@ -200,7 +242,10 @@ class _GroceryScreenState extends State<GroceryScreen>
 
   Widget getTimeDateUI() {
     return Padding(
-      padding: const EdgeInsets.only(left: 18, bottom: 16),
+      padding: const EdgeInsets.only(
+        left: 18,
+        bottom: 16,
+      ),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -340,52 +385,21 @@ class _GroceryScreenState extends State<GroceryScreen>
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 16,
-                    right: 16,
+                    right: 12,
                     top: 4,
                     bottom: 4,
                   ),
                   child: TextField(
-                    onChanged: (String txt) {},
+                    onChanged: onSearchChanged,
                     style: TextStyle(
-                      fontSize: 18 * Scaler.textScaleFactor(context),
+                      fontSize: 16 * Scaler.textScaleFactor(context),
                     ),
                     cursorColor: AppTheme.buildLightTheme().primaryColor,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Chicken...',
+                      hintText: 'Search for an item',
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().primaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(14.0),
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8.0),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(32.0),
-                ),
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Icon(FontAwesomeIcons.magnifyingGlass,
-                      size: 20,
-                      color: AppTheme.buildLightTheme().backgroundColor),
                 ),
               ),
             ),
@@ -426,7 +440,7 @@ class _GroceryScreenState extends State<GroceryScreen>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '820 items found',
+                      '${filteredGroceryData.length} items found',
                       style: TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 16,
@@ -449,8 +463,11 @@ class _GroceryScreenState extends State<GroceryScreen>
                       Navigator.push<dynamic>(
                         context,
                         MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) => FiltersScreen(),
-                            fullscreenDialog: true),
+                          builder: (BuildContext context) => FiltersScreen(
+                            updateFilteredDataCallback: updateFilteredData,
+                          ),
+                          fullscreenDialog: true,
+                        ),
                       );
                     },
                     child: Padding(
@@ -557,10 +574,10 @@ class _GroceryScreenState extends State<GroceryScreen>
 }
 
 class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  ContestTabHeader(
-    this.searchUI,
-  );
   final Widget searchUI;
+  final int itemCount;
+
+  ContestTabHeader({required this.searchUI, required this.itemCount});
 
   @override
   Widget build(
@@ -575,7 +592,8 @@ class ContestTabHeader extends SliverPersistentHeaderDelegate {
   double get minExtent => 52.0;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+  bool shouldRebuild(ContestTabHeader oldDelegate) {
+    // Rebuild if the item count changes
+    return itemCount != oldDelegate.itemCount;
   }
 }

@@ -37,6 +37,11 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
   @override
   void initState() {
     super.initState();
+
+    if (latestMealList.isEmpty) {
+      loadMeals('assets/datasets/meals.csv');
+    }
+
     filteredLatestMeals = List.from(latestMealList);
     filteredRecommendedMeals = List.from(recommendedMealList);
 

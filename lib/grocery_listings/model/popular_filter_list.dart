@@ -1,5 +1,5 @@
-class EdibleTypesFilterListData {
-  EdibleTypesFilterListData({
+class SelectedFilterListData {
+  SelectedFilterListData({
     this.titleTxt = '',
     this.isSelected = false,
   });
@@ -7,109 +7,84 @@ class EdibleTypesFilterListData {
   String titleTxt;
   bool isSelected;
 
-  static List<EdibleTypesFilterListData> meatTypes =
-      <EdibleTypesFilterListData>[
-    EdibleTypesFilterListData(
-      titleTxt: 'Poultry',
+  static List<SelectedFilterListData> categoryTypes = <SelectedFilterListData>[
+    SelectedFilterListData(
+      titleTxt: 'Milk',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Beef',
-      isSelected: true,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Pork',
-      isSelected: true,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Lamb',
+    SelectedFilterListData(
+      titleTxt: 'Cheese',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Veal',
+    SelectedFilterListData(
+      titleTxt: 'Eggs',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Seafood',
+    SelectedFilterListData(
+      titleTxt: 'Chocolate',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Processed Meat',
+    SelectedFilterListData(
+      titleTxt: 'Drink Mixes',
       isSelected: false,
     ),
-  ];
-
-  static List<EdibleTypesFilterListData> vegeTypes =
-      <EdibleTypesFilterListData>[
-    EdibleTypesFilterListData(
-      titleTxt: 'Leafy Greens',
+    SelectedFilterListData(
+      titleTxt: 'Beverage Deals',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Cruciferous',
+    SelectedFilterListData(
+      titleTxt: 'Meat Sticks',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Root Vegetables',
-      isSelected: true,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Squashes',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Nightshades',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Alliums',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Legumes',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Fungi',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Cucurbits',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Edible Flowers',
-      isSelected: false,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Herbs',
+    SelectedFilterListData(
+      titleTxt: 'Yeast',
       isSelected: false,
     ),
   ];
 
-  static List<EdibleTypesFilterListData> accomodationList = [
-    EdibleTypesFilterListData(
-      titleTxt: 'All',
+  static List<SelectedFilterListData> brandTypes = <SelectedFilterListData>[
+    SelectedFilterListData(
+      titleTxt: 'Marketside',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Apartment',
+    SelectedFilterListData(
+      titleTxt: 'Price\'s',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Home',
-      isSelected: true,
-    ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Villa',
+    SelectedFilterListData(
+      titleTxt: 'Julio\'s',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Hotel',
+    SelectedFilterListData(
+      titleTxt: 'Rojo\'s',
       isSelected: false,
     ),
-    EdibleTypesFilterListData(
-      titleTxt: 'Resort',
+    SelectedFilterListData(
+      titleTxt: 'Marzetti',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Pace',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Yucatan',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Monster Energy',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Skippy',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Celsius',
+      isSelected: false,
+    ),
+    SelectedFilterListData(
+      titleTxt: 'Pompeian',
       isSelected: false,
     ),
   ];

@@ -29,6 +29,7 @@ final List<Meal> latestMealList = <Meal>[];
 List<Meal> recommendedMealList = <Meal>[];
 
 Future<void> loadMeals(String csvFilePath) async {
+  print("== loaded meals ====");
   List<List<dynamic>> csvData = await AppCsvFileLoader.loadCsvFile(csvFilePath);
 
   // Skip the header row

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:smart_fridge/grocery_listings/model/grocery_data.dart';
 
 import '../src/config/themes/app_theme.dart';
 import 'model/popular_filter_list.dart';
@@ -8,20 +9,46 @@ import 'range_slider_view.dart';
 import 'slider_view.dart';
 
 class FiltersScreen extends StatefulWidget {
+  final Function(List<GroceryData>) updateFilteredDataCallback;
+
+  const FiltersScreen({
+    super.key,
+    required this.updateFilteredDataCallback,
+  });
+
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  List<EdibleTypesFilterListData> meatFilterListData =
-      EdibleTypesFilterListData.meatTypes;
-  List<EdibleTypesFilterListData> vegeFilterListData =
-      EdibleTypesFilterListData.vegeTypes;
-  List<EdibleTypesFilterListData> accomodationListData =
-      EdibleTypesFilterListData.accomodationList;
-
   RangeValues _values = const RangeValues(100, 600);
   double distValue = 50.0;
+
+  void applyFilters() {
+    Set<String> selectedCategories = SelectedFilterListData.categoryTypes
+        .where((item) => item.isSelected)
+        .map((item) => item.titleTxt)
+        .toSet();
+
+    Set<String> selectedBrands = SelectedFilterListData.brandTypes
+        .where((item) => item.isSelected)
+        .map((item) => item.titleTxt)
+        .toSet();
+
+    List<GroceryData> newFilteredData = groceryList.where((grocery) {
+      bool categoryMatch = selectedCategories.isEmpty ||
+          selectedCategories.contains(grocery.category);
+      bool brandMatch =
+          selectedBrands.isEmpty || selectedBrands.contains(grocery.brand);
+      double price = double.tryParse(grocery.price) ??
+          0; // Safely convert price to double, default to 0 if conversion fails
+      bool priceMatch = (price >= _values.start && price <= _values.end);
+
+      return categoryMatch && brandMatch && priceMatch;
+    }).toList();
+
+    widget.updateFilteredDataCallback(newFilteredData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +67,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     const Divider(
                       height: 1,
                     ),
-                    foodTypeFilter("meat"),
+                    foodTypeFilter("category"),
                     const Divider(
                       height: 1,
                     ),
-                    foodTypeFilter("vegetables"),
-                    const Divider(
-                      height: 1,
-                    ),
-                    distanceViewUI(),
+                    foodTypeFilter("brand"),
                     const Divider(
                       height: 1,
                     ),
@@ -82,6 +105,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(24.0)),
                     highlightColor: Colors.transparent,
                     onTap: () {
+                      applyFilters();
                       Navigator.pop(context);
                     },
                     child: Center(
@@ -133,119 +157,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  List<Widget> getAccomodationListUI() {
-    final List<Widget> noList = <Widget>[];
-    for (int i = 0; i < accomodationListData.length; i++) {
-      final EdibleTypesFilterListData date = accomodationListData[i];
-      noList.add(
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-            onTap: () {
-              setState(() {
-                checkAppPosition(i);
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      date.titleTxt,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  CupertinoSwitch(
-                    activeColor: date.isSelected
-                        ? AppTheme.buildLightTheme().primaryColor
-                        : Colors.grey.withOpacity(0.6),
-                    onChanged: (bool value) {
-                      setState(() {
-                        checkAppPosition(i);
-                      });
-                    },
-                    value: date.isSelected,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-      if (i == 0) {
-        noList.add(const Divider(
-          height: 1,
-        ));
-      }
-    }
-    return noList;
-  }
-
-  void checkAppPosition(int index) {
-    if (index == 0) {
-      if (accomodationListData[0].isSelected) {
-        accomodationListData.forEach((d) {
-          d.isSelected = false;
-        });
-      } else {
-        accomodationListData.forEach((d) {
-          d.isSelected = true;
-        });
-      }
-    } else {
-      accomodationListData[index].isSelected =
-          !accomodationListData[index].isSelected;
-
-      int count = 0;
-      for (int i = 0; i < accomodationListData.length; i++) {
-        if (i != 0) {
-          final EdibleTypesFilterListData data = accomodationListData[i];
-          if (data.isSelected) {
-            count += 1;
-          }
-        }
-      }
-
-      if (count == accomodationListData.length - 1) {
-        accomodationListData[0].isSelected = true;
-      } else {
-        accomodationListData[0].isSelected = false;
-      }
-    }
-  }
-
-  Widget distanceViewUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Distance from where you are',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.grey,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-        SliderView(
-          distValue: distValue,
-          onChangedistValue: (double value) {
-            distValue = value;
-          },
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-      ],
-    );
-  }
-
   Widget foodTypeFilter(String type) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -281,15 +192,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
     int count = 0;
     const int columnCount = 2;
 
-    List<EdibleTypesFilterListData> edibleTypesFilterListData =
-        type == "meat" ? meatFilterListData : vegeFilterListData;
+    List<SelectedFilterListData> edibleTypesFilterListData = type == "category"
+        ? SelectedFilterListData.categoryTypes
+        : SelectedFilterListData.brandTypes;
 
     for (int i = 0; i < edibleTypesFilterListData.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final EdibleTypesFilterListData date =
-              edibleTypesFilterListData[count];
+          final SelectedFilterListData type = edibleTypesFilterListData[count];
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -299,7 +210,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     onTap: () {
                       setState(() {
-                        date.isSelected = !date.isSelected;
+                        type.isSelected = !type.isSelected;
                       });
                     },
                     child: Padding(
@@ -307,10 +218,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            date.isSelected
+                            type.isSelected
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            color: date.isSelected
+                            color: type.isSelected
                                 ? AppTheme.buildLightTheme().primaryColor
                                 : Colors.grey.withOpacity(0.6),
                           ),
@@ -318,7 +229,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             width: 4,
                           ),
                           Text(
-                            date.titleTxt,
+                            type.titleTxt,
                           ),
                         ],
                       ),
@@ -366,7 +277,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
         RangeSliderView(
           values: _values,
           onChangeRangeValues: (RangeValues values) {
-            _values = values;
+            setState(() {
+              _values = values;
+            });
           },
         ),
         const SizedBox(

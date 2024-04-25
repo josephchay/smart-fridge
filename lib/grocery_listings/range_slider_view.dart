@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../src/config/themes/app_theme.dart';
 
 class RangeSliderView extends StatefulWidget {
-  const RangeSliderView({Key? key, this.values, this.onChangeRangeValues})
-      : super(key: key);
+  const RangeSliderView({
+    super.key,
+    this.values,
+    this.onChangeRangeValues,
+  });
 
   final Function(RangeValues)? onChangeRangeValues;
   final RangeValues? values;
@@ -38,7 +41,7 @@ class _RangeSliderViewState extends State<RangeSliderView> {
                   Container(
                     width: 54,
                     child: Text(
-                      '\$${_values!.start.round()}',
+                      'RM${_values!.start.round()}',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -57,7 +60,7 @@ class _RangeSliderViewState extends State<RangeSliderView> {
                   Container(
                     width: 54,
                     child: Text(
-                      '\$${_values!.end.round()}',
+                      'RM${_values!.end.round()}',
                       textAlign: TextAlign.center,
                     ),
                   ),

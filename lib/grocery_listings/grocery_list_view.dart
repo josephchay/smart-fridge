@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
-import '../src/config/themes/app_theme.dart';
-import 'model/grocery_list_data.dart';
+import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'model/grocery_data.dart';
 
 class GroceryListView extends StatelessWidget {
-  const GroceryListView(
-      {Key? key,
-      this.groceryData,
-      this.animationController,
-      this.animation,
-      this.callback})
-      : super(key: key);
+  const GroceryListView({
+    super.key,
+    this.groceryData,
+    this.animationController,
+    this.animation,
+    this.callback,
+  });
 
   final VoidCallback? callback;
-  final GroceryListData? groceryData;
+  final GroceryData? groceryData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -51,13 +50,13 @@ class GroceryListView extends StatelessWidget {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            AspectRatio(
-                              aspectRatio: 2,
-                              child: Image.asset(
-                                groceryData!.imagePath,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            // AspectRatio(
+                            //   aspectRatio: 2,
+                            //   child: Image.asset(
+                            //     groceryData!.imagePath,
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            // ),
                             Container(
                               color: AppTheme.buildLightTheme().backgroundColor,
                               child: Row(
@@ -68,7 +67,11 @@ class GroceryListView extends StatelessWidget {
                                     child: Container(
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 16, top: 8, bottom: 8),
+                                          left: 16,
+                                          right: 16,
+                                          top: 8,
+                                          bottom: 8,
+                                        ),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -76,11 +79,11 @@ class GroceryListView extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              groceryData!.titleTxt,
+                                              groceryData!.name,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 22,
+                                                fontSize: 16,
                                               ),
                                             ),
                                             // Row(
@@ -124,42 +127,42 @@ class GroceryListView extends StatelessWidget {
                                                   const EdgeInsets.only(top: 4),
                                               child: Row(
                                                 children: <Widget>[
-                                                  RatingBar(
-                                                    initialRating:
-                                                        groceryData!.rating,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    itemCount: 5,
-                                                    itemSize: 24,
-                                                    ratingWidget: RatingWidget(
-                                                      full: Icon(
-                                                        Icons.star_rate_rounded,
-                                                        color: AppTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      half: Icon(
-                                                        Icons.star_half_rounded,
-                                                        color: AppTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                      empty: Icon(
-                                                        Icons
-                                                            .star_border_rounded,
-                                                        color: AppTheme
-                                                                .buildLightTheme()
-                                                            .primaryColor,
-                                                      ),
-                                                    ),
-                                                    itemPadding:
-                                                        EdgeInsets.zero,
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
-                                                  ),
+                                                  // RatingBar(
+                                                  //   initialRating:
+                                                  //       groceryData!.rating,
+                                                  //   direction: Axis.horizontal,
+                                                  //   allowHalfRating: true,
+                                                  //   itemCount: 5,
+                                                  //   itemSize: 24,
+                                                  //   ratingWidget: RatingWidget(
+                                                  //     full: Icon(
+                                                  //       Icons.star_rate_rounded,
+                                                  //       color: AppTheme
+                                                  //               .buildLightTheme()
+                                                  //           .primaryColor,
+                                                  //     ),
+                                                  //     half: Icon(
+                                                  //       Icons.star_half_rounded,
+                                                  //       color: AppTheme
+                                                  //               .buildLightTheme()
+                                                  //           .primaryColor,
+                                                  //     ),
+                                                  //     empty: Icon(
+                                                  //       Icons
+                                                  //           .star_border_rounded,
+                                                  //       color: AppTheme
+                                                  //               .buildLightTheme()
+                                                  //           .primaryColor,
+                                                  //     ),
+                                                  //   ),
+                                                  //   itemPadding:
+                                                  //       EdgeInsets.zero,
+                                                  //   onRatingUpdate: (rating) {
+                                                  //     print(rating);
+                                                  //   },
+                                                  // ),
                                                   Text(
-                                                    ' ${groceryData!.bought} Bought',
+                                                    groceryData!.category,
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         color: Colors.grey
@@ -168,6 +171,36 @@ class GroceryListView extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                top: 8,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'RM${groceryData!.price}',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 15,
+                                                      color:
+                                                          AppTheme.nearlyOrange,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Text(
+                                                    '/unit (Tesco)',
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.8)),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -182,20 +215,26 @@ class GroceryListView extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        Text(
-                                          'RM${groceryData!.price}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(32.0),
+                                            ),
+                                            onTap: () {},
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Icon(
+                                                // add button
+                                                Icons.add,
+                                                color:
+                                                    AppTheme.buildLightTheme()
+                                                        .primaryColor,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          '/unit',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color:
-                                                  Colors.grey.withOpacity(0.8)),
                                         ),
                                       ],
                                     ),
@@ -205,27 +244,6 @@ class GroceryListView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(32.0),
-                              ),
-                              onTap: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.favorite_border,
-                                  color:
-                                      AppTheme.buildLightTheme().primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
