@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
@@ -21,8 +22,24 @@ class MealScreen extends StatefulWidget {
 }
 
 class _MealScreenState extends State<MealScreen> {
+  final FlutterTts flutterTts = FlutterTts();
+
+  speak(String text) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(text);
+  }
+
   int currentNumber = 1;
+  int stepCountReading =
+      0; // Initialize the step counter of the step that is being currently read by tts
   bool isMakingMeal = false;
+
+  @override
+  void dispose() {
+    flutterTts.stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +54,41 @@ class _MealScreenState extends State<MealScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isMakingMeal = !isMakingMeal;
-                    });
+                  onPressed: () async {
+                    if (isMakingMeal) {
+                      // If currently making a meal, stop the TTS and toggle the state.
+                      await flutterTts.stop();
+                      setState(() {
+                        isMakingMeal = false;
+                        stepCountReading = 0; // Reset step count when stopping
+                      });
+                    } else {
+                      // Set makingMeal to true at the start of the process.
+                      setState(() {
+                        isMakingMeal = true;
+                        stepCountReading =
+                            1; // Ensure starting from the first step
+                      });
+                      for (var step in widget.data.steps) {
+                        if (!isMakingMeal)
+                          break; // Ensures we stop if isMakingMeal is toggled off
+                        setState(() {
+                          stepCountReading = widget.data.steps.indexOf(step) +
+                              1; // Update currently reading step
+                        });
+                        String textToSpeak = "Step $stepCountReading. ${step}";
+                        await flutterTts.speak(textToSpeak);
+                        await flutterTts.awaitSpeakCompletion(true);
+                      }
+                      // Check again after finishing the loop in case the state was not changed by stopping.
+                      if (isMakingMeal) {
+                        setState(() {
+                          isMakingMeal = false;
+                          stepCountReading =
+                              0; // Reset step count when finished
+                        });
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.nearlyOrange,
@@ -87,7 +135,13 @@ class _MealScreenState extends State<MealScreen> {
                       TopActionButton(
                         icon: CupertinoIcons.chevron_back,
                         color: AppTheme.darkText,
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () async {
+                          await flutterTts.stop();
+                          setState(() {
+                            isMakingMeal = false;
+                          });
+                          Navigator.pop(context);
+                        },
                       ),
                       const Spacer(),
                       TopActionButton(
@@ -97,7 +151,7 @@ class _MealScreenState extends State<MealScreen> {
                         color: widget.data.isFavorite
                             ? AppTheme.nearlyRed
                             : AppTheme.grey,
-                        onPressed: () {},
+                        onPressed: () async {},
                       ),
                     ],
                   ),
@@ -241,10 +295,12 @@ class _MealScreenState extends State<MealScreen> {
                                 style: TextStyle(
                                   fontSize:
                                       16 * Scaler.textScaleFactor(context),
-                                  color: i % 2 == 0
-                                      ? AppTheme.deactivatedText
-                                      : AppTheme.deactivatedText
-                                          .withOpacity(0.6),
+                                  color: (i + 1 == stepCountReading)
+                                      ? AppTheme.nearlyDarkOrange
+                                      : i % 2 == 0
+                                          ? AppTheme.deactivatedText
+                                          : AppTheme.deactivatedText
+                                              .withOpacity(0.6),
                                 ),
                               ),
                             ),
@@ -257,10 +313,12 @@ class _MealScreenState extends State<MealScreen> {
                                 style: TextStyle(
                                   fontSize:
                                       16 * Scaler.textScaleFactor(context),
-                                  color: i % 2 == 0
-                                      ? AppTheme.deactivatedText
-                                      : AppTheme.deactivatedText
-                                          .withOpacity(0.6),
+                                  color: (i + 1 == stepCountReading)
+                                      ? AppTheme.nearlyDarkOrange
+                                      : i % 2 == 0
+                                          ? AppTheme.deactivatedText
+                                          : AppTheme.deactivatedText
+                                              .withOpacity(0.6),
                                 ),
                               ),
                             ),
@@ -386,20 +444,19 @@ class _MealScreenState extends State<MealScreen> {
 class TopActionButton extends StatelessWidget {
   final IconData icon;
   final Color color;
-  final Function()? onPressed;
+  final Future<void> Function() onPressed;
 
   const TopActionButton({
     super.key,
     required this.icon,
-    this.color = AppTheme.darkText,
-    this.onPressed,
+    required this.color,
+    required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(
-          15), // Match this to your IconButton's borderRadius
+      borderRadius: BorderRadius.circular(15),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
         child: Container(
@@ -408,12 +465,10 @@ class TopActionButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: IconButton(
-            onPressed: () => onPressed!(),
-            icon: Icon(
-              icon,
-              color: color,
-            ),
-            // Remove the styleFrom if using a Container for background styling
+            icon: Icon(icon, color: color),
+            onPressed: () async {
+              await onPressed(); // Make sure to await the onPressed function
+            },
           ),
         ),
       ),

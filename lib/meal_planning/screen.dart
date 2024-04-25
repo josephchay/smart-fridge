@@ -110,32 +110,32 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Categories',
-        hasBottomPadding: false,
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController,
-      ),
-    );
+    // listViews.add(
+    //   TitleView(
+    //     titleTxt: 'Categories',
+    //     hasBottomPadding: false,
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController,
+    //   ),
+    // );
 
-    listViews.add(
-      AppMealPlannerFoodCategories(
-        current: 'All',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController,
-      ),
-    );
+    // listViews.add(
+    //   AppMealPlannerFoodCategories(
+    //     current: 'All',
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController,
+    //   ),
+    // );
 
     listViews.add(
       TitleView(
@@ -146,7 +146,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
           MaterialPageRoute(
               builder: (context) => AppMealPlannerAllList(
                     type: 'Recommendations',
-                    data: recommendedMealList,
+                    data: filteredRecommendedMeals,
                     animationController: widget.animationController!,
                   )),
         ),
@@ -183,7 +183,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
           MaterialPageRoute(
               builder: (context) => AppMealPlannerAllList(
                     type: 'Latest',
-                    data: latestMealList,
+                    data: filteredLatestMeals,
                     animationController: widget.animationController!,
                   )),
         ),

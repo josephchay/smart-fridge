@@ -29,6 +29,7 @@ class AppPageSearchBar extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 24,
                 right: 24,
+                bottom: 40,
               ),
               child: Container(
                 width: double.infinity,

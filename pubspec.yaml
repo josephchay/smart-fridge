@@ -94,6 +94,10 @@ dependencies:
   cloud_firestore: ^4.13.1
   google_sign_in: ^6.2.1
 
+  # speech and text
+  speech_to_text: ^6.6.0
+  flutter_tts: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
