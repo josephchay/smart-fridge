@@ -1,31 +1,25 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
-
 import 'model/grocery_data.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class GroceryListView extends StatelessWidget {
-  const GroceryListView({
+class GroceryCartView extends StatelessWidget {
+  const GroceryCartView({
     super.key,
     this.groceryData,
     this.animationController,
     this.animation,
-    required this.callback,
+    this.callback,
+    required this.storageGroceryData,
   });
 
-  final void Function(GroceryData) callback;
+  final VoidCallback? callback;
   final GroceryData? groceryData;
   final AnimationController? animationController;
   final Animation<double>? animation;
-
-  void saveGroceryData(List<GroceryData> data) async {
-    final storage = GetStorage();
-    List<Map<String, dynamic>> jsonData =
-        data.map((item) => item.toJson()).toList();
-    storage.write('groceryListings', jsonEncode(jsonData));
-  }
+  final List<GroceryData> storageGroceryData;
 
   @override
   Widget build(BuildContext context) {
@@ -232,18 +226,14 @@ class GroceryListView extends StatelessWidget {
                                                 const BorderRadius.all(
                                               Radius.circular(32.0),
                                             ),
-                                            onTap: () {
-                                              callback(groceryData!);
-                                            },
+                                            onTap: () => callback!(),
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Icon(
                                                 // add button
-                                                Icons.add,
-                                                color:
-                                                    AppTheme.buildLightTheme()
-                                                        .primaryColor,
+                                                Icons.remove,
+                                                color: AppTheme.nearlyRed,
                                               ),
                                             ),
                                           ),

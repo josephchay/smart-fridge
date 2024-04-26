@@ -16,6 +16,27 @@ class GroceryData {
     required double price, // Accept price as a double
   }) : price =
             price.toStringAsFixed(2); // Convert to string with 2 decimal places
+
+  // Converts a GroceryData instance into a map.
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'category': category,
+      'brand': brand,
+      'price': price,
+    };
+  }
+
+  // Creates a GroceryData instance from a map.
+  factory GroceryData.fromJson(Map<String, dynamic> json) {
+    return GroceryData(
+      name: json['name'] as String,
+      category: json['category'] as String,
+      brand: json['brand'] as String,
+      price:
+          double.tryParse(json['price']) ?? 0.0, // Parse the price as a double
+    );
+  }
 }
 
 final List<GroceryData> groceryList = <GroceryData>[];

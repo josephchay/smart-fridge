@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:smart_fridge/commons/widgets/snackbar.dart';
+import 'package:smart_fridge/grocery_listings/cart_screen.dart';
 import 'package:smart_fridge/grocery_listings/grocery_list_view.dart';
 import 'package:smart_fridge/grocery_listings/model/grocery_data.dart';
 import 'package:smart_fridge/src/config/math/scaler.dart';
@@ -17,6 +22,7 @@ class _GroceryScreenState extends State<GroceryScreen>
   final ScrollController _scrollController = ScrollController();
 
   List<GroceryData> filteredGroceryData = [];
+  List<GroceryData> storageGroceryData = [];
 
 // print all the unique categories and brands
   void printUniqueCategoriesAndBrands() {
@@ -38,6 +44,7 @@ class _GroceryScreenState extends State<GroceryScreen>
     super.initState();
 
     filteredGroceryData = List.from(groceryList);
+    loadGroceryData();
     // printUniqueCategoriesAndBrands();
   }
 
@@ -141,7 +148,7 @@ class _GroceryScreenState extends State<GroceryScreen>
                                               curve: Curves.fastOutSlowIn)));
                               animationController?.forward();
                               return GroceryListView(
-                                callback: () {},
+                                callback: addItemToStorage,
                                 groceryData: filteredGroceryData[index],
                                 animation: animation,
                                 animationController: animationController!,
@@ -198,7 +205,7 @@ class _GroceryScreenState extends State<GroceryScreen>
                       animationController?.forward();
 
                       return GroceryListView(
-                        callback: () {},
+                        callback: addItemToStorage,
                         groceryData: filteredGroceryData[index],
                         animation: animation,
                         animationController: animationController!,
@@ -214,6 +221,65 @@ class _GroceryScreenState extends State<GroceryScreen>
     );
   }
 
+  void addItemToStorage(GroceryData item) {
+    final localStorage = GetStorage();
+
+    // Attempt to read the existing grocery listings, handle cases where the key does not exist or is not a list.
+    var rawListings = localStorage.read('groceryListings');
+    List<dynamic> groceryListings;
+
+    if (rawListings != null) {
+      try {
+        groceryListings = jsonDecode(rawListings);
+      } catch (e) {
+        print("Error decoding stored data: $e");
+        groceryListings = []; // Initialize as empty if decoding fails
+      }
+    } else {
+      groceryListings = []; // Initialize as empty if the key does not exist
+    }
+
+    // Add new item as a Map to the list
+    groceryListings.add(item.toJson());
+
+    // Save the updated list back to storage
+    localStorage.write('groceryListings', jsonEncode(groceryListings));
+
+    loadGroceryData();
+
+    AppSnackbar.success(message: 'Item added to cart!');
+  }
+
+  void loadGroceryData() async {
+    final storage = GetStorage();
+    try {
+      String? jsonString = storage.read('groceryListings');
+
+      if (jsonString != null) {
+        List<dynamic> jsonData = jsonDecode(jsonString);
+        List<GroceryData> groceryData = jsonData
+            .map((item) => GroceryData.fromJson(item as Map<String, dynamic>))
+            .toList();
+        setState(() {
+          storageGroceryData = groceryData;
+        });
+      } else {
+        // Handle empty or null jsonString
+        setState(() {
+          storageGroceryData = [];
+        });
+        // Optionally show a message or a graphic indicating the cart is empty
+      }
+    } catch (e) {
+      // Handle errors in decoding or processing data
+      print('Error loading cart data: $e');
+      setState(() {
+        storageGroceryData = [];
+      });
+      // Show error message to user
+    }
+  }
+
   Widget getHotelViewList() {
     final List<Widget> GroceryListViews = <Widget>[];
     for (int i = 0; i < filteredGroceryData.length; i++) {
@@ -227,10 +293,10 @@ class _GroceryScreenState extends State<GroceryScreen>
       );
       GroceryListViews.add(
         GroceryListView(
-          callback: () {},
           groceryData: filteredGroceryData[i],
           animation: animation,
           animationController: animationController!,
+          callback: addItemToStorage,
         ),
       );
     }
@@ -286,7 +352,7 @@ class _GroceryScreenState extends State<GroceryScreen>
                             height: 8,
                           ),
                           Text(
-                            '17',
+                            storageGroceryData.length.toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.w100,
                               fontSize: 16,
@@ -552,7 +618,18 @@ class _GroceryScreenState extends State<GroceryScreen>
                       borderRadius: const BorderRadius.all(
                         Radius.circular(32.0),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                GroceryCartScreen(
+                              storageGroceryData: storageGroceryData,
+                            ),
+                          ),
+                        );
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
