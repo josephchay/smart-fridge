@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/features/notifications/data/notifications_list_data.dart';
 import 'package:smart_fridge/src/features/notifications/presentation/notification_item.dart';
@@ -67,7 +71,7 @@ class NotificationScreenState extends State<NotificationScreen>
   }
 
   void addAllListData() {
-    const int count = 4; // number of items in the list
+    const int count = 2; // number of items in the list
 
     listViews.add(
       TitleView(
@@ -95,38 +99,6 @@ class NotificationScreenState extends State<NotificationScreen>
         NotificationItem(
           callback: () {},
           data: recentNotificationList[i],
-          animation: animation,
-          animationController: widget.animationController!,
-        ),
-      );
-    }
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Yesterday',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    for (int i = 0; i < yesterdayNotificationList.length; i++) {
-      final int count = yesterdayNotificationList.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: widget.animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      listViews.add(
-        NotificationItem(
-          callback: () {},
-          data: yesterdayNotificationList[i],
           animation: animation,
           animationController: widget.animationController!,
         ),
@@ -191,5 +163,14 @@ class NotificationScreenState extends State<NotificationScreen>
         }
       },
     );
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
   }
 }

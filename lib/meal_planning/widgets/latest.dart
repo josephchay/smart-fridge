@@ -252,42 +252,42 @@ class MealCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            12.0), // Radius of the rounded corners
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                              sigmaX: 6.0,
-                              sigmaY: 6.0), // The blur effect values
-                          child: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(
-                                  0.4), // Semi-transparent white background
-                              borderRadius: BorderRadius.circular(
-                                  12.0), // Radius of the rounded corners
-                            ),
-                            child: IconButton(
-                              iconSize: 20 * Scaler.textScaleFactor(context),
-                              onPressed: () {},
-                              icon: Icon(
-                                meal.isFavorite
-                                    ? Icons.favorite_outlined
-                                    : Icons.favorite_border_outlined,
-                                // check if the current meal is in the favorites list
-                                color: meal.isFavorite
-                                    ? AppTheme.nearlyRed
-                                    : AppTheme.grey.withOpacity(.8),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 6,
+                    //   right: 6,
+                    //   child: ClipRRect(
+                    //     borderRadius: BorderRadius.circular(
+                    //         12.0), // Radius of the rounded corners
+                    //     child: BackdropFilter(
+                    //       filter: ImageFilter.blur(
+                    //           sigmaX: 6.0,
+                    //           sigmaY: 6.0), // The blur effect values
+                    //       child: Container(
+                    //         width: 36,
+                    //         height: 36,
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.white.withOpacity(
+                    //               0.4), // Semi-transparent white background
+                    //           borderRadius: BorderRadius.circular(
+                    //               12.0), // Radius of the rounded corners
+                    //         ),
+                    //         child: IconButton(
+                    //           iconSize: 20 * Scaler.textScaleFactor(context),
+                    //           onPressed: () {},
+                    //           icon: Icon(
+                    //             meal.isFavorite
+                    //                 ? Icons.favorite_outlined
+                    //                 : Icons.favorite_border_outlined,
+                    //             // check if the current meal is in the favorites list
+                    //             color: meal.isFavorite
+                    //                 ? AppTheme.nearlyRed
+                    //                 : AppTheme.grey.withOpacity(.8),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

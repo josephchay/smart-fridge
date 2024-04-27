@@ -6,6 +6,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smart_fridge/data/repositories/authentication/authentication_repository.dart';
+import 'package:smart_fridge/fireabase_api.dart';
+import '';
 
 import 'app.dart';
 import 'firebase_options.dart';
@@ -22,6 +24,11 @@ Future<void> main() async {
     overlays: [SystemUiOverlay.top],
   );
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((FirebaseApp value) => Get.put(AuthenticationRepository()));
+  // await FirebaseApi().initNotifications();
+
   await SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
@@ -30,8 +37,4 @@ Future<void> main() async {
   await GetStorage.init();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).then((FirebaseApp value) => Get.put(AuthenticationRepository()));
 }

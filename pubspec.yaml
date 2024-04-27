@@ -59,6 +59,8 @@ dependencies:
   rive: ^0.9.1
   lottie: ^2.7.0
 
+  flutter_barcode_scanner: ^2.0.0
+
   # date format
   intl: ^0.18.1
   animations: ^2.0.3
@@ -91,8 +93,11 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   firebase_core: ^2.24.2
   firebase_auth: ^4.14.0
+  firebase_messaging: ^14.9.1
   cloud_firestore: ^4.13.1
   google_sign_in: ^6.2.1
+
+  openfoodfacts: ^3.6.1
 
   # speech and text
   speech_to_text: ^6.6.0

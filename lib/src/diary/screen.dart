@@ -1,246 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/diary/current_diets_list_view.dart';
-import 'package:smart_fridge/src/ui_view/accumulated_nutrition_view.dart';
-import 'package:smart_fridge/src/ui_view/body_measurement.dart';
-import 'package:smart_fridge/src/ui_view/title_view.dart';
-import 'package:smart_fridge/top_bar.dart';
 
-/// The Home (first) Page of the app
 class DiaryScreen extends StatefulWidget {
-  final AnimationController? animationController;
-  final ScrollController scrollController;
-
   const DiaryScreen({
     super.key,
-    this.animationController,
-    required this.scrollController,
   });
 
   @override
-  _DiaryScreenState createState() => _DiaryScreenState();
+  State<DiaryScreen> createState() => _DiaryScreenState();
 }
 
-class _DiaryScreenState extends State<DiaryScreen>
-    with TickerProviderStateMixin {
-  Animation<double>? topBarAnimation;
+class _DiaryScreenState extends State<DiaryScreen> {
+  String _scanBarcode = 'Unknown';
 
-  List<Widget> listViews = <Widget>[];
-  double topBarOpacity = 0.0;
+  Future<void> scanBarcodeNormal() async {
+    String barcodesScanRes;
+    try {
+      barcodesScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      debugPrint(barcodesScanRes);
+    } on PlatformException {
+      barcodesScanRes = 'Failed to get platform version.';
+    }
 
-  @override
-  void initState() {
-    super.initState();
-
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: widget.animationController!,
-        curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
-      ),
-    );
-
-    widget.scrollController.addListener(() {
-      if (!mounted) return;
-
-      if (widget.scrollController.offset >= 24) {
-        if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
-        }
-      } else if (widget.scrollController.offset <= 24 &&
-          widget.scrollController.offset >= 0) {
-        if (topBarOpacity != widget.scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = widget.scrollController.offset / 24;
-          });
-        }
-      } else if (widget.scrollController.offset <= 0) {
-        if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
-        }
-      }
+    if (!mounted) return;
+    setState(() {
+      _scanBarcode = barcodesScanRes;
     });
-
-    addAllListData();
-  }
-
-  void addAllListData() {
-    const int count = 4; // number of items in the list
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Accumulated Nutrition',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      AppAccumulatedNutritionView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Current Diet',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      CurrentDietsListView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        ),
-        mainScreenAnimationController: widget.animationController,
-      ),
-    );
-
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Body measurement',
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     animationController: widget.animationController!,
-    //   ),
-    // );
-
-    // listViews.add(
-    //   BodyMeasurementView(
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     animationController: widget.animationController!,
-    //   ),
-    // );
-
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Water',
-    //     subTxt: 'Aqua SmartBottle',
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     animationController: widget.animationController!,
-    //   ),
-    // );
-    //
-    // listViews.add(
-    //   WaterView(
-    //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 7, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     mainScreenAnimationController: widget.animationController!,
-    //   ),
-    // );
-    //
-    // listViews.add(
-    //   GlassView(
-    //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //         CurvedAnimation(
-    //           parent: widget.animationController!,
-    //           curve:
-    //               Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn),
-    //         ),
-    //       ),
-    //       animationController: widget.animationController!),
-    // );
-  }
-
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime startDate = DateTime.now();
-    DateTime endDate = DateTime.now().add(const Duration(days: 5));
-
-    return Container(
-      color: AppTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: <Widget>[
-            getListViewUI(),
-            AppTopBar(
-              title: 'Diary',
-              action: AppTopBarAction.datepicker,
-              topBarOpacity: topBarOpacity,
-              animationController: widget.animationController,
-              animation: topBarAnimation,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget getListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return ListView.builder(
-            controller: widget.scrollController,
-            padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
-              bottom: 20 + MediaQuery.of(context).padding.bottom,
-            ),
-            itemCount: listViews.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (BuildContext context, int index) {
-              widget.animationController?.forward();
-              return listViews[index];
-            },
-          );
-        }
-      },
-    );
+    return Scaffold(
+        // appBar: AppBar(
+        //   title: Text('Scan a Barcode'),
+        // ),
+        body: Builder(builder: (context) {
+      return Container(
+        alignment: Alignment.center,
+        child: Flex(
+            direction: Axis.vertical,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // ElevatedButton(
+              //   onPressed: scanBarcodeNormal,
+              //   child: Text('Scan Barcode'),
+              // ),
+              Text("Coming Soon!\n",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppTheme.nearlyOrange,
+                  ))
+            ]),
+      );
+    }));
   }
 }

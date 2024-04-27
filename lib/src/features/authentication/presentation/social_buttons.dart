@@ -21,10 +21,10 @@ class AppAuthSocialButtons extends StatelessWidget {
           image: "assets/images/logos/google.png",
           onPressed: () => controller.processWithGoogle(),
         ),
-        SizedBox(width: 20),
-        AuthSocialButton(
-          image: "assets/images/logos/facebook.png",
-        ),
+        // SizedBox(width: 20),
+        // AuthSocialButton(
+        //   image: "assets/images/logos/facebook.png",
+        // ),
       ],
     );
   }

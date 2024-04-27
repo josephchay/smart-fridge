@@ -46,40 +46,40 @@ class _AppDrawerState extends State<AppDrawer> {
                   slogan: "Your new refrigerator experience.",
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 24,
-                  top: 32,
-                  bottom: 16,
-                ),
-                child: Text(
-                  'BROWSE',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Colors.white60,
-                      ),
-                ),
-              ),
-              ...drawerTopTabs.map((tab) => AppDrawerPlate(
-                    isLightMode: isLightMode,
-                    tab: tab,
-                    // iconOnInit: (artboard) {
-                    //   rive.StateMachineController controller =
-                    //       RiveIconController.getRiveController(artboard,
-                    //           stateMachineName: tab.stateMachineName);
-                    //   tab.input = controller.findSMI("active") as rive.SMIBool;
-                    // },
-                    press: () {
-                      // tab.input!.change(true);
-                      // Future.delayed(const Duration(milliseconds: 800), () {
-                      //   tab.input!.change(false);
-                      // });
-                      setState(() {
-                        selectedTab = tab;
-                      });
-                      tab.action();
-                    },
-                    isActive: selectedTab == tab,
-                  )),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //     left: 24,
+              //     top: 32,
+              //     bottom: 16,
+              //   ),
+              //   child: Text(
+              //     'BROWSE',
+              //     style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              //           color: Colors.white60,
+              //         ),
+              //   ),
+              // ),
+              // ...drawerTopTabs.map((tab) => AppDrawerPlate(
+              //       isLightMode: isLightMode,
+              //       tab: tab,
+              //       // iconOnInit: (artboard) {
+              //       //   rive.StateMachineController controller =
+              //       //       RiveIconController.getRiveController(artboard,
+              //       //           stateMachineName: tab.stateMachineName);
+              //       //   tab.input = controller.findSMI("active") as rive.SMIBool;
+              //       // },
+              //       press: () {
+              //         // tab.input!.change(true);
+              //         // Future.delayed(const Duration(milliseconds: 800), () {
+              //         //   tab.input!.change(false);
+              //         // });
+              //         setState(() {
+              //           selectedTab = tab;
+              //         });
+              //         tab.action();
+              //       },
+              //       isActive: selectedTab == tab,
+              //     )),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 24,

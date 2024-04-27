@@ -44,29 +44,12 @@ class _CameraScreenState extends State<CameraScreen> {
           // Bounding boxes
           boundingBoxes(results),
 
-          // Heading
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              padding: EdgeInsets.only(top: 20),
-              child: Text(
-                'Object Detection Flutter',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepOrangeAccent.withOpacity(0.4),
-                ),
-              ),
-            ),
-          ),
-
           // Bottom Sheet
           Align(
             alignment: Alignment.bottomCenter,
             child: DraggableScrollableSheet(
-              initialChildSize: 0.4,
-              minChildSize: 0.1,
+              initialChildSize: 0.5,
+              minChildSize: 0.5,
               maxChildSize: 0.5,
               builder: (_, ScrollController scrollController) => Container(
                 width: double.maxFinite,
@@ -87,23 +70,23 @@ class _CameraScreenState extends State<CameraScreen> {
                                 child: Column(
                                   children: [
                                     Metric(
-                                      'Inference time:',
+                                      'Decision time:',
                                       '${stats.inferenceTime}ms (${avg.inferenceTime}ms)',
                                     ),
                                     Metric(
-                                      'Pre-processing time:',
+                                      'Setup time:',
                                       '${stats.preProcessingTime}ms (${avg.preProcessingTime}ms)',
                                     ),
                                     Metric(
-                                      'Total predict time:',
+                                      'Total Analysis time:',
                                       '${stats.totalPredictTime}ms (${avg.totalPredictTime}ms)',
                                     ),
                                     Metric(
-                                      'Total elapsed time:',
+                                      'Total time taken:',
                                       '${stats.totalElapsedTime}ms (${avg.totalElapsedTime}ms)',
                                     ),
                                     Metric(
-                                      'Count:',
+                                      'Items Processed:',
                                       '${totalStats.count}',
                                     ),
                                     Metric(

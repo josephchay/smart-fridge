@@ -20,12 +20,12 @@ class GroceryListView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  void saveGroceryData(List<GroceryData> data) async {
-    final storage = GetStorage();
-    List<Map<String, dynamic>> jsonData =
-        data.map((item) => item.toJson()).toList();
-    storage.write('groceryListings', jsonEncode(jsonData));
-  }
+  // void saveGroceryData(List<GroceryData> data) async {
+  //   final storage = GetStorage();
+  //   List<Map<String, dynamic>> jsonData =
+  //       data.map((item) => item.toJson()).toList();
+  //   storage.write('groceryListings', jsonEncode(jsonData));
+  // }
 
   @override
   Widget build(BuildContext context) {

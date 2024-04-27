@@ -144,15 +144,15 @@ class _MealScreenState extends State<MealScreen> {
                         },
                       ),
                       const Spacer(),
-                      TopActionButton(
-                        icon: widget.data.isFavorite
-                            ? Icons.favorite_outlined
-                            : Icons.favorite_border_outlined,
-                        color: widget.data.isFavorite
-                            ? AppTheme.nearlyRed
-                            : AppTheme.grey,
-                        onPressed: () async {},
-                      ),
+                      // TopActionButton(
+                      //   icon: widget.data.isFavorite
+                      //       ? Icons.favorite_outlined
+                      //       : Icons.favorite_border_outlined,
+                      //   color: widget.data.isFavorite
+                      //       ? AppTheme.nearlyRed
+                      //       : AppTheme.grey,
+                      //   onPressed: () async {},
+                      // ),
                     ],
                   ),
                 ),
@@ -364,7 +364,7 @@ class _MealScreenState extends State<MealScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            "${widget.data.ingredients!.length} / ${widget.data.nIngredients}",
+                            "0 / ${widget.data.nIngredients}",
                             style: TextStyle(
                               fontSize: 14 * Scaler.textScaleFactor(context),
                               color: Colors.white,
@@ -410,14 +410,14 @@ class _MealScreenState extends State<MealScreen> {
                                   ),
                                 ),
                               ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Icon(
-                                Icons.check_circle,
-                                color: AppTheme.nearlyGreen,
-                                size: 24 * Scaler.textScaleFactor(context),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 10),
+                            //   child: Icon(
+                            //     Icons.add_circle_outline,
+                            //     color: AppTheme.grey.withOpacity(0.6),
+                            //     size: 24 * Scaler.textScaleFactor(context),
+                            //   ),
+                            // ),
                           ],
                         ),
                         if (i !=

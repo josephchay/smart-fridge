@@ -39,11 +39,11 @@ List<AppDrawerTab> drawerTopTabs = [
 ];
 
 List<AppDrawerTab> drawerBottomTabs = [
-  AppDrawerTab(
-    title: "Settings",
-    src: "assets/images/icons/drawer/gear.svg",
-    action: () {},
-  ),
+  // AppDrawerTab(
+  //   title: "Settings",
+  //   src: "assets/images/icons/drawer/gear.svg",
+  //   action: () {},
+  // ),
   AppDrawerTab(
     title: "Logout",
     src: "assets/images/icons/drawer/arrow-right-from-bracket-solid.svg",

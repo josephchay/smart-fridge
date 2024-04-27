@@ -88,7 +88,7 @@ class _AppClientEnvironmentControllerState
       tab.isSelected = false;
     });
 
-    navigationBarIcons['diary']?.isSelected = true;
+    navigationBarIcons['grocery']?.isSelected = true;
 
     _drawerAnimationController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -125,10 +125,7 @@ class _AppClientEnvironmentControllerState
       vsync: this,
     );
 
-    tabBody = DiaryScreen(
-      animationController: pageAnimationController,
-      scrollController: _scrollController,
-    );
+    tabBody = GroceryScreen();
 
     // if (widget.onDrawerSlide != null) {
     //   widget.onDrawerSlide!(updatePosition());
@@ -284,10 +281,7 @@ class _AppClientEnvironmentControllerState
                 setState(() {
                   switch (index) {
                     case 0:
-                      tabBody = DiaryScreen(
-                        animationController: pageAnimationController,
-                        scrollController: _scrollController,
-                      );
+                      tabBody = DiaryScreen();
                       break;
                     case 1:
                       tabBody = GroceryScreen();

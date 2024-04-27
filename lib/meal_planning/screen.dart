@@ -232,7 +232,7 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
             getListViewUI(),
             AppTopBar(
               title: 'Meals',
-              action: AppTopBarAction.favourites,
+              action: AppTopBarAction.none,
               topBarOpacity: topBarOpacity,
               animationController: widget.animationController,
               animation: topBarAnimation,

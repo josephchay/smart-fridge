@@ -212,7 +212,7 @@ class MealDietView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
-                                    if (mealsListData?.kcal != 0)
+                                    if (mealsListData?.kcal != -1)
                                       Text(
                                         mealsListData!.kcal.toString(),
                                         textAlign: TextAlign.center,
@@ -226,7 +226,7 @@ class MealDietView extends StatelessWidget {
                                         textScaleFactor:
                                             Scaler.textScaleFactor(context),
                                       ),
-                                    mealsListData?.kcal != 0
+                                    mealsListData?.kcal != -1
                                         ? Padding(
                                             padding: EdgeInsets.only(
                                               left: 4,

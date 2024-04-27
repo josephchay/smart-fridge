@@ -457,6 +457,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.16.0"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      sha256: "73a43445a7f8c6e6327f0ec3922b1c99a9f4a0e4896197bfe10a88259f775aad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.9.1"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      sha256: "675527aadccb679c9dfd43a4558690427123ac1e99f03eef5bbce9dc216edc91"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.34"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      sha256: "66deff69307f54fc7a20732b4278af327ae378b86607d5ac877d8f2201fe881e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.8.4"
   fixnum:
     dependency: transitive
     description:
@@ -494,6 +518,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_barcode_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_barcode_scanner
+      sha256: a4ba37daf9933f451a5e812c753ddd045d6354e4a3280342d895b07fecaab3fa
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -888,6 +920,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  openfoodfacts:
+    dependency: "direct main"
+    description:
+      name: openfoodfacts
+      sha256: "1b9954e093ead9c314e21e25a92e89540adae2212ae0535f6e69804b312ff972"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.1"
   package_config:
     dependency: transitive
     description:
