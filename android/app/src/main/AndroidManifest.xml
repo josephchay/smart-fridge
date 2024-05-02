@@ -13,7 +13,7 @@
     </queries>
 
     <application
-        android:name="${applicationName}"
+        android:name="io.flutter.app.FlutterApplication"
         android:label="smart_fridge"
         android:icon="@mipmap/ic_launcher">
         <activity
