@@ -1,676 +1,120 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:smart_fridge/commons/widgets/snackbar.dart';
-import 'package:smart_fridge/grocery_listings/cart_screen.dart';
-import 'package:smart_fridge/grocery_listings/grocery_list_view.dart';
-import 'package:smart_fridge/grocery_listings/model/grocery_model.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'filters_screen.dart';
+import 'package:smart_fridge/grocery_listings/controllers/screen_controller.dart';
+import 'package:smart_fridge/grocery_listings/models/grocery_listing_model.dart';
 
 class GroceryScreen extends StatefulWidget {
   @override
   _GroceryScreenState createState() => _GroceryScreenState();
 }
 
-class _GroceryScreenState extends State<GroceryScreen>
-    with TickerProviderStateMixin {
-  AnimationController? animationController;
-  final ScrollController _scrollController = ScrollController();
-
-  List<GroceryData> filteredGroceryData = [];
-  List<GroceryData> storageGroceryData = [];
-
-// print all the unique categories and brands
-  void printUniqueCategoriesAndBrands() {
-    print("Unique Categories:====================================");
-    uniqueCategories.forEach((category) {
-      print(category);
-    });
-
-    print("\nUnique Brands::====================================");
-    uniqueBrands.forEach((brand) {
-      print(brand);
-    });
-  }
+class _GroceryScreenState extends State<GroceryScreen> {
+  late GroceryScreenController _controller;
+  late AnimationController animationController;
 
   @override
   void initState() {
+    super.initState();
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-    super.initState();
-
-    filteredGroceryData = List.from(groceryList);
-    loadGroceryData();
-    // printUniqueCategoriesAndBrands();
+    _controller =
+        GroceryScreenController(updateProductsList: updateProductsList);
+    _controller.fetchProductsFromFirebase();
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    return true;
-  }
-
-  void updateFilteredData(List<GroceryData> newFilteredData) {
+  void updateProductsList(List<GroceryListingModel> products) {
     setState(() {
-      filteredGroceryData = newFilteredData;
-    });
-  }
-
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
-  }
-
-  void onSearchChanged(String query) {
-    // Ensure dupedFilteredGroceryData is a separate copy of the original full list
-    // This should be done outside of this method to keep the original full list intact.
-    List<GroceryData> dupedFilteredGroceryData = List.from(groceryList);
-
-    setState(() {
-      if (query.isEmpty) {
-        // Reset filteredGroceryData to the original full list when the query is empty
-        filteredGroceryData = List.from(dupedFilteredGroceryData);
-      } else {
-        // Apply the filtering based on the search query
-        filteredGroceryData = dupedFilteredGroceryData
-            .where(
-                (meal) => meal.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
+      // This will rebuild the widget with the new list of products
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: AppTheme.buildLightTheme(),
-      child: Container(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Column(
-                  children: <Widget>[
-                    getAppBarUI(),
-                    Expanded(
-                      child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                return Column(
-                                  children: <Widget>[
-                                    getSearchBarUI(),
-                                    getTimeDateUI(),
-                                  ],
-                                );
-                              }, childCount: 1),
-                            ),
-                            SliverPersistentHeader(
-                              pinned: true,
-                              floating: true,
-                              delegate: ContestTabHeader(
-                                  searchUI: getFilterBarUI(),
-                                  itemCount: filteredGroceryData.length),
-                            ),
-                          ];
-                        },
-                        body: Container(
-                          color: AppTheme.buildLightTheme().backgroundColor,
-                          child: ListView.builder(
-                            itemCount: filteredGroceryData.length,
-                            padding: const EdgeInsets.only(top: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext context, int index) {
-                              final int count = filteredGroceryData.length > 10
-                                  ? 10
-                                  : filteredGroceryData.length;
-                              final Animation<double> animation =
-                                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                                      CurvedAnimation(
-                                          parent: animationController!,
-                                          curve: Interval(
-                                              (1 / count) * index, 1.0,
-                                              curve: Curves.fastOutSlowIn)));
-                              animationController?.forward();
-                              return GroceryListView(
-                                callback: addItemToStorage,
-                                groceryData: filteredGroceryData[index],
-                                animation: animation,
-                                animationController: animationController!,
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getListUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, -2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height - 156 - 50,
-            child: FutureBuilder<bool>(
-              future: getData(),
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                } else {
-                  return ListView.builder(
-                    itemCount: filteredGroceryData.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (BuildContext context, int index) {
-                      final int count = filteredGroceryData.length > 10
-                          ? 10
-                          : filteredGroceryData.length;
-                      final Animation<double> animation =
-                          Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                  parent: animationController!,
-                                  curve: Interval((1 / count) * index, 1.0,
-                                      curve: Curves.fastOutSlowIn)));
-                      animationController?.forward();
-
-                      return GroceryListView(
-                        callback: addItemToStorage,
-                        groceryData: filteredGroceryData[index],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void addItemToStorage(GroceryData item) {
-    final localStorage = GetStorage();
-
-    // Attempt to read the existing grocery listings, handle cases where the key does not exist or is not a list.
-    var rawListings = localStorage.read('groceryListings');
-    List<dynamic> groceryListings;
-
-    if (rawListings != null) {
-      try {
-        groceryListings = jsonDecode(rawListings);
-      } catch (e) {
-        print("Error decoding stored data: $e");
-        groceryListings = []; // Initialize as empty if decoding fails
-      }
-    } else {
-      groceryListings = []; // Initialize as empty if the key does not exist
-    }
-
-    // Add new item as a Map to the list
-    groceryListings.add(item.toJson());
-
-    // Save the updated list back to storage
-    localStorage.write('groceryListings', jsonEncode(groceryListings));
-
-    loadGroceryData();
-
-    AppSnackbar.success(message: 'Item added to cart!');
-  }
-
-  void loadGroceryData() async {
-    final storage = GetStorage();
-    try {
-      String? jsonString = storage.read('groceryListings');
-
-      if (jsonString != null) {
-        List<dynamic> jsonData = jsonDecode(jsonString);
-        List<GroceryData> groceryData = jsonData
-            .map((item) => GroceryData.fromJson(item as Map<String, dynamic>))
-            .toList();
-        setState(() {
-          storageGroceryData = groceryData;
-        });
-      } else {
-        // Handle empty or null jsonString
-        setState(() {
-          storageGroceryData = [];
-        });
-        // Optionally show a message or a graphic indicating the cart is empty
-      }
-    } catch (e) {
-      // Handle errors in decoding or processing data
-      print('Error loading cart data: $e');
-      setState(() {
-        storageGroceryData = [];
-      });
-      // Show error message to user
-    }
-  }
-
-  Widget getHotelViewList() {
-    final List<Widget> GroceryListViews = <Widget>[];
-    for (int i = 0; i < filteredGroceryData.length; i++) {
-      final int count = filteredGroceryData.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      GroceryListViews.add(
-        GroceryListView(
-          groceryData: filteredGroceryData[i],
-          animation: animation,
-          animationController: animationController!,
-          callback: addItemToStorage,
-        ),
-      );
-    }
-    animationController?.forward();
-    return Column(
-      children: GroceryListViews,
-    );
-  }
-
-  Widget getTimeDateUI() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 18,
-        bottom: 16,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      // setState(() {
-                      //   isDatePopupOpen = true;
-                      // });
-                      // showDemoDialog(context: context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 4, bottom: 4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Items in List',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w100,
-                                fontSize: 16,
-                                color: Colors.grey.withOpacity(0.8)),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            storageGroceryData.length.toString(),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Container(
-              width: 1,
-              height: 42,
-              color: Colors.grey.withOpacity(0.8),
-            ),
-          ),
-          // Expanded(
-          //   child: Row(
-          //     children: <Widget>[
-          //       Material(
-          //         color: Colors.transparent,
-          //         child: InkWell(
-          //           focusColor: Colors.transparent,
-          //           highlightColor: Colors.transparent,
-          //           hoverColor: Colors.transparent,
-          //           splashColor: Colors.grey.withOpacity(0.2),
-          //           borderRadius: const BorderRadius.all(
-          //             Radius.circular(4.0),
-          //           ),
-          //           onTap: () {
-          //             FocusScope.of(context).requestFocus(FocusNode());
-          //           },
-          //           child: Padding(
-          //             padding: const EdgeInsets.only(
-          //                 left: 8, right: 8, top: 4, bottom: 4),
-          //             child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               children: <Widget>[
-          //                 Text(
-          //                   'Number of Rooms',
-          //                   style: TextStyle(
-          //                       fontWeight: FontWeight.w100,
-          //                       fontSize: 16,
-          //                       color: Colors.grey.withOpacity(0.8)),
-          //                 ),
-          //                 const SizedBox(
-          //                   height: 8,
-          //                 ),
-          //                 Text(
-          //                   '1 Room - 2 Adults',
-          //                   style: TextStyle(
-          //                     fontWeight: FontWeight.w100,
-          //                     fontSize: 16,
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-
-  Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppTheme.buildLightTheme().backgroundColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(14.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(0, 2),
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 12,
-                    top: 4,
-                    bottom: 4,
-                  ),
-                  child: TextField(
-                    onChanged: onSearchChanged,
-                    style: TextStyle(
-                      fontSize: 16 * Scaler.textScaleFactor(context),
-                    ),
-                    cursorColor: AppTheme.buildLightTheme().primaryColor,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search for an item',
-                    ),
-                  ),
-                ),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Grocery Listings"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(
+              context: context,
+              delegate: ProductSearchDelegate(_controller),
             ),
           ),
         ],
       ),
+      body: ListView.builder(
+        itemCount: _controller.filteredProducts.length,
+        itemBuilder: (context, index) {
+          GroceryListingModel product = _controller.filteredProducts[index];
+          return ListTile(
+            title: Text(product.name),
+            subtitle: Text("£${product.price.toStringAsFixed(2)}"),
+            trailing: Image.network(product.image, width: 50, height: 50),
+          );
+        },
+      ),
     );
   }
 
-  Widget getFilterBarUI() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 24,
-            decoration: BoxDecoration(
-              color: AppTheme.buildLightTheme().backgroundColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    offset: const Offset(0, -2),
-                    blurRadius: 8.0),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          color: AppTheme.buildLightTheme().backgroundColor,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '${filteredGroceryData.length} items found',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w100,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.push<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) => FiltersScreen(
-                            updateFilteredDataCallback: updateFilteredData,
-                          ),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.sort,
-                                color: AppTheme.buildLightTheme().primaryColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Divider(
-            height: 1,
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.buildLightTheme().backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 8.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Grocery List',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22 + 6 - 6,
-                    letterSpacing: 1.2,
-                    color: AppTheme.darkerText,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Navigator.push<dynamic>(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) =>
-                                GroceryCartScreen(
-                              storageGroceryData: storageGroceryData,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          FontAwesomeIcons.bagShopping,
-                          size: 26,
-                          color: Colors.grey.withOpacity(0.8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 }
 
-class ContestTabHeader extends SliverPersistentHeaderDelegate {
-  final Widget searchUI;
-  final int itemCount;
+class ProductSearchDelegate extends SearchDelegate<GroceryListingModel> {
+  final GroceryScreenController controller;
 
-  ContestTabHeader({required this.searchUI, required this.itemCount});
+  ProductSearchDelegate(this.controller);
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return searchUI;
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () => query = "",
+      ),
+    ];
   }
 
   @override
-  double get maxExtent => 52.0;
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
 
   @override
-  double get minExtent => 52.0;
+  Widget buildResults(BuildContext context) {
+    controller.filterProducts(query);
+    return ListView.builder(
+      itemCount: controller.filteredProducts.length,
+      itemBuilder: (context, index) {
+        GroceryListingModel product = controller.filteredProducts[index];
+        return ListTile(
+          title: Text(product.name),
+          subtitle: Text("£${product.price.toStringAsFixed(2)}"),
+          trailing: Image.network(product.image, width: 50, height: 50),
+        );
+      },
+    );
+  }
 
   @override
-  bool shouldRebuild(ContestTabHeader oldDelegate) {
-    // Rebuild if the item count changes
-    return itemCount != oldDelegate.itemCount;
+  Widget buildSuggestions(BuildContext context) {
+    controller.filterProducts(query);
+    return ListView.builder(
+      itemCount: controller.filteredProducts.length,
+      itemBuilder: (context, index) {
+        GroceryListingModel product = controller.filteredProducts[index];
+        return ListTile(
+          title: Text(product.name),
+          subtitle: Text("£${product.price.toStringAsFixed(2)}"),
+          trailing: Image.network(product.image, width: 50, height: 50),
+        );
+      },
+    );
   }
 }

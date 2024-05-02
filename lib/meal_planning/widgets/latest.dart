@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/meal_planning/screens/meal_screen.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/utils/formatters/datetime.dart';
 
 class AppMealPlannerLatest extends StatefulWidget {

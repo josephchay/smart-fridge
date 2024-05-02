@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/diary/current_diets_list_view.dart';
-import 'package:smart_fridge/src/ui_view/accumulated_nutrition_view.dart';
-import 'package:smart_fridge/src/ui_view/title_view.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/widgets/accumulated_nutrition_view.dart';
+import 'package:smart_fridge/diary/widgets/current_diets_list_view.dart';
 import 'package:smart_fridge/top_bar.dart';
+
+import 'title_view.dart';
 
 /// The Home (first) Page of the app
 class DiaryScreen extends StatefulWidget {

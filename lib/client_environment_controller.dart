@@ -1,15 +1,16 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/custom_drawer/drawer.dart';
-import 'package:smart_fridge/fridge/ui/screen.dart';
-import 'package:smart_fridge/grocery_listings/screen.dart';
+import 'package:smart_fridge/bottom_navigation/navigation_bar_view.dart';
+import 'package:smart_fridge/bottom_navigation_view/navigation_bar_view.dart';
+import 'package:smart_fridge/custom_drawer/widgets/drawer.dart';
+import 'package:smart_fridge/diary/models/navigation_bar_icon.dart';
+import 'package:smart_fridge/diary/widgets/screen.dart';
+import 'package:smart_fridge/fridge/widgets/camera.dart';
+import 'package:smart_fridge/grocery_listings/widgets/screen.dart';
 import 'package:smart_fridge/meal_planning/screen.dart';
-import 'package:smart_fridge/src/bottom_navigation_view/navigation_bar_view.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/diary/screen.dart';
-import 'package:smart_fridge/src/features/notifications/presentation/notification_screen.dart';
-import 'package:smart_fridge/src/models/navigation_bar_icon.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/notifications/widgets/notification_screen.dart';
 
 /// Front controller of the app after the successful login attempt.
 class AppClientEnvironmentController extends StatefulWidget {
@@ -125,7 +126,10 @@ class _AppClientEnvironmentControllerState
       vsync: this,
     );
 
-    tabBody = GroceryScreen();
+    tabBody = DiaryScreen(
+      animationController: pageAnimationController,
+      scrollController: _scrollController,
+    );
 
     // if (widget.onDrawerSlide != null) {
     //   widget.onDrawerSlide!(updatePosition());
@@ -281,7 +285,10 @@ class _AppClientEnvironmentControllerState
                 setState(() {
                   switch (index) {
                     case 0:
-                      tabBody = DiaryScreen();
+                      tabBody = DiaryScreen(
+                        animationController: pageAnimationController,
+                        scrollController: _scrollController,
+                      );
                       break;
                     case 1:
                       tabBody = GroceryScreen();

@@ -32,37 +32,46 @@ dependencies:
     sdk: flutter
 
   flutter_native_splash: ^2.2.16
-  connectivity_plus: ^5.0.1
+  connectivity_plus: ^6.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   get: ^4.6.6
   get_storage: ^2.1.1
   cupertino_icons: ^1.0.2
-  csv: ^5.0.1
+  csv: ^6.0.0
+  dio: ^5.0.0
+
+  dcdg: ^3.0.0
 
   camera: ^0.10.5+9
   tflite_flutter: ^0.10.4
-  image: ^3.3.0
+  image: ^4.1.7
   path_provider: ^2.1.2
 
   # For yolov5 object detection - under commit 790e3d9d23c435d3c9acdab59832ee5b659cb0bc lib/fridge/screen
-#  camera: ^0.10.5
-#  flutter_vision: ^1.1.4
-#  permission_handler: ^11.0.1
-#  flutter_tts: ^3.8.2
+  #  camera: ^0.10.5
+  #  flutter_vision: ^1.1.4
+  #  permission_handler: ^11.0.1
+  #  flutter_tts: ^3.8.2
 
   font_awesome_flutter: ^10.1.0
   flutter_rating_bar: ^4.0.1
 
   iconsax_flutter: ^1.0.0
-  rive: ^0.9.1
-  lottie: ^2.7.0
+  rive: ^0.13.2
+  lottie: ^3.1.0
 
   flutter_barcode_scanner: ^2.0.0
 
+  image_picker:
+  firebase_ml_vision: ^0.12.0+3
+  http: ^1.2.1
+  percent_indicator: ^4.2.3
+  step_progress_indicator: ^1.0.2
+
   # date format
-  intl: ^0.18.1
+  intl: ^0.19.0
   animations: ^2.0.3
 
   # state management
@@ -80,7 +89,7 @@ dependencies:
   floor: ^1.4.2
 
   # hooks
-  flutter_hooks: ^0.18.3
+  flutter_hooks: ^0.20.5
 
   # cached image
   cached_network_image: ^3.2.0
@@ -103,8 +112,8 @@ dependencies:
   speech_to_text: ^6.6.0
   flutter_tts: ^4.0.2
 
-#  hive: ^2.2.3
-#  hive_flutter: ^1.1.0
+  #  hive: ^2.2.3
+  #  hive_flutter: ^1.1.0
 
   shared_preferences: ^2.0.5
 
@@ -112,16 +121,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^2.0.0
-  retrofit_generator: 3.0.1+1
-  floor_generator: 1.2.0
-#  hive_generator: ^1.1.3
-  build_runner: 2.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

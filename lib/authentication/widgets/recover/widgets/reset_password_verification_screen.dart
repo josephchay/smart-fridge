@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_fridge/utils/formatters/color.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/features/authentication/controllers/forget_password/reset_password_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/primary_button.dart';

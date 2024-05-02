@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-
-import 'calendar_view.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/widgets/calendar_view.dart';
 
 class CalendarModalView extends StatefulWidget {
   const CalendarModalView({

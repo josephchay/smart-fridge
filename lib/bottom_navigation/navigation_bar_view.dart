@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smart_fridge/utils/formatters/color.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/models/navigation_bar_icon.dart';
 
 class AppNavigationBarView extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/ui_view/wave_view.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 
 import '../../utils/formatters/color.dart';
+import 'wave_view.dart';
 
 class WaterView extends StatefulWidget {
   final AnimationController? mainScreenAnimationController;

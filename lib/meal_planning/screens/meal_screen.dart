@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/utils/formatters/datetime.dart';
 import 'package:smart_fridge/utils/formatters/strings.dart';
 

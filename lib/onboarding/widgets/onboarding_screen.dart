@@ -2,10 +2,11 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:liquid_swipe/liquid_swipe.dart";
 import "package:smart_fridge/meal_planning/models/meal.dart";
-import 'package:smart_fridge/src/features/onboarding/widgets/onboarding_controller.dart';
-import "package:smart_fridge/src/features/onboarding/widgets/page_indicator.dart";
-import "package:smart_fridge/src/features/onboarding/widgets/swipe_next_button.dart";
-import "package:smart_fridge/src/features/onboarding/widgets/swipe_previous_button.dart";
+import "package:smart_fridge/onboarding/controllers/onboarding_controller.dart";
+import "package:smart_fridge/onboarding/widgets/swipe_next_button.dart";
+
+import "page_indicator.dart";
+import "swipe_previous_button.dart";
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({

@@ -2,11 +2,12 @@ import 'dart:isolate';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/fridge/tflite/classifier.dart';
-import 'package:smart_fridge/fridge/tflite/recognition.dart';
-import 'package:smart_fridge/fridge/tflite/stats.dart';
-import 'package:smart_fridge/fridge/ui/camera_view_singleton.dart';
+import 'package:smart_fridge/fridge/widgets/classifier.dart';
+import 'package:smart_fridge/fridge/controllers/camera_view_controller.dart';
+import 'package:smart_fridge/fridge/models/recognition_model.dart';
+import 'package:smart_fridge/fridge/models/stats_model.dart';
 import 'package:smart_fridge/fridge/utils/isolate_utils.dart';
+import 'package:smart_fridge/fridge/models/camera_view_model.dart';
 
 /// [CameraView] sends each frame for inference
 class CameraView extends StatefulWidget {
@@ -23,158 +24,41 @@ class CameraView extends StatefulWidget {
 }
 
 class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
-  /// List of available cameras
-  late List<CameraDescription> cameras;
-
-  /// Controller
-  CameraController? cameraController;
-
-  /// true when inference is ongoing
-  late bool predicting;
-
-  /// Instance of [Classifier]
-  late Classifier classifier;
-
-  /// Instance of [IsolateUtils]
-  late IsolateUtils isolateUtils;
+  late CameraControllerManager _cameraManager;
 
   @override
   void initState() {
     super.initState();
-    initStateAsync();
-  }
-
-  void initStateAsync() async {
     WidgetsBinding.instance.addObserver(this);
 
-    // Spawn a new isolate
-    isolateUtils = IsolateUtils();
-    await isolateUtils.start();
+    _cameraManager = CameraControllerManager(
+      widget.resultsCallback,
+      widget.statsCallback,
+      Classifier(),
+      IsolateUtils(),
+    );
 
-    // Camera initialization
-    initializeCamera();
-
-    // Create an instance of classifier to load model and labels
-    classifier = Classifier();
-
-    // Initially predicting = false
-    predicting = false;
-  }
-
-  /// Initializes the camera by setting [cameraController]
-  void initializeCamera() async {
-    cameras = await availableCameras();
-
-    // cameras[0] for rear-camera
-    final cameraController =
-        CameraController(cameras[0], ResolutionPreset.low, enableAudio: false);
-    this.cameraController = cameraController;
-
-    cameraController.initialize().then((_) async {
-      // Stream of image passed to [onLatestImageAvailable] callback
-      await cameraController.startImageStream(onLatestImageAvailable);
-
-      /// previewSize is size of each image frame captured by controller
-      ///
-      /// 352x288 on iOS, 240p (320x240) on Android with ResolutionPreset.low
-      Size previewSize = cameraController.value.previewSize!;
-
-      /// previewSize is size of raw input image to the model
-      CameraViewSingleton.inputImageSize = previewSize;
-
-      // the display width of image on screen is
-      // same as screenWidth while maintaining the aspectRatio
-      Size screenSize = MediaQuery.of(context).size;
-      CameraViewSingleton.screenSize = screenSize;
-      CameraViewSingleton.ratio = screenSize.width / previewSize.height;
-    });
+    _cameraManager.initializeCamera();
   }
 
   @override
   Widget build(BuildContext context) {
-    final cameraController = this.cameraController;
-    // Return empty container while the camera is not initialized
-    if (cameraController == null || !cameraController.value.isInitialized) {
-      return Container();
-    }
-    // print(cameraController.value.aspectRatio);
-    return CameraPreview(cameraController);
-  }
-
-  /// Callback to receive each frame [CameraImage] perform inference on it
-  onLatestImageAvailable(CameraImage cameraImage) async {
-    final interpreter = classifier.interpreter;
-    final labels = classifier.labels;
-    if (interpreter != null && labels != null) {
-      // If previous inference has not completed then return
-      if (predicting) {
-        return;
-      }
-
-      setState(() {
-        predicting = true;
-      });
-
-      var uiThreadTimeStart = DateTime.now().millisecondsSinceEpoch;
-
-      // Data to be passed to inference isolate
-      var isolateData = IsolateData(cameraImage, interpreter.address, labels);
-
-      // We could have simply used the compute method as well however
-      // it would be as in-efficient as we need to continuously passing data
-      // to another isolate.
-
-      /// perform inference in separate isolate
-      Map<String, dynamic> inferenceResults = await inference(isolateData);
-
-      var uiThreadInferenceElapsedTime =
-          DateTime.now().millisecondsSinceEpoch - uiThreadTimeStart;
-
-      // pass results to HomeView
-      widget.resultsCallback(inferenceResults["recognitions"]);
-
-      // pass stats to HomeView
-      widget.statsCallback((inferenceResults["stats"] as Stats)
-        ..totalElapsedTime = uiThreadInferenceElapsedTime);
-
-      // set predicting to false to allow new frames
-      setState(() {
-        predicting = false;
-      });
-    }
-  }
-
-  /// Runs inference in another isolate
-  Future<Map<String, dynamic>> inference(IsolateData isolateData) async {
-    ReceivePort responsePort = ReceivePort();
-    isolateUtils.sendPort
-        .send(isolateData..responsePort = responsePort.sendPort);
-    var results = await responsePort.first;
-    return results;
+    return CameraPreview(_cameraManager._cameraController);
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    final cameraController = this.cameraController;
-
-    switch (state) {
-      case AppLifecycleState.paused:
-        cameraController?.stopImageStream();
-        break;
-      case AppLifecycleState.resumed:
-        if (cameraController != null &&
-            !cameraController.value.isStreamingImages) {
-          await cameraController.startImageStream(onLatestImageAvailable);
-        }
-        break;
-      default:
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _cameraManager.pauseCameraStream();
+    } else if (state == AppLifecycleState.resumed) {
+      _cameraManager.resumeCameraStream();
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    cameraController?.dispose();
+    _cameraManager.dispose();
     super.dispose();
   }
 }

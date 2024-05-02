@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/register/pages/screen.dart';
 
-import 'login/pages/screen.dart';
+import 'login/widgets/screen.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool isLogin;

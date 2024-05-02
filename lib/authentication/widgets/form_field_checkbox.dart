@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 
 class AuthCheckbox extends StatelessWidget {
   final bool value;

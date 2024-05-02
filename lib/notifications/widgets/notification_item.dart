@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/features/notifications/data/notifications_list_data.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/notifications/data/notifications_list_model.dart';
 
 class NotificationItem extends StatelessWidget {
   final VoidCallback? callback;

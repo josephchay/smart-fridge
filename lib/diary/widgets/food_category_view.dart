@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/models/food_category.dart';
+import 'package:smart_fridge/diary/models/food_category.dart';
 
 class FoodCategoryView extends StatelessWidget {
   final AnimationController? animationController;

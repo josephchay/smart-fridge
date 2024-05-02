@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/models/drawer_icon.dart';
 
 class AppDrawerPlate extends StatelessWidget {

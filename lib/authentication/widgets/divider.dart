@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
 
 import '../../../config/themes/app_theme.dart';
 

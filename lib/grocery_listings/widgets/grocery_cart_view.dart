@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'model/grocery_model.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import '../model/grocery_listing_model.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,10 +16,10 @@ class GroceryCartView extends StatelessWidget {
   });
 
   final VoidCallback? callback;
-  final GroceryData? groceryData;
+  final GroceryListingModel? groceryData;
   final AnimationController? animationController;
   final Animation<double>? animation;
-  final List<GroceryData> storageGroceryData;
+  final List<GroceryListingModel> storageGroceryData;
 
   @override
   Widget build(BuildContext context) {

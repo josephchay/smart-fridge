@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:smart_fridge/fridge/ui/camera_view_singleton.dart';
+import 'package:smart_fridge/fridge/ui/camera_view_model.dart';
 
 /// Represents the recognition output from the model
 class Recognition {

@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:smart_fridge/bindings/core_bindings.dart';
-import 'package:smart_fridge/grocery_listings/model/grocery_data.dart';
-import 'package:smart_fridge/meal_planning/models/meal.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -48,9 +46,5 @@ class App extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  static Future<void> initializeLoaders() async {
-    await loadGroceryData('assets/datasets/groceries.csv');
   }
 }

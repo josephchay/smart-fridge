@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/features/notifications/data/notifications_list_data.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/src/features/notifications/data/notifications_list_model.dart';
 import 'package:smart_fridge/src/features/notifications/presentation/notification_item.dart';
 import 'package:smart_fridge/src/features/notifications/presentation/notification_list_view.dart';
 import 'package:smart_fridge/src/ui_view/title_view.dart';

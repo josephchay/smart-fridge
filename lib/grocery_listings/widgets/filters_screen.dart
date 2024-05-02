@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_fridge/grocery_listings/model/grocery_model.dart';
-
-import '../src/config/themes/app_theme.dart';
-import 'model/popular_filter_list.dart';
-import 'range_slider_view.dart';
-import 'slider_view.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/grocery_listings/models/grocery_listing_model.dart';
+import 'package:smart_fridge/grocery_listings/models/popular_filter_list.dart';
+import 'package:smart_fridge/grocery_listings/widgets/range_slider_view.dart';
 
 class FiltersScreen extends StatefulWidget {
-  final Function(List<GroceryData>) updateFilteredDataCallback;
+  final Function(List<GroceryListingModel>) updateFilteredDataCallback;
 
   const FiltersScreen({
     super.key,
@@ -35,7 +33,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         .map((item) => item.titleTxt)
         .toSet();
 
-    List<GroceryData> newFilteredData = groceryList.where((grocery) {
+    List<GroceryListingModel> newFilteredData = groceryList.where((grocery) {
       bool categoryMatch = selectedCategories.isEmpty ||
           selectedCategories.contains(grocery.category);
       bool brandMatch =

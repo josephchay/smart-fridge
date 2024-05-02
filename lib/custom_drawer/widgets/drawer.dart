@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/custom_drawer/drawer_info_card.dart';
-import 'package:smart_fridge/custom_drawer/drawer_plate.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/models/drawer_icon.dart';
+import 'package:smart_fridge/custom_drawer/widgets/drawer_info_card.dart';
+import 'package:smart_fridge/custom_drawer/widgets/drawer_plate.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/models/drawer_icon.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({

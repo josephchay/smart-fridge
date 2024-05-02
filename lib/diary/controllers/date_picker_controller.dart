@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/utils/calendar_modal_view.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/widgets/calendar_modal_view.dart';
 import 'package:smart_fridge/utils/formatters/datetime.dart';
 
-class DatePicker extends StatelessWidget {
+class DatePickerController extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
   final Function(DateTime, DateTime) onDateChange;
 
-  const DatePicker({
+  const DatePickerController({
     super.key,
     required this.startDate,
     required this.endDate,

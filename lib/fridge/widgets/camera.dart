@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/fridge/tflite/recognition.dart';
-import 'package:smart_fridge/fridge/tflite/stats.dart';
-import 'package:smart_fridge/fridge/ui/box_widget.dart';
-import 'package:smart_fridge/fridge/ui/camera_view_singleton.dart';
+import 'package:smart_fridge/fridge/controllers/camera_controller.dart';
+import 'package:smart_fridge/fridge/models/recognition_model.dart';
+import 'package:smart_fridge/fridge/models/stats_model.dart';
+import 'package:smart_fridge/fridge/widgets/box_widget.dart';
+import 'package:smart_fridge/fridge/models/camera_view_model.dart';
 
 import 'camera_view.dart';
 
@@ -13,20 +14,43 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  /// Results to draw bounding boxes
-  List<Recognition>? results;
+  late CameraController _controller;
+  late List<Recognition> results;
+  late Stats stats;
+  late Stats totalStats;
 
-  /// Realtime stats
-  Stats? stats;
-  Stats totalStats = Stats(
-      totalPredictTime: 0,
-      inferenceTime: 0,
-      preProcessingTime: 0,
-      totalElapsedTime: 0,
-      count: 0);
+  @override
+  void initState() {
+    super.initState();
+    _controller = CameraController(
+      onNewResults: (results) {
+        setState(() => this.results = results);
+      },
+      onUpdateStats: (stats) {
+        setState(() {
+          this.stats = stats;
+          this.totalStats += stats;
+        });
+      },
+    );
+  }
 
-  /// Scaffold Key
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void resultsCallback(List<Recognition> results) {
+    _controller.updateResults(results);
+  }
+
+  void statsCallback(Stats stats) {
+    _controller.updateStats(stats);
+  }
+
+  _reset() {
+    _controller.resetStats();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +78,7 @@ class _CameraScreenState extends State<CameraScreen> {
               builder: (_, ScrollController scrollController) => Container(
                 width: double.maxFinite,
                 decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BORDER_RADIUS_BOTTOM_SHEET),
+                    color: Colors.white.withOpacity(0.9), borderRadius: 20),
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Center(
@@ -119,7 +142,6 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  /// Returns Stack of bounding boxes
   Widget boundingBoxes(List<Recognition>? results) {
     if (results == null) {
       return Container();
@@ -132,36 +154,6 @@ class _CameraScreenState extends State<CameraScreen> {
           .toList(),
     );
   }
-
-  /// Callback to get inference results from [CameraView]
-  void resultsCallback(List<Recognition> results) {
-    setState(() {
-      this.results = results;
-    });
-  }
-
-  _reset() {
-    setState(() {
-      totalStats = Stats(
-          totalPredictTime: 0,
-          inferenceTime: 0,
-          preProcessingTime: 0,
-          totalElapsedTime: 0,
-          count: 0);
-    });
-  }
-
-  /// Callback to get inference stats from [CameraView]
-  void statsCallback(Stats stats) {
-    setState(() {
-      this.stats = stats;
-      this.totalStats += stats;
-    });
-  }
-
-  static const BOTTOM_SHEET_RADIUS = Radius.circular(24.0);
-  static const BORDER_RADIUS_BOTTOM_SHEET = BorderRadius.only(
-      topLeft: BOTTOM_SHEET_RADIUS, topRight: BOTTOM_SHEET_RADIUS);
 }
 
 /// Row for one Stats field

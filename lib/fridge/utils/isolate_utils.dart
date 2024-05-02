@@ -3,8 +3,8 @@ import 'dart:isolate';
 
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imageLib;
-import 'package:smart_fridge/fridge/tflite/classifier.dart';
 import 'package:smart_fridge/fridge/utils/image_utils.dart';
+import 'package:smart_fridge/fridge/widgets/classifier.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 /// Manages separate Isolate instance for inference
@@ -37,7 +37,7 @@ class IsolateUtils {
       imageLib.Image image =
           ImageUtils.convertCameraImage(isolateData.cameraImage);
       if (Platform.isAndroid) {
-        image = imageLib.copyRotate(image, 90);
+        image = imageLib.copyRotate(image, angle: 0);
       }
       Map<String, dynamic>? results = classifier.predict(image);
       isolateData.responsePort?.send(results);

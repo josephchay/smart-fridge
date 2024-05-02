@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:smart_fridge/grocery_listings/grocery_cart_view.dart';
-import 'package:smart_fridge/grocery_listings/grocery_list_view.dart';
-import 'package:smart_fridge/grocery_listings/model/grocery_model.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'filters_screen.dart';
+import 'package:smart_fridge/grocery_listings/models/grocery_listing_model.dart';
+import 'package:smart_fridge/grocery_listings/widgets/grocery_cart_view.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:get_storage/get_storage.dart';
 
 class GroceryCartScreen extends StatefulWidget {
-  List<GroceryData> storageGroceryData = [];
+  List<GroceryListingModel> storageGroceryData = [];
 
   GroceryCartScreen({Key? key, required this.storageGroceryData})
       : super(key: key);
@@ -36,7 +34,7 @@ class _GroceryCartScreenState extends State<GroceryCartScreen>
     return true;
   }
 
-  void removeItemFromCart(GroceryData item) {
+  void removeItemFromCart(GroceryListingModel item) {
     setState(() {
       int index = widget.storageGroceryData
           .indexWhere((element) => element.name == item.name);

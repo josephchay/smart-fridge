@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 
-import 'model/grocery_model.dart';
+import 'model/grocery_listing_model.dart';
 
 class GroceryListView extends StatelessWidget {
   const GroceryListView({

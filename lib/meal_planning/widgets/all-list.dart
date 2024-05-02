@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/meal_planning/widgets/latest.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/top_bar.dart';
 
 class AppMealPlannerAllList extends StatefulWidget {

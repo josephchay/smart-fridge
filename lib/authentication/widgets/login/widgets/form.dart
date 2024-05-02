@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:smart_fridge/client_environment_controller.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/form_field_checkbox.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/login/login_controller.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/password_form_field.dart';

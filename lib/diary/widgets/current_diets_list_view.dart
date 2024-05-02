@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/models/current_meal_diet_list_data.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/models/current_meal_diet_list_data.dart';
 
-import '../../utils/formatters/color.dart';
+import '../../../utils/formatters/color.dart';
 
 class CurrentDietsListView extends StatefulWidget {
   const CurrentDietsListView({

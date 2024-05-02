@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/formatters/color.dart';
-import '../config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 
 class WorkoutView extends StatelessWidget {
   final AnimationController? animationController;

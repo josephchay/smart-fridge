@@ -6,8 +6,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smart_fridge/data/repositories/authentication/authentication_repository.dart';
-import 'package:smart_fridge/fireabase_api.dart';
-import '';
 
 import 'app.dart';
 import 'firebase_options.dart';
@@ -16,8 +14,6 @@ import 'main_injection_container.dart';
 Future<void> main() async {
   final WidgetsBinding widgetsBinding =
       WidgetsFlutterBinding.ensureInitialized();
-
-  await initializeDependencies();
 
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,

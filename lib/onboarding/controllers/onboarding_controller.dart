@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:liquid_swipe/PageHelpers/LiquidController.dart';
 import 'package:smart_fridge/utils/formatters/color.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/src/features/authentication/data/models/onboarding/onboarding_model.dart';
 import 'package:smart_fridge/src/features/authentication/presentation/screen.dart';
 import 'package:smart_fridge/src/features/onboarding/widgets/onboarding_page_widget.dart';

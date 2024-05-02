@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/features/authentication/data/models/onboarding/onboarding_model.dart';
+import 'package:smart_fridge/authentication/models/onboarding_model.dart';
 
 class OnboardingPageWidget extends StatefulWidget {
   const OnboardingPageWidget({

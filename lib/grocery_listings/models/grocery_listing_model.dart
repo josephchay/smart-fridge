@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class GroceryListingModel {
   int id;
   String name;
   String category;
   String brand;
   double price;
-  String image; // Assuming image is stored as a URL or a base64 string
+  String image;
 
   GroceryListingModel({
     this.id = 0,
@@ -38,15 +36,4 @@ class GroceryListingModel {
       image: json['image'] as String,
     );
   }
-}
-
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-Future<List<GroceryListingModel>> loadTescoProductsFromFirebase() async {
-  QuerySnapshot snapshot =
-      await _firestore.collection('api_tesco_backup').get();
-
-  return snapshot.docs.map((doc) {
-    return GroceryListingModel.fromJson(doc.data() as Map<String, dynamic>);
-  }).toList();
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fridge/src/config/math/scaler.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/utils/date_picker.dart';
+import 'package:smart_fridge/config/math/scaler.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
+import 'package:smart_fridge/diary/controllers/date_picker_controller.dart';
 
 enum AppTopBarAction {
   none,
@@ -114,7 +114,7 @@ class _AppTopBarState extends State<AppTopBar> with TickerProviderStateMixin {
   Widget _getActionWidget() {
     switch (widget.action) {
       case AppTopBarAction.datepicker:
-        return DatePicker(
+        return DatePickerController(
           startDate: startDate,
           endDate: endDate,
           onDateChange: (DateTime start, DateTime end) {

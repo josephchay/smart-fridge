@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:image/image.dart';
-import 'package:smart_fridge/fridge/tflite/recognition.dart';
+import 'package:smart_fridge/fridge/tflite/recognition_model.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'detection/stats.dart';
+import '../detection/stats_model.dart';
 
 /// Classifier
 class Classifier {
@@ -14,7 +14,7 @@ class Classifier {
   /// Labels file loaded as list
   List<String>? _labels;
 
-  static const String MODEL_FILE_NAME = "model.tflite";
+  static const String MODEL_FILE_NAME = "model_unquant.tflite";
   static const String LABEL_FILE_NAME = "labels.txt";
 
   /// Input size of image (height = width = 300)

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:smart_fridge/diary/widgets/title_view.dart';
 import 'package:smart_fridge/meal_planning/models/meal.dart';
 import 'package:smart_fridge/meal_planning/widgets/categories.dart';
 import 'package:smart_fridge/meal_planning/widgets/all-list.dart';
 import 'package:smart_fridge/meal_planning/widgets/recommendations.dart';
 import 'package:smart_fridge/meal_planning/widgets/search_bar.dart';
 import 'package:smart_fridge/meal_planning/widgets/latest.dart';
-import 'package:smart_fridge/src/config/themes/app_theme.dart';
-import 'package:smart_fridge/src/ui_view/title_view.dart';
+import 'package:smart_fridge/config/themes/app_theme.dart';
 import 'package:smart_fridge/top_bar.dart';
 
 class AppMealPlannerScreen extends StatefulWidget {
@@ -114,33 +114,6 @@ class _AppMealPlannerScreenState extends State<AppMealPlannerScreen>
         onSearchChanged: onSearchChanged,
       ),
     );
-
-    // listViews.add(
-    //   TitleView(
-    //     titleTxt: 'Categories',
-    //     hasBottomPadding: false,
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     animationController: widget.animationController,
-    //   ),
-    // );
-
-    // listViews.add(
-    //   AppMealPlannerFoodCategories(
-    //     current: 'All',
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //       CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve: Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
-    //       ),
-    //     ),
-    //     animationController: widget.animationController,
-    //   ),
-    // );
 
     listViews.add(
       TitleView(

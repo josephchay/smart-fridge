@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smart_fridge/commons/widgets/snackbar.dart';
-import 'package:smart_fridge/fridge/tflite/recognition.dart';
-import 'package:smart_fridge/src/features/notifications/data/notifications_list_data.dart';
+import 'package:smart_fridge/fridge/models/recognition_model.dart';
+import 'package:smart_fridge/src/features/notifications/data/notifications_list_model.dart';
 
 /// Individual bounding box
 class BoxWidget extends StatefulWidget {
