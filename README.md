@@ -4,9 +4,23 @@
 
 These instructions will help you get a copy of the project up and running on your local machine for development and testing purposes.
 
-## Access
+## Sample Screens
 
-The repository will be **public forever**. Therefore, anyone will be able to have **READ** access to the repository.
+### Onboarding Pages
+
+![Onboarding Pages](https://github.com/user-attachments/assets/2c881b18-1924-4ad0-bd23-b005092d7950)
+
+![Authentication Pages](https://github.com/user-attachments/assets/b0048eec-15d8-4b9a-84f0-45fd39426869)
+
+![Email Verificaiton Page](https://github.com/user-attachments/assets/0d20b0f6-733f-464c-8eef-9f432505669d)
+
+![Diary Page](https://github.com/user-attachments/assets/05509f6c-0a64-4775-8ff0-2b585d0d9f1a)
+
+![Grocery Listing Pages](https://github.com/user-attachments/assets/504e4bd1-645c-4bd6-b891-1a145717a305)
+
+![Notification Pages](https://github.com/user-attachments/assets/41bcc345-61be-467e-9498-66e1df31b17c)
+
+![Meal Planning Pages](https://github.com/user-attachments/assets/7f9bda38-e3e1-4045-9714-7210b8c6674b)
 
 ## Prerequisites
 
